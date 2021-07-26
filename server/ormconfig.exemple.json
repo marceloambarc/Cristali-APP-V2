@@ -1,0 +1,22 @@
+{
+  "type": "mssql",
+  "host": "000.000.00.000",
+  "port": 4133,
+  "username": "usename",
+  "password": "password",
+  "database": "database",
+  "options": {
+    "instanceName": "sqlexpress0000"
+  },
+  "synchronize": true,
+  "logging": false,
+  "entities": [
+     "./src/models/*.ts"
+  ],
+  "migrations": [
+     "./src/database/migration/*.ts"
+  ],
+  "subscribers": [
+     "./src/subscriber/**/*.ts"
+  ]
+}
