@@ -6,16 +6,16 @@ export default class Token {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Index("IX_Token1")
+  @Index("ix_token1", { synchronize: false })
   @Column("nvarchar", { length: 255 })
-  Token_Celular: string;
+  token_celular: string;
 
   @Column("datetime")
-  @Index("IX_Token2")
-  DT_Criado: Date;
+  @Index("ix_token2", { synchronize: false })
+  dt_criado: Date;
 
   @Column("datetime")
-  @Index("IX_Token3")
-  DT_Modificado: Date;
+  @Index("ix_token3", { synchronize: false })
+  dt_modificado: Date;
   
 }

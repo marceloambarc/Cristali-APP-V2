@@ -4,25 +4,25 @@ import { Entity, PrimaryGeneratedColumn, Column, Index } from 'typeorm';
 export default class Senha {
 
   @PrimaryGeneratedColumn()
-  ID: number;
+  id: number;
 
-  @Index("IX_SENHA1")
+  @Index("ix_senha1", { synchronize: false })
   @Column()
-  IN_Ativo: number;
+  in_ativo: number;
 
   @Column("nvarchar", { length: 255 })
-  TX_Senha: string;
+  tx_senha: string;
 
   @Column("nvarchar", { length: 6 })
-  @Index("IX_SENHA2")
-  CD_ccli: string;
+  @Index("ix_senha2", { synchronize: false })
+  cd_ccli: string;
 
   @Column("nvarchar", { length: 100 })
-  @Index("IX_SENHA3")
-  NM_nomecli: string;
+  @Index("ix_senha3", { synchronize: false })
+  nm_nomecli: string;
 
   @Column("nvarchar", { length: 14 })
-  @Index("IX_SENHA4")
-  TX_CGC: string;
+  @Index("ix_senha4", { synchronize: false })
+  tx_cgc: string;
   
 }

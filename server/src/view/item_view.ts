@@ -1,13 +1,13 @@
-import OrdemItem from "../models/OrdemItem";
+import OrdemItem from "../models/Ordemitem";
 
 export default {
   render(item: OrdemItem) {
     return {
-      orderId: item.CD_Ordem_ID,
-      id: item.CD_ID,
-      productName: item.NM_Produto,
-      gCode: item.CD_codigoGerado,
-      price: item.VL_Preco
+      orderId: item.cd_ordem_id,
+      id: item.cd_id,
+      productName: item.nm_produto,
+      gCode: item.cd_codigogerado,
+      price: item.vl_preco
     };
   },
 

@@ -1,31 +1,31 @@
-import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, Index, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import ClienteFinal from './Clientefinal';
 
 @Entity()
 export default class Ordem {
 
   @PrimaryGeneratedColumn()
-  CD_ID: number;
+  cd_id: number;
 
-  @Index("IX_Ordem1")
+  @Index("ix_ordem1", { synchronize: false })
   @Column("nvarchar", { length: 6 })
-  CD_ID_ccli: string;
-
-  @Column("numeric")
-  @Index("IX_Ordem5")
-  CD_ClienteFinal: number;
+  cd_id_ccli: string;
 
   @Column("datetime")
-  @Index("IX_Ordem3")
-  DT_Criado: Date;
+  @Index("ix_ordem3", { synchronize: false })
+  dt_criado: Date;
 
   @Column("nvarchar", { length: 255 })
-  VL_Total: string;
+  vl_total: string;
 
   @Column("nvarchar", { length: 255 })
-  TX_OBS: string;
+  tx_obs: string;
 
   @Column()
-  @Index("IX_Ordem4")
-  CD_HABIL_TIPO: number;
+  @Index("ix_ordem4", { synchronize: false })
+  cd_habil_tipo: number;
+
+  @ManyToOne(() => ClienteFinal, cliente => cliente.ordens)
+  cliente: ClienteFinal;
 
 }

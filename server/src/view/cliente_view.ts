@@ -1,18 +1,18 @@
-import ClienteFinal from "../models/ClienteFinal";
+import Clientefinal from "../models/Clientefinal";
 import ordem_view from "./ordem_view"
 
 export default {
-  render(cliente: ClienteFinal) {
+  render(cliente: Clientefinal) {
     return {
-      id: cliente.CD_Pessoa,
-      clientName: cliente.NM_Nome,
-      clientPhone: cliente.TX_Fone,
-      clientEmail: cliente.TX_email,
-      clientNotes: cliente.TX_OBS,
+      id: cliente.cd_pessoa,
+      clientName: cliente.nm_nome,
+      clientPhone: cliente.tx_fone,
+      clientEmail: cliente.tx_email,
+      clientNotes: cliente.tx_obs,
     };
   },
 
-  renderMany(clientes: ClienteFinal[]) {
+  renderMany(clientes: Clientefinal[]) {
     return clientes.map(cliente => this.render(cliente));
   }
 }

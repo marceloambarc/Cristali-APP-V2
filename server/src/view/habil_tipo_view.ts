@@ -1,17 +1,17 @@
-import HABIL_TIPO from "../models/HABIL_TIPO";
+import Habiltipo from "../models/Habiltipo";
 
 export default {
-  render(habilTipo: HABIL_TIPO) {
+  render(habilTipo: Habiltipo) {
     return {
-      id: habilTipo.CD_TIPO,
-      description: habilTipo.DS_TIPO,
-      type: habilTipo.TP_TIPO,
-      obs: habilTipo.TX_OBS,
-      refCode: habilTipo.CD_REFERENCIA
+      id: habilTipo.cd_tipo,
+      description: habilTipo.ds_tipo,
+      type: habilTipo.tp_tipo,
+      obs: habilTipo.tx_obs,
+      refCode: habilTipo.cd_referencia
     };
   },
 
-  renderMany(habilTipos: HABIL_TIPO[]) {
+  renderMany(habilTipos: Habiltipo[]) {
     return habilTipos.map(habilTipo => this.render(habilTipo));
   }
 }

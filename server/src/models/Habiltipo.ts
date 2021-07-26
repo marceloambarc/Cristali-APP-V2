@@ -1,21 +1,21 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity()
-export default class HABIL_TIPO {
+export default class Habiltipo {
 
   @PrimaryGeneratedColumn()
-  CD_TIPO: number;
+  cd_tipo: number;
 
   @Column("nvarchar", { length: 100 })
-  DS_TIPO: string;
+  ds_tipo: string;
 
   @Column("smallint")
-  TP_TIPO: number;
+  tp_tipo: number;
 
   @Column("ntext")
-  TX_OBS: string;
+  tx_obs: string;
 
   @Column('smallint')
-  CD_REFERENCIA: number;
+  cd_referencia: number;
 
 }

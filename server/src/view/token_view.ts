@@ -4,9 +4,9 @@ export default {
   render(token: Token) {
     return {
       id: token.id,
-      deviceToken: token.Token_Celular,
-      createdAt: token.DT_Criado,
-      updatedAt: token.DT_Modificado
+      token_celular: token.token_celular,
+      dt_criado: token.dt_criado,
+      dt_modificado: token.dt_modificado
     };
   },
 

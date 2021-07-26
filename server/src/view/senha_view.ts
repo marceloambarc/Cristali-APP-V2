@@ -3,12 +3,12 @@ import Senha from "../models/Senha";
 export default {
   render(senha: Senha) {
     return {
-      id: senha.ID,
-      isActive: senha.IN_Ativo,
-      password: senha.TX_Senha,
-      userCode: senha.CD_ccli,
-      userName: senha.NM_nomecli,
-      cgc: senha.TX_CGC 
+      id: senha.id,
+      isActive: senha.in_ativo,
+      password: senha.tx_senha,
+      userCode: senha.cd_ccli,
+      userName: senha.nm_nomecli,
+      cgc: senha.tx_cgc
     };
   },
 

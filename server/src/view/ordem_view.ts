@@ -3,13 +3,12 @@ import Ordem from "../models/Ordem";
 export default {
   render(ordem: Ordem) {
     return {
-      id: ordem.CD_ID,
-      userCode: ordem.CD_ID_ccli,
-      clientCode: ordem.CD_ClienteFinal,
-      createdAt: ordem.DT_Criado,
-      totalPrice: ordem.VL_Total,
-      orderNotes: ordem.TX_OBS,
-      condition: ordem.CD_HABIL_TIPO
+      id: ordem.cd_id,
+      userCode: ordem.cd_id_ccli,
+      createdAt: ordem.dt_criado,
+      totalPrice: ordem.vl_total,
+      orderNotes: ordem.tx_obs,
+      condition: ordem.cd_habil_tipo,
     }
   }
 }

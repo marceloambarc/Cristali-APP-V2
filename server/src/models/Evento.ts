@@ -4,24 +4,24 @@ import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 export default class Evento {
 
   @PrimaryGeneratedColumn()
-  ID_Evento: number;
+  id_evento: number;
 
-  @Index('IX_Evento1')
+  @Index('ix_evento1', { synchronize: false })
   @Column("datetime")
-  DT_Evento: Date;
+  dt_evento: Date;
 
   @Column("nvarchar", { length: 6 })
-  @Index('IX_Evento2')
-  CD_ccli: string;
+  @Index('ix_evento2', { synchronize: false })
+  cd_ccli: string;
 
   @Column("nvarchar", { length: 250 })
-  @Index('IX_Evento3')
-  TX_Evento: string;
+  @Index('ix_evento3', { synchronize: false })
+  tx_evento: string;
 
   @Column("nvarchar", { length: 250 })
-  Token_Cliente: string;
+  token_cliente: string;
 
   @Column("nvarchar", { length: 250 })
-  Token_Celular: string;
+  token_celular: string;
 
 }

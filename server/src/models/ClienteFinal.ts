@@ -1,30 +1,28 @@
-import { Column, Entity, Index, OneToMany, JoinTable, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, Index, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import Ordem  from "./Ordem";
 
 @Entity()
-export default class ClienteFinal {
+export default class Clientefinal {
 
-  @PrimaryGeneratedColumn({name: "PK_ClienteFinal"})
-  CD_Pessoa: number;
+  @PrimaryGeneratedColumn({name: "PK_clientefinal"})
+  cd_pessoa: number;
 
-  @Index("IX_ClientFinal1")
+  @Index("ix_clientefinal1")
   @Column("nvarchar", { length: 100 })
-  NM_Nome: string;
+  nm_nome: string;
 
   @Column("nvarchar", { length: 14 })
-  @Index("IX_ClientFinal2")
-  TX_Fone: string;
+  @Index("ix_clientefinal2")
+  tx_fone: string;
 
   @Column("nvarchar", { length: 100 })
-  TX_email: string;
+  tx_email: string;
 
   @Column("nvarchar", { length: 200 })
-  @Index("IX_ClientFinal3")
-  TX_OBS: string;
+  @Index("ix_clientefinal3")
+  tx_obs: string;
 
-  @OneToMany(() => Ordem, ordem => ordem.CD_ClienteFinal)
-  @Index("IX_ClientFinal14")
-  @JoinTable()
-  CD_OrdemId: Ordem[];
+  @OneToMany(() => Ordem, ordem => ordem.cliente)
+  ordens: Ordem[];
 
 }
