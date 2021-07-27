@@ -40,6 +40,7 @@ function AuthProvider({ children } : AuthProps) {
       cgc, password
     }).then(res => {
       AsyncStorage.setItem(COLLECTION_USER, JSON.stringify(res.data.user));
+      setClientToken(res.data.token);
       setUser(res.data.user);
       setLoading(false);
     }).catch(err => {
