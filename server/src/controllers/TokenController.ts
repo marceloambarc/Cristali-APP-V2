@@ -40,7 +40,7 @@ export default {
       /* CRIAR NOVO TOKEN DE DISPOSITIVO FÍSICO PARA 
       GERENCIAMENTO DE EVETOS E NOTIFICAÇÕES
       VEM DO APP COMO { id, deviceToken, createdAt, updatedAt }
-      SAI PARA O BANCO { id, token_celular, dt_crido, dt_modificado }
+      SAI PARA O BANCO { id, token_celular, dt_criado, dt_modificado }
 
       NOMENCLATURAS PARA MELHOR VISUALIZAÇÃO DOS CÓDIGOS EM SEUS 
       RESPECTIVOS AMBIENTES (REACT-NATIVE => APP  || api || SQL => BANCO DE DADOS)
@@ -82,7 +82,7 @@ export default {
 
         return response.status(201).json(tokenRepository);
       }else{
-        return response.status(409).json();
+        return response.status(409).json({ "Ops!" : "Token já Cadastrado" });
       }
 
     }catch(err){

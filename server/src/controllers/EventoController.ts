@@ -31,6 +31,13 @@ export default {
 
   async create(request: Request, response: Response) {
     try {
+      /* CRIAR NOVO LOG DE EVENTOS
+      VEM DO APP COMO { userCode, eventDescription, userToken, deviceToken }
+      SAI PARA O BANCO { cd_ccli, tx_evento, token_cliente, token_celular }
+
+      NOMENCLATURAS PARA MELHOR VISUALIZAÇÃO DOS CÓDIGOS EM SEUS 
+      RESPECTIVOS AMBIENTES (REACT-NATIVE => APP  || api || SQL => BANCO DE DADOS)
+      */
 
       const { 
         userCode,
@@ -42,19 +49,19 @@ export default {
       const eventsRepository = getRepository(Evento);
 
       const data : any = {
-        createdAt: new Date(),
-        userCode,
-        eventDescription,
-        userToken,
-        deviceToken,
+        dt_evento: new Date(),
+        cd_ccli: userCode,
+        tx_evento: eventDescription,
+        token_cliente: userToken,
+        token_celular: deviceToken,
       };
 
       const schema = Yup.object().shape({
-        createdAt: Yup.date().default(() => new Date()),
-        userCode: Yup.string().required(),
-        eventDescription: Yup.string().required(),
-        userToken: Yup.string().required(),
-        deviceToken: Yup.string().required()
+        dt_evento: Yup.date().default(() => new Date()),
+        cd_ccli: Yup.string().required(),
+        tx_evento: Yup.string().required(),
+        token_cliente: Yup.string().required(),
+        token_celular: Yup.string().required()
       });
 
       await schema.validate(data, {

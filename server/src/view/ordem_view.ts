@@ -10,5 +10,9 @@ export default {
       orderNotes: ordem.tx_obs,
       condition: ordem.cd_habil_tipo,
     }
+  },
+
+  renderMany(ordens: Ordem[]) {
+    return ordens.map(ordem => this.render(ordem));
   }
 }
