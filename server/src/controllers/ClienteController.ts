@@ -36,6 +36,63 @@ export default {
     }
   },
 
+  async showWithOrders(request: Request, response: Response) {
+    try {
+      const { clientName } = request.body;
+      const clientesFinalRepository = getRepository(Clientefinal);
+
+      const existCliente = await clientesFinalRepository.findOne({
+        where: [
+          { nm_nome: clientName }
+        ]
+      });
+
+      if(existCliente === undefined){
+        return response.status(404).json({ "Erro" : "Cliente não Econtrado." });
+      }else{
+        return response.json(clienteView.renderWithOrder(existCliente));
+      }
+    }catch(err){
+      return response.status(400).json({ "Erro" : err });
+    }
+  },
+
+  async edit(request: Request, response: Response) {
+    try{
+
+      const { id } = request.params;
+
+      const {
+        clientName,
+        clientPhone,
+        clientEmail,
+        clientNotes
+      } = request.body;
+
+      const clientesFinalRepository = getRepository(Clientefinal);
+
+      const existClienteFinal = await clientesFinalRepository.findOne({
+        where: {
+          cd_pessoa: id
+        }
+      });
+
+      if(existClienteFinal === undefined){
+        return response.status(404).json({ "Erro" : "Cliente não Existe" });
+      }else{
+        existClienteFinal.nm_nome = clientName;
+        existClienteFinal.tx_fone = clientPhone;
+        existClienteFinal.tx_email = clientEmail;
+        existClienteFinal.tx_obs = clientNotes;
+        await clientesFinalRepository.save(existClienteFinal);
+        return response.status(200).json(existClienteFinal);
+      } 
+
+    }catch(err){
+      return response.status(400).json({ "Erro" : err });
+    }
+  },
+
   async create(request: Request, response: Response) {
     try {
 
