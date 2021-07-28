@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StatusBar, Alert } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 
 import { Header } from "../../components/Header";
 import { Divider } from "../../components/Divider";
@@ -13,7 +13,12 @@ import { ClientProps } from "../../components/ClientComponent";
 import { styles } from "./styles";
 import { theme } from "../../global";
 
+import { api } from "../../services/api";
+
 export function Client() {
+  const [loading, setLoading] = useState(true);
+  const [clients, setClients] = useState<ClientProps[]>([])
+
   const [searchId, setSearchId] = useState(0);
   const [searchName, setSearchName] = useState('');
   const [searchTelephone, setSearchTelephone] = useState('');
@@ -23,6 +28,17 @@ export function Client() {
   const [allowPress, setAllowPress] = useState(false);
 
   const navigation = useNavigation();
+
+  useFocusEffect(() => {
+    if(!loading){
+      return;
+    }else{
+      api.get('client').then(response => {
+        setClients(response.data);
+        setLoading(false);
+      });
+    }
+  });
 
   useEffect(() => {
     if(searchName != '' && searchName != undefined){
@@ -78,6 +94,7 @@ export function Client() {
 
       <View style={styles.clientList}>
         <ClientList
+          data={clients}
           handleClientSelect={handleClientSelect}
         />
       </View>
@@ -91,7 +108,7 @@ export function Client() {
 
       {
         allowPress?
-        <CristaliButton 
+        <CristaliButton
           title="Selecionar"
           color={theme.colors.Config}
           onPress={validate}

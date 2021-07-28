@@ -1,22 +1,22 @@
 import React from "react";
 import { FlatList } from "react-native";
 
-import { ClientComponent, ClientProps } from "../ClientComponent";
+import { Order, OrderProps } from "../Order";
 
-interface ClientListProps {
-  handleClientSelect: (client : ClientProps) => void;
-  data: ClientProps[];
+interface OrderListProps {
+  handleOrderSelect: (order : OrderProps) => void;
+  data: OrderProps[];
 }
 
-export function ClientList({ data, handleClientSelect } : ClientListProps) {
+export function OrderList({ data, handleOrderSelect } : OrderListProps) {
   return (
     <FlatList
       data={data}
       keyExtractor={item => String(item.id)}
       renderItem={({ item }) => (
-        <ClientComponent 
+        <Order 
           data={item} 
-          onPress={() => handleClientSelect(item)}
+          onPress={() => handleOrderSelect(item)}
         />
       )}
       showsVerticalScrollIndicator={false}

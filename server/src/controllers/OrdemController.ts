@@ -23,8 +23,6 @@ export default {
     try {
 
       const { id } = request.params;
-
-      console.log(id);
   
       const ordensRepository = getRepository(Ordem);
   
@@ -38,6 +36,123 @@ export default {
         return response.status(404).json({ "Erro" : "Nenhuma Ordem Cadastrada neste Usuário" });
       }else{
         return response.json(ordemView.render(ordem));
+      }
+
+    }catch(err){
+      return response.status(400).json({ "Erro" : err });
+    }
+  },
+
+  async showOpenSales(request: Request, response: Response) {
+    try {
+
+      const { userCode } = request.body;
+
+      const ordensRepository = getRepository(Ordem);
+
+      var openSales;
+
+      if(userCode !== undefined) {
+        openSales = await ordensRepository.find({
+          where: {
+            cd_id_ccli: userCode,
+            cd_habil_tipo : 217
+          }
+        });
+      } else {
+        openSales = await ordensRepository.find({
+          where: {
+            cd_habil_tipo : 217
+          }
+        });
+      }
+
+      if(openSales === undefined) {
+        return response.status(404).json({ "Erro" : "Nenhuma Ordem Aberta" });
+      } else {
+        if(openSales.length <= 0){
+          return response.status(204).json({ "Vazio" : "Nenhuma Ordem Aberta" });
+        } else {
+          return response.json(ordemView.renderMany(openSales));
+        }
+      }
+
+    }catch(err){
+      return response.status(400).json({ "Erro" : err });
+    }
+  },
+
+  async showInsertedSales(request: Request, response: Response) {
+    try {
+
+      const { userCode } = request.body;
+
+      const ordensRepository = getRepository(Ordem);
+
+      var insertedSales;
+
+      if(userCode !== undefined) {
+        insertedSales = await ordensRepository.find({
+          where: {
+            cd_id_ccli: userCode,
+            cd_habil_tipo : 218
+          }
+        });
+      } else {
+        insertedSales = await ordensRepository.find({
+          where: {
+            cd_habil_tipo : 218
+          }
+        });
+      }
+
+      if(insertedSales === undefined) {
+        return response.status(404).json({ "Erro" : "Nenhuma Ordem Aberta" });
+      } else {
+        if(insertedSales.length <= 0){
+          return response.status(204).json({ "Vazio" : "Nenhuma Ordem Aberta" });
+        } else {
+          return response.json(ordemView.renderMany(insertedSales));
+        }
+      }
+
+    }catch(err){
+      return response.status(400).json({ "Erro" : err });
+    }
+  },
+  
+  async showSelectedPaymentSales(request: Request, response: Response) {
+    try {
+
+      const { userCode } = request.body;
+
+      const ordensRepository = getRepository(Ordem);
+
+      var selectedPaymentOrdem;
+
+      if(userCode !== undefined) {
+        selectedPaymentOrdem = await ordensRepository.find({
+          where: {
+            cd_id_ccli: userCode,
+            cd_habil_tipo : 219
+          }
+        });
+      } else {
+        selectedPaymentOrdem = await ordensRepository.find({
+          where: {
+            cd_habil_tipo : 219
+          }
+        });        
+      }
+
+      if(selectedPaymentOrdem === undefined) {
+        return response.status(404).json({ "Erro" : "Nenhuma Ordem Aberta" });
+      } else {
+        if(selectedPaymentOrdem.length <= 0){
+          return response.status(204).json({ "Vazio" : "Nenhuma Ordem Aberta" });
+        } else {
+          return response.json(ordemView.renderMany(selectedPaymentOrdem));
+        }
       }
 
     }catch(err){

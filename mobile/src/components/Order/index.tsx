@@ -14,11 +14,11 @@ export interface OrderProps {
   condition: number;
 }
 
-interface Props extends TouchableOpacityProps {
+interface OrderComponentProps extends TouchableOpacityProps {
   data: OrderProps;
 }
 
-export function Order({ data, ...rest } : Props ) {
+export function Order({ data, ...rest } : OrderComponentProps ) {
   return (
     <TouchableOpacity
       style={

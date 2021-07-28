@@ -5,7 +5,6 @@ export default {
     return {
       id: senha.id,
       isActive: senha.in_ativo,
-      password: senha.tx_senha,
       userCode: senha.cd_ccli,
       userName: senha.nm_nomecli,
       cgc: senha.tx_cgc
