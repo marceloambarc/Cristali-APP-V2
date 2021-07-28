@@ -8,25 +8,43 @@ import TokenController from './controllers/TokenController';
 
 const routes = Router();
 
-// CONTROLE
+
+// ---------------------- CONTROLE
+
+// -- CRIPTOGRAFAR SENHAS
 
 routes.post('/hashpasswords', SenhaController.hashPasswords);
+
+// -- LOGS
 
 routes.get('/evento', EventoController.index);
 routes.get('/evento/:id', EventoController.show);
 routes.post('/evento', EventoController.create);
 
+// -- USUÁRIOS
+
 routes.get('/senha', SenhaController.index);
-routes.post('/senha', SenhaController.login);
-routes.post('/senha/create', SenhaController.create);
-routes.put('/senha/:id', SenhaController.switch);
+routes.get('/senha/:cgc', SenhaController.show);
+routes.post('/login', SenhaController.login);
+routes.post('/senha', SenhaController.create);
+routes.put('/acesso/:id', SenhaController.switch);
+routes.put('/senha/:cgc', SenhaController.edit);
+routes.delete('/senha/:cgc', SenhaController.delete);
+
+// -- TOKEN DE DISPOSITIVOS
 
 routes.get('/token', TokenController.index);
 routes.get('/token/:id', TokenController.show);
 routes.post('/token', TokenController.create);
 
-// APLICAÇÃO
-// -- CLIENTE
+
+// ----------------------- APLICAÇÃO
+
+// -- USUÁRIO 
+
+routes.put('/changepassword', SenhaController.changePassword);
+
+// -- CLIENTES
 
 routes.get('/client', ClienteController.index);
 routes.get('/client/orders', ClienteController.showWithOrders);
@@ -34,7 +52,7 @@ routes.get('/client/:id', ClienteController.show);
 routes.post('/client', ClienteController.create);
 routes.put('/cliente/:id', ClienteController.edit);
 
-// -- ORDEM
+// -- ORDENS
 
 routes.get('/order', OrdemController.index);
 routes.get('/order/:id', OrdemController.show);

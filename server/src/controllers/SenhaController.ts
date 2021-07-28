@@ -24,6 +24,28 @@ export default {
     }
   },
 
+  async show(request: Request, response: Response) {
+    try {
+      const { 
+        cgc
+      } = request.params;
+      const searchCgc = String(cgc);
+  
+      const senhasRepository = getRepository(Senha);
+  
+      const existSenha = await senhasRepository.findOneOrFail({
+        where: {
+          tx_cgc: searchCgc
+        }
+      });
+
+      return response.json(senhaView.render(existSenha));
+
+    }catch(err) {
+      return response.status(400).json({ "Erro" : err });
+    }
+  },
+
   async login(request: Request, response: Response) {
     const { cgc, password } = request.body;
 
@@ -75,6 +97,46 @@ export default {
     }
   },
 
+  async changePassword(request: Request, response: Response) {
+    try {
+
+      const {
+        userCode,
+        oldPassword,
+        newPassword
+      } = request.body;
+      const searchUserCode = String(userCode);
+
+      const senhasRepository = getRepository(Senha);
+
+      const existSenha = await senhasRepository.findOne({
+        where: {
+          cd_ccli: searchUserCode
+        }
+      });
+
+      if(existSenha === undefined) {
+        return response.status(404).json({ "Erro" : "Usuário não existe" });
+      } else {
+        const isPasswordRight = await bcrypt.compare(oldPassword, existSenha.tx_senha);
+        if(!isPasswordRight) {
+          return response.status(419).json({ "Erro": `Senha Atual Incorreta ${existSenha.nm_nomecli}` });
+        } else {
+          let generatedSalt = await bcrypt.genSalt(salt);
+          let hash = await bcrypt.hash(newPassword, generatedSalt);
+
+          existSenha.tx_senha = hash;
+          await senhasRepository.save(existSenha);
+
+          return response.status(202).json(senhaView.render(existSenha));
+        }
+      }
+
+    }catch(err) {
+      return response.status(400).json({ "Erro" : err });
+    }
+  },
+
   async switch(request: Request, response: Response) {
     try {
       
@@ -86,7 +148,7 @@ export default {
 
       const existSenha = await senhasRepository.findOne({
         where: [
-          { TX_CGC: cgc }
+          { tx_cgc: cgc }
         ]
       });
 
@@ -102,6 +164,72 @@ export default {
       }
     }catch(err){
       return response.status(400).json({ err });
+    }
+  },
+
+  async edit(request: Request, response: Response) {
+    try {
+
+      const {
+        cgc
+      } = request.params;
+      const searchCgc = String(cgc);
+
+      const {
+        userName
+      } = request.body;
+
+      const senhasRepository = getRepository(Senha);
+
+      const existSenha = await senhasRepository.findOne({
+        where: {
+          tx_cgc: searchCgc
+        }
+      });
+
+      if(existSenha === undefined) {
+        return response.status(404).json({ "Erro" : "Cadastro não Existe!" });
+      } else {
+        if(userName === '') {
+          return response.status(411).json({ "Erro" : "Insira o Nome do Usuário." });
+        } else {
+          existSenha.nm_nomecli = userName;
+          await senhasRepository.save(existSenha);
+          return response.status(200).json(existSenha);
+        }
+      }
+
+    }catch(err) {
+      return response.status(400).json({ "Erro" : err });
+    }
+  },
+
+  async delete(request: Request, response: Response) {
+    try {
+      const {
+        cgc
+      } = request.params;
+      const searchCgc = String(cgc);
+
+      const senhasRepository = getRepository(Senha);
+
+      const existSenha = await senhasRepository.findOne({
+        where: {
+          tx_cgc: searchCgc
+        }
+      });
+
+      if(existSenha === undefined) {
+        return response.status(404).json({ "Erro" : "Usuário não Encontrado" });
+      } else {
+        console.log('H');
+        await senhasRepository.remove(existSenha);
+
+        return response.status(200);
+      }
+
+    }catch(err) {
+      return response.status(400).json({ "Erro" : err });
     }
   },
 
@@ -121,48 +249,53 @@ export default {
         cgc
       } = request.body;
 
-      const senhasRepository = getRepository(Senha);
-
-      const existSenha = await senhasRepository.findOne({
-        where: {
-          tx_cgc: cgc
-        }
-      });
-
-      if(existSenha === undefined) {
-        const saltEncriypted = await bcrypt.genSalt(salt);
-        const hash = await bcrypt.hash(password, saltEncriypted);
-
-        const data : any = {
-          in_ativo: 0,
-          tx_senha: hash,
-          cd_ccli: userCode,
-          nm_nomecli: userName,
-          cgc
-        };
-  
-        const schema = Yup.object().shape({
-          in_ativo: Yup.number().required(),
-          tx_senha: Yup.string().required(),
-          cd_ccli: Yup.string().required(),
-          nm_nomecli: Yup.string().required(),
-          cgc: Yup.string().required()
-        });
-  
-        await schema.validate(data, {
-          abortEarly: false,
-        });
-  
-        const senhaRepository = senhasRepository.create(data);
-
-        await senhasRepository.save(senhaRepository);
-
-        return response.status(201).json(senhaRepository);
+      if(password === '' || userCode === '' || userName === '' || cgc === '') {
+        return response.status(400).json({ "Erro" : "O parâmetro não pode ser vazio." });
       } else {
-        return response.status(409).json({ "Ops!" : "CPF já Cadastrado." });
+
+        const senhasRepository = getRepository(Senha);
+
+        const existSenha = await senhasRepository.findOne({
+          where: {
+            tx_cgc: cgc
+          }
+        });
+  
+        if(existSenha === undefined) {
+          
+          const saltEncriypted = await bcrypt.genSalt(salt);
+          const hash = await bcrypt.hash(password, saltEncriypted);
+  
+          const data : any = {
+            in_ativo: 0,
+            tx_senha: hash,
+            cd_ccli: userCode,
+            nm_nomecli: userName,
+            tx_cgc: cgc
+          };
+
+          const schema = Yup.object().shape({
+            in_ativo: Yup.number().required(),
+            tx_senha: Yup.string().required(),
+            cd_ccli: Yup.string().required(),
+            nm_nomecli: Yup.string().required(),
+            tx_cgc: Yup.string().required()
+          });
+    
+          await schema.validate(data, {
+            abortEarly: false,
+          });
+    
+          const senhaRepository = await senhasRepository.insert(data);
+  
+          return response.status(201).json(senhaRepository);
+
+        } else {
+          return response.status(409).json({ "Ops!" : "CPF já Cadastrado." });
+        }
       }
     }catch(err){
-      return response.json(400).json({ "Erro" : err });
+      return response.status(400).json({ "Erro" : err });
     }
   }
 
