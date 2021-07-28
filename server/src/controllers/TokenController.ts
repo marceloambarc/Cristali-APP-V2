@@ -15,7 +15,7 @@ export default {
     if(tokens.length === 0){
       return response.status(204).json({ "Vazio": "Nenhum Token Inserido." });
     }else{
-      return response.status(200).json(tokenView.renderMany(tokens));
+      return response.status(200).json([tokenView.renderMany(tokens), request.userId]);
     }
   },
 

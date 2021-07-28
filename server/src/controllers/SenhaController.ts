@@ -5,7 +5,8 @@ import jwt from 'jsonwebtoken';
 import * as Yup from 'yup';
 
 import { salt } from '../../credentials';
-import { JWTSecret } from '../../credentials';
+import { JWTSecretUser } from '../../credentials';
+import { SegundaSenha } from '../../credentials';
 
 import Senha from '../models/Senha';
 import senhaView from '../view/senha_view';
@@ -61,7 +62,7 @@ export default {
       if(!isPasswordRight){
         return response.status(419).json({ "Erro": "Senha Incorreta" });
       }else{
-        jwt.sign({ cgc, id: senha.id, isActive: senha.in_ativo, userName: senha.nm_nomecli }, JWTSecret, { expiresIn: '1h' }, (err, token) => {
+        jwt.sign({ cgc, id: senha.id, isActive: senha.in_ativo, userName: senha.nm_nomecli }, JWTSecretUser, { expiresIn: '1h' }, (err, token) => {
           if(err){
             return response.status(401).json({ "Ops": "A sua Sessão Terminou, Faça Login Novamente" });
           }else{
@@ -75,13 +76,13 @@ export default {
   async hashPasswords(request: Request, response: Response) {
     try {
 
-      const { senhaHyperSecret } = request.body;
+      const { password } = request.body;
 
       const senhasRepository = getRepository(Senha);
   
       const senha = await senhasRepository.find();
   
-      if(senhaHyperSecret === JWTSecret) {
+      if(password === SegundaSenha) {
         senha.forEach(async user => {
           let password = user.tx_senha;
           let generatedSalt = await bcrypt.genSalt(salt);
@@ -298,5 +299,4 @@ export default {
       return response.status(400).json({ "Erro" : err });
     }
   }
-
 }
