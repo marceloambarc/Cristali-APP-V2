@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, StatusBar, Image, Alert } from 'react-native';
-import { useNavigation, useRoute, StackActions } from '@react-navigation/native';
+import { View, Text, ScrollView, StatusBar, Image } from 'react-native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 import { api } from '../../services/api';
 import { pgapi } from '../../services/pgapi';

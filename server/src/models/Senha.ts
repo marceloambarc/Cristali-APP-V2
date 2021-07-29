@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, Index } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, Index, ManyToMany, JoinTable } from 'typeorm';
+import Clientefinal from './Clientefinal';
 
 @Entity()
 export default class Senha {
@@ -24,5 +25,9 @@ export default class Senha {
   @Column("nvarchar", { length: 14 })
   @Index("ix_senha4", { synchronize: false })
   tx_cgc: string;
+
+  @ManyToMany(() => Clientefinal)
+  @JoinTable()
+  Clientes: Clientefinal[];
   
 }

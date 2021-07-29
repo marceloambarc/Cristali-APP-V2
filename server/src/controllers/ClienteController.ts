@@ -138,6 +138,25 @@ export default {
     }catch(err){
       return response.status(400).json({ "Erro": err });
     }
+  },
+
+  // MYCLIENTS
+
+  async userClients(request: Request, response: Response) {
+    try {
+
+      const { id } = request.body;
+      const searchId = parseInt(id);
+  
+      const clientesFinalRepository = getRepository(Clientefinal);
+  
+      const cliente = await clientesFinalRepository.findOneOrFail(searchId);
+  
+      return response.json(clienteView.render(cliente));
+
+    }catch(err){
+      return response.status(404).json({ "Erro" : "Nenhum Cliente encontrado com este Parâmetro." });
+    }
   }
 
 }

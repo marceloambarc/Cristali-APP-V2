@@ -62,13 +62,17 @@ export default {
       if(!isPasswordRight){
         return response.status(419).json({ "Erro": "Senha Incorreta" });
       }else{
-        jwt.sign({ cgc, id: senha.id, isActive: senha.in_ativo, userName: senha.nm_nomecli }, JWTSecretUser, { expiresIn: '1h' }, (err, token) => {
-          if(err){
-            return response.status(401).json({ "Ops": "A sua Sessão Terminou, Faça Login Novamente" });
-          }else{
-            return response.status(200).json({ "token": token, "user": senhaView.render(senha) });
-          }
-        })
+        if(senha.in_ativo === 0){
+          return response.status(403).json({ "Erro": "Usuário não ativo." });
+        } else {
+          jwt.sign({ cgc, id: senha.id, isActive: senha.in_ativo, userName: senha.nm_nomecli }, JWTSecretUser, { expiresIn: '1h' }, (err, token) => {
+            if(err){
+              return response.status(401).json({ "Ops": "A sua Sessão Terminou, Faça Login Novamente" });
+            }else{
+              return response.status(200).json({ "token": token, "user": senhaView.render(senha) });
+            }
+          })
+        }
       }
     }
   },

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Linking, Platform } from 'react-native';
+import { View, Linking } from 'react-native';
 
 import { CristaliButton } from '../components/CristaliButton';
 
