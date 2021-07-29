@@ -1,5 +1,6 @@
-import { Column, Entity, Index, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, Index, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import ClienteFinal from './Clientefinal';
+import Ordemitem from './Ordemitem';
 
 @Entity()
 export default class Ordem {
@@ -27,5 +28,8 @@ export default class Ordem {
 
   @ManyToOne(() => ClienteFinal, cliente => cliente.ordens)
   cliente: ClienteFinal;
+
+  @OneToMany(() => Ordemitem, item => item.cd_ordem_id)
+  itens: Ordemitem[]
 
 }

@@ -1,9 +1,13 @@
 import { Request, Response } from "express";
-import { getRepository } from "typeorm";
+import { getRepository, LessThan } from "typeorm";
+import { createHash } from 'crypto';
 import * as Yup from 'yup'
+
+import { pagSegurotoken } from "../../credentials";
 
 import Ordem from "../models/Ordem";
 import ordemView from "../view/ordem_view";
+
 
 export default { 
 
@@ -285,6 +289,132 @@ export default {
     }catch(err){
       return response.status(400).json({ "Erro" : err });
     }
-  }
+  },
 
+  //  MYCLIENTS
+
+  async userOrders(request: Request, response: Response) {
+    try {
+
+      const { id } = request.params;
+      const searchId = parseInt(id);
+
+      const ordensRepository = getRepository(Ordem);
+
+      const ordens = await ordensRepository.find({
+        where: {
+          cd_id_ccli: searchId
+        }
+      });
+
+      if(ordens.length === 0) {
+        return response.status(204).json({ "Vazio" : "Nenhuma Ordem Cadastrada" });
+      } else {
+        return response.json(ordemView.renderMany(ordens));
+      }
+
+    }catch(err) {
+      return response.status(400).json({ "Erro" : err });
+    }
+  },
+
+  async userSavedOrders(request: Request, response: Response) {
+    try {
+
+      const { id } = request.params;
+      const searchId = parseInt(id);
+
+      const ordensRepository = getRepository(Ordem);
+
+      const ordens = await ordensRepository.find({
+        where: [
+          { cd_id_ccli: searchId },
+          { cd_habil_tipo: 217 },
+          { cd_habil_tipo: 218 },
+          { cd_habil_tipo: 219 }
+        ]
+      });
+
+      if(ordens.length === 0) {
+        return response.status(204).json({ "Vazio" : "Nenhuma Ordem Salva" });
+      } else {
+        return response.json(ordemView.renderMany(ordens));
+      }
+
+    }catch(err) {
+      return response.status(400).json({ "Erro" : err });
+    }
+  },
+
+  async userHystory(request: Request, response: Response) {
+    try {
+
+      const { id } = request.params;
+      const searchId = parseInt(id);
+
+      const ordensRepository = getRepository(Ordem);
+
+      const ordens = await ordensRepository.find({
+        where: [
+          { cd_id_ccli: searchId },
+          { cd_habil_tipo: 221 },
+          { cd_habil_tipo: 222 },
+          { cd_habil_tipo: 223 }
+        ]
+      });
+
+      if(ordens.length === 0) {
+        return response.status(204).json({ "Vazio" : "Histórico Vazio" });
+      } else {
+        return response.json(ordemView.renderMany(ordens));
+      }
+
+    }catch(err) {
+      return response.status(400).json({ "Erro" : err });
+    }
+  },
+
+  async deleteUserHistory(request: Request, response: Response) {
+    try {
+
+      const { id } = request.params;
+      const searchId = parseInt(id);
+
+      const ordensRepository = getRepository(Ordem);
+
+      var d = new Date();
+      d.setDate(d.getDate()-30);
+
+      const ordens = await ordensRepository.find({
+        where: [
+          { cd_id_ccli: searchId },
+          { dt_criado: LessThan(d) }
+        ]
+      });
+
+      if(ordens.length !== 0){
+        await ordensRepository.remove(ordens);
+
+        return response.status(200);
+      }
+
+      return;
+
+    }catch(err) {
+      return response.status(400).json({ "Erro" : err });
+    }
+  },
+
+  async pSeguro(request: Request, response: Response) {
+    try {
+
+      const payload = request.body;
+      const header = request.headers;
+
+      const hash = createHash("sha256").update(`${payload}-${pagSegurotoken}`).digest('hex')
+
+    }catch(err) {
+      return response.status(400).json({ "Erro": err });
+    }
+  }
 }

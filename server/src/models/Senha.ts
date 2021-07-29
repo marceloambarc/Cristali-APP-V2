@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, Index, ManyToMany, JoinTable } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, Index, JoinTable, OneToMany } from 'typeorm';
 import Clientefinal from './Clientefinal';
 
 @Entity()
@@ -26,8 +26,8 @@ export default class Senha {
   @Index("ix_senha4", { synchronize: false })
   tx_cgc: string;
 
-  @ManyToMany(() => Clientefinal)
+  @OneToMany(() => Clientefinal, cliente => cliente.senhas)
   @JoinTable()
-  Clientes: Clientefinal[];
+  clientes: Clientefinal[];
   
 }

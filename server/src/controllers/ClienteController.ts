@@ -145,14 +145,22 @@ export default {
   async userClients(request: Request, response: Response) {
     try {
 
-      const { id } = request.body;
+      const { id } = request.params;
       const searchId = parseInt(id);
   
       const clientesFinalRepository = getRepository(Clientefinal);
   
-      const cliente = await clientesFinalRepository.findOneOrFail(searchId);
-  
-      return response.json(clienteView.render(cliente));
+      const clientes = await clientesFinalRepository.find({
+        where: {
+          senhas: searchId
+        }
+      });
+
+      if(clientes.length === 0) {
+        return response.status(204).json({ "Vazio" : "Nenhuma Cliente Inserida." });
+      } else {
+        return response.json(clienteView.renderMany(clientes));
+      }
 
     }catch(err){
       return response.status(404).json({ "Erro" : "Nenhum Cliente encontrado com este Parâmetro." });

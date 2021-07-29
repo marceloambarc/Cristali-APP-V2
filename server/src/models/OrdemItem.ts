@@ -6,7 +6,7 @@ export default class Ordemitem {
 
   @PrimaryColumn()
   @Index("ix_ordemitem1", { synchronize: false })
-  @ManyToOne( () => Ordem, (ordem) => ordem.cd_id, { primary: true, })
+  @ManyToOne(() => Ordem, (ordem) => ordem.cd_id, { primary: true, })
   cd_ordem_id: number;
 
   @PrimaryColumn("numeric")
@@ -22,4 +22,5 @@ export default class Ordemitem {
 
   @Column("numeric")
   vl_preco: number;
+  
 }

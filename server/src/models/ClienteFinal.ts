@@ -1,4 +1,5 @@
-import { Column, Entity, Index, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, Index, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import Senha from './Senha';
 import Ordem  from "./Ordem";
 
 @Entity()
@@ -21,6 +22,9 @@ export default class Clientefinal {
   @Column("nvarchar", { length: 200 })
   @Index("ix_clientefinal3")
   tx_obs: string;
+
+  @ManyToOne(() => Senha, senha => senha.clientes)
+  senhas: Senha[]
 
   @OneToMany(() => Ordem, ordem => ordem.cliente)
   ordens: Ordem[];

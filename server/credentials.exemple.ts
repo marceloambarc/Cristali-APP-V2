@@ -1,2 +1,5 @@
-export const salt = 0;
-export const JWTSecret = "YourJWTSecretHere";
+export const salt = 2;
+export const JWTSecretUser = "JWTSECRET";
+export const JWTSecretAdmin = "JWTSECRET2";
+export const SegundaSenha = "AnotherPassword";
+export const pagSegurotoken = "PagSeguroToken";
