@@ -70,7 +70,7 @@ export default function App(){
 
   async function sendToken(deviceToken: string) {
     AsyncStorage.setItem(COLLECTION_DEVICE_TOKEN, JSON.stringify(deviceToken));
-    api.post('token',{
+    api.post('/token',{
       deviceToken: deviceToken
     }).then(() => {
       setLoading(false);

@@ -58,18 +58,23 @@ export function MoneyScreen() {
   }
 
   function handleFinal() {
-    const notes = paymentMethod + ' ' + orderParams.orderNotes;
+    const notes = paymentMethod + ' ' + orderParams.ordem.orderNotes;
+    handleSetNewCondition(221);
     if(isMoney) {
-      // API
       handleLogSend(`${user.userName} Finalizou uma venda por ${paymentMethod}.`);
       navigation.setParams({ moneyParams: null });
       navigation.navigate('Final');
     } else {
-      // API
       handleLogSend(`${user.userName} Finalizou uma venda por Dinheiro.`);
       navigation.setParams({moneyParams: null});
       navigation.navigate('Final');
     }
+  }
+
+  async function handleSetNewCondition(condition: number) {
+    await api.post(`/order/condition/${orderParams.ordem.id}`,{
+      condition: condition
+    });
   }
 
   async function loadItems() {
@@ -82,6 +87,7 @@ export function MoneyScreen() {
 
   useFocusEffect(useCallback(() => {
     loadItems();
+    handleSetNewCondition(219);
   },[]));
 
   return (

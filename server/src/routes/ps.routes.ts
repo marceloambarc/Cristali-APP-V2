@@ -10,6 +10,6 @@ const psController = Router();
   ROTAS DISTINTAS PARA PAGSEGURO
 */
 
-psController.post('/order/:document', OrdemController.pSeguro);
+psController.post('/myPagSeguro/:document/:', OrdemController.pSeguro);
 
 export default psController;

@@ -36,7 +36,7 @@ function AuthProvider({ children } : AuthProps) {
 
   async function signIn({ cgc, password } : UserProps) {
     setLoading(true);
-    api.post('/senha',{
+    api.post('/login',{
       cgc, password
     }).then(res => {
       AsyncStorage.setItem(COLLECTION_USER, JSON.stringify(res.data.user));

@@ -38,7 +38,7 @@ export function History() {
   const [isHistoryDeleted, setIsHistoryDeleted] = useState(false);
 
   async function handleSetTotal(){
-    setTotal(orderHistory.reduce((a,v) =>  a = a + parseFloat(v.totalPrice.replace('.','').replace(',','')) , 0).toString());
+    setTotal(orderHistory.reduce((a,v) =>  a = a + parseFloat(v.ordem.totalPrice.replace('.','').replace(',','')) , 0).toString());
   }
 
   async function handleSetMomentum(){
@@ -50,7 +50,7 @@ export function History() {
   }
 
   async function getHistory(){
-    api.get(`order/${user.id}`).then(res => {
+    api.get(`/order/${user.id}`).then(res => {
       setOrderHistory(res.data);
     })
   }
@@ -59,7 +59,7 @@ export function History() {
     if(isLogSended)
       return;
     setLoading(true);
-    api.post('evento',{
+    api.post('/evento',{
       userCode: user.userCode,
       eventDescription: logText,
       userToken: clientToken,
@@ -68,33 +68,29 @@ export function History() {
       setIsLogSended(true);
     }).catch(res => {
       setIsLogSended(false);
-    }).finally(() => {
-      setLoading(false);
-    });
+    })
   }
 
   async function deleteHistory() {
     if(isHistoryDeleted)
       return;
-    api.delete(`myOrders/hitory/${user.userCode}`).then(() => {
+    api.delete(`/myOrders/history/${user.userCode}`).then(() => {
       setIsHistoryDeleted(true);
     }).catch(err => {
       Alert.alert(err);
-    }).finally(() => {
-      setLoading(false);
-    });
+    })
   }
 
   useEffect(() => {
-    getHistory();
     deleteHistory();
+    getHistory();
     setHistoryCount(orderHistory.length);
     handleSetTotal();
     handleSetMomentum();
   },[]);
 
   function handleOrderSelect(orderSelect: OrderProps){
-    alert('Selected ' + orderSelect.id);
+    alert('Selected ' + orderSelect.ordem.id);
   }
 
   const showSecondDatePicker = () => {

@@ -10,6 +10,7 @@ import ordemView from "../view/ordem_view";
 
 import Clientefinal from "../models/Clientefinal";
 import ClienteController from "./ClienteController";
+import clienteView from "../view/cliente_view";
 
 
 export default { 
@@ -426,7 +427,20 @@ export default {
       if(ordens.length === 0) {
         return response.status(204).json({ "Vazio" : "Nenhuma Ordem Salva" });
       } else {
-        return response.json(ordemView.renderMany(ordens));
+        ordens.map(async ordem => {
+          const searchId = ordem.cd_clientefinal;
+          const clientesRepository = getRepository(Clientefinal);
+          const cliente = await clientesRepository.findOne({
+            where: {
+              cd_pessoa: searchId
+            }
+          });
+          if(cliente != undefined){
+            return response.json({"ordem": ordemView.render(ordem), "cliente": clienteView.render(cliente)});
+          }
+        
+        })
+        
       }
 
     }catch(err) {

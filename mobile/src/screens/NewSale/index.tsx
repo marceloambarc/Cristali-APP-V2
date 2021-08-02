@@ -10,6 +10,7 @@ import { styles } from "./styles";
 import { theme } from "../../global";
 
 import { COLLECTION_ITEMS, COLLECTION_DEVICE_TOKEN } from "../../config/storage";
+
 import { OrderProps } from "../../components/Order";
 
 import { Divider } from "../../components/Divider";
@@ -44,10 +45,13 @@ export function NewSale() {
   const [clientEmail, setClientEmail] = useState('');
   const [clientNotes, setClientNotes] = useState('');
 
+  const [orderId, setOrderId] = useState(0);
+  const [orderNotes, setOrderNotes] = useState('');
+  const [totalPrice, setTotalPrice] = useState('');
+  const [condition, setCondition] = useState(0);
+
   const [sellPrice, setSellPrice] = useState(0);
   const [qt, setQt] = useState(0);
-
-  const [totalPrice, setTotalPrice] = useState('');
 
   const [isLogSended, setIsLogSended] = useState(false);
 
@@ -62,7 +66,7 @@ export function NewSale() {
   async function handleLogSend(logText: string) {
     if(isLogSended)
       return;
-    api.post('evento',{
+    api.post('/evento',{
       userCode: user.userCode,
       eventDescription: logText,
       userToken: clientToken,
@@ -79,20 +83,22 @@ export function NewSale() {
   useEffect(() => {
     if(isLogSended)
       return
-    setLoading(true);
     handleLogSend(`${user.userName} INICIOU UMA VENDA PARA ${clientName}.`)
-  },[clientName]);
+  },[]);
 
   useEffect(() => {
     removeStorage()
-    /*if(orderParams){
-      setClientName(orderParams.clientName);
-      setClientPhone(orderParams.clientPhone);
-      setClientEmail(orderParams.clientEmail);
-      setClientNotes(orderParams.clientNotes);
-      setTotalPrice(orderParams.price);
-    }*/
-    setLoading(false);
+    if(orderParams){
+      setClientName(orderParams.cliente.clientName);
+      setClientPhone(orderParams.cliente.clientPhone);
+      setClientEmail(orderParams.cliente.clientEmail);
+      setClientNotes(orderParams.cliente.clientNotes);
+
+      setOrderId(orderParams.ordem.id);
+      setOrderNotes(orderParams.ordem.orderNotes);
+      setTotalPrice(orderParams.ordem.totalPrice);
+      setCondition(orderParams.ordem.condition);
+    }
     
   },[orderParams]);
 
@@ -141,6 +147,21 @@ export function NewSale() {
           COLLECTION_ITEMS,
           JSON.stringify([...COLLECTION_ITEMS, newItem])
         );
+        await api.post('/order',{
+          userCode: user.userCode,
+          totalPrice,
+          orderNotes,
+          client: {
+            clientName,
+            clientPhone,
+            clientEmail,
+            clientNotes,
+            userCode: user.userCode
+          },
+          itens: list
+        }).then(res => {
+          setOrderId(res.data.cd_id);
+        })
       } else {
         return;
       }
@@ -154,6 +175,7 @@ export function NewSale() {
       handleSave();
       handleLogSend(`${user.userName} INSERIU PRODUTOS / VL_TOTAL: ${sellPrice}.`);
       navigation.navigate('Checkout', {
+        orderId,
         clientName,
         clientPhone,
         clientEmail,

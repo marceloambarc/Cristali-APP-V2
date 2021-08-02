@@ -10,11 +10,11 @@ import { CristaliButton } from '../../components/CristaliButton';
 
 import { styles } from './styles';
 import { theme } from '../../global';
-import { COLLECTION_TOKEN, COLLECTION_DEVICE_TOKEN } from '../../config/storage';
+import { COLLECTION_DEVICE_TOKEN } from '../../config/storage';
 import { api } from '../../services/api';
 
 export function Home(){
-  const { user, signOut } = useAuth();
+  const { user, clientToken, signOut } = useAuth();
   const [loading, setLoading] = useState(true);
   const [isLogSended, setIsLogSended] = useState(false);
   const logText = `${user.userName} ENTROU NO SISTEMA.`
@@ -40,10 +40,10 @@ export function Home(){
   async function handleLogSend() {
     if(isLogSended)
       return;
-    api.post('evento',{
+    api.post('/evento',{
       userCode: user.userCode,
       eventDescription: logText,
-      userToken: COLLECTION_TOKEN,
+      userToken: clientToken,
       deviceToken: COLLECTION_DEVICE_TOKEN
     }).then(() => {
       setIsLogSended(true);

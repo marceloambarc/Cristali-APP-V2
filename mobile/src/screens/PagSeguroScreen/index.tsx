@@ -17,15 +17,11 @@ import { CristaliButton } from '../../components/CristaliButton';
 import { Banner } from '../../components/Banner';
 import { Loading } from '../../components/Loading';
 
-interface CheckoutProps extends OrderProps  {
-  piece: string;
-}
-
 export function PagSeguroScreen() {
   const navigation = useNavigation();
   const route = useRoute();
 
-  const orderParams = route.params as CheckoutProps;
+  const orderParams = route.params as OrderProps;
 
   const [loading, setLoading] = useState(true);
 
@@ -42,12 +38,12 @@ export function PagSeguroScreen() {
   const [cvv, setCvv] = useState('');
 
   useEffect(() => {
-    /*if(orderParams){
-      setClientName(orderParams.client);
-      setClientPhone(orderParams.telephone);
-      setClientNotes(orderParams.email);
-      setClientEmail(orderParams.notes);
-    }*/
+    if(orderParams){
+      setClientName(orderParams.cliente.clientName);
+      setClientPhone(orderParams.cliente.clientPhone);
+      setClientNotes(orderParams.cliente.clientNotes);
+      setClientEmail(orderParams.cliente.clientEmail);
+    }
     setLoading(false);
   },[orderParams]);
 
@@ -75,6 +71,8 @@ export function PagSeguroScreen() {
   }
 
   function handleConcludeSale() {
+    //handleSendPagSeguro()
+    //handleSendOrderPayment()
     navigation.setParams({orderParams: null});
     navigation.navigate('Final');
   }

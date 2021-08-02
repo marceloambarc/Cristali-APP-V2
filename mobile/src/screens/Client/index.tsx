@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StatusBar, Alert } from "react-native";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
+import { useAuth } from "../../hooks/auth";
 
 import { Header } from "../../components/Header";
 import { Divider } from "../../components/Divider";
@@ -15,7 +16,9 @@ import { theme } from "../../global";
 
 import { api } from "../../services/api";
 
+
 export function Client() {
+  const { user } = useAuth()
   const [loading, setLoading] = useState(true);
   const [clients, setClients] = useState<ClientProps[]>([])
 
@@ -33,7 +36,7 @@ export function Client() {
     if(!loading){
       return;
     }else{
-      api.get('client').then(response => {
+      api.get(`/myClients/${user.userCode}`).then(response => {
         setClients(response.data);
         setLoading(false);
       });

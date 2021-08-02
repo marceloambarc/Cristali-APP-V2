@@ -19,6 +19,7 @@ import { theme } from "../../global";
 import { useEffect } from "react";
 
 import { api } from "../../services/api";
+import { ClientProps } from "../../components/ClientComponent";
 
 export function UnfinishedSale() {
   const { user, clientToken } = useAuth();
@@ -26,8 +27,12 @@ export function UnfinishedSale() {
 
   const [unfinisedSales, setUnfinishedSales] = useState<OrderProps[]>([]);
 
-  const [searchOrderId, setSearchOrderId] = useState('0');
-  const [searchClientName, setSearchClientName] = useState('');
+  const [searchOrderId, setSearchOrderId] = useState(0);
+  const [searchTotalPrice, setTotalPrice] = useState('');
+  const [searchCondition, setCondition] = useState(0);
+  const [searchOrderNotes, setSearchOrderNotes] = useState('');
+
+  const [searchClienteName, setSearchClienteName] = useState('');
   const [searchClientPhone, setSearchClientPhone] = useState('');
   const [searchClientEmail, setSearchClientEmail] = useState('');
   const [searchClientNotes, setSearchClientNotes] = useState('');
@@ -37,8 +42,8 @@ export function UnfinishedSale() {
   const navigation = useNavigation();
 
   async function loadUnfinishedSales() {
-    api.post('order/primary',{
-      condition: 0
+    api.post(`/myOrders/saved/${user.userCode}`,{
+        condition: 0
     }).then(res => {
       setUnfinishedSales(res.data);
     }).catch(err => {
@@ -51,7 +56,7 @@ export function UnfinishedSale() {
   async function handleLogSend(logText: string) {
     if(isLogSended)
       return;
-    api.post('evento',{
+    api.post('/evento',{
       userCode: user.userCode,
       eventDescription: logText,
       userToken: clientToken,
@@ -75,23 +80,32 @@ export function UnfinishedSale() {
   },[]);
 
   function handleOrderSelect(orderSelect: OrderProps){
-    alert('TODO handleOrderSelect');
-    /*setSearchNumber(orderSelect.number);
-    setSearchName(orderSelect.client);
-    setSearchTelephone(orderSelect.telephone);
-    setSearchEmail(orderSelect.email);
-    setSearchNotes(orderSelect.notes);*/
+    setSearchOrderId(orderSelect.ordem.id);
+    setSearchOrderNotes(orderSelect.ordem.orderNotes);
+    setTotalPrice(orderSelect.ordem.totalPrice);
+    setCondition(orderSelect.ordem.condition);
+
+    setSearchClienteName(orderSelect.cliente.clientName);
+    setSearchClientPhone(orderSelect.cliente.clientPhone);
+    setSearchClientEmail(orderSelect.cliente.clientEmail);
+    setSearchClientNotes(orderSelect.cliente.clientNotes);
   }
 
   function handleLoadSale(){
-    alert('TODO handleLoadSale')
-    /*navigation.navigate('NewSale',{
-      number: searchNumber,
-      client: searchName,
-      telephone: searchTelephone,
-      email: searchEmail,
-      notes: searchNotes
-    });*/
+    navigation.navigate('NewSale',{
+      ordem: {
+        searchOrderId,
+        searchOrderNotes,
+        searchTotalPrice,
+        searchCondition
+      },
+      cliente: {
+        searchClienteName,
+        searchClientPhone,
+        searchClientEmail,
+        searchClientNotes
+      }
+    });
   }
 
   if(loading) {
@@ -118,7 +132,7 @@ export function UnfinishedSale() {
         </View>
         <View style={styles.inputContainer}>
           <CristaliInput 
-            value={searchOrderId}
+            value={searchOrderId.toString()}
             textAlign='center'
             editable={false}
           />
