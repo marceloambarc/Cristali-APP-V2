@@ -1,5 +1,4 @@
-import { Column, Entity, Index, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import ClienteFinal from './Clientefinal';
+import { Column, Entity, Index, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import Ordemitem from './Ordemitem';
 
 @Entity()
@@ -26,10 +25,13 @@ export default class Ordem {
   @Index("ix_ordem4", { synchronize: false })
   cd_habil_tipo: number;
 
-  @ManyToOne(() => ClienteFinal, cliente => cliente.ordens)
-  cliente: ClienteFinal;
+  @Column()
+  cd_clientefinal: number;
 
-  @OneToMany(() => Ordemitem, item => item.cd_ordem_id)
-  itens: Ordemitem[]
+  @OneToMany(() => Ordemitem, item => item.ordem,{
+    cascade: ['insert', 'update']
+  })
+  @JoinColumn({ name: 'cd_ordem_id' })
+  itens: Ordemitem[];
 
 }

@@ -7,7 +7,7 @@ import { useAuth } from '../../hooks/auth';
 import { CristaliButton } from '../../components/CristaliButton';
 import { CristaliInput } from '../../components/CristaliInput';
 
-import { COLLECTION_ITEMS } from '../../config/storage';
+import { COLLECTION_ITEMS, COLLECTION_DEVICE_TOKEN } from '../../config/storage';
 import { ItemProps } from '../NewSale';
 import { OrderProps } from '../../components/Order';
 
@@ -32,6 +32,7 @@ export function MoneyScreen() {
   const route = useRoute();
   const orderParams = route.params as OrderProps;
   const [loading, setLoading] = useState(true);
+  const [isLogSended, setIsLogSended] = useState(false);
   const [items, setItems] = useState<ItemsOutProps[]>([]);
 
   const moneyParams = route.params as MoneyProps;
@@ -39,12 +40,33 @@ export function MoneyScreen() {
 
   const [paymentMethod, setPaymentMethod] = useState('');
 
+  async function handleLogSend(logText: string) {
+    if(isLogSended)
+    return;
+    api.post('evento',{
+      userCode: user.userCode,
+      eventDescription: logText,
+      userToken: clientToken,
+      deviceToken: COLLECTION_DEVICE_TOKEN
+    }).then(() => {
+      setIsLogSended(true);
+    }).catch(res => {
+      setIsLogSended(false);
+    }).finally(() => {
+      setLoading(false);
+    });
+  }
+
   function handleFinal() {
     const notes = paymentMethod + ' ' + orderParams.orderNotes;
     if(isMoney) {
+      // API
+      handleLogSend(`${user.userName} Finalizou uma venda por ${paymentMethod}.`);
       navigation.setParams({ moneyParams: null });
       navigation.navigate('Final');
     } else {
+      // API
+      handleLogSend(`${user.userName} Finalizou uma venda por Dinheiro.`);
       navigation.setParams({moneyParams: null});
       navigation.navigate('Final');
     }

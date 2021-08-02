@@ -1,6 +1,4 @@
-import { Column, Entity, Index, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import Senha from './Senha';
-import Ordem  from "./Ordem";
+import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export default class Clientefinal {
@@ -23,10 +21,8 @@ export default class Clientefinal {
   @Index("ix_clientefinal3")
   tx_obs: string;
 
-  @ManyToOne(() => Senha, senha => senha.clientes)
-  senhas: Senha[]
-
-  @OneToMany(() => Ordem, ordem => ordem.cliente)
-  ordens: Ordem[];
+  @Index("ix_clientefinal4", { synchronize: false })
+  @Column("nvarchar", { length: 6 })
+  cd_id_ccli: string;
 
 }

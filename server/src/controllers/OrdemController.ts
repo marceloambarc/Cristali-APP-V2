@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getRepository, LessThan } from "typeorm";
+import { getRepository, LessThan, LessThanOrEqual, MoreThan } from "typeorm";
 import { createHash } from 'crypto';
 import * as Yup from 'yup'
 
@@ -7,6 +7,11 @@ import { pagSegurotoken } from "../../credentials";
 
 import Ordem from "../models/Ordem";
 import ordemView from "../view/ordem_view";
+
+import Clientefinal from "../models/Clientefinal";
+import clienteView from "../view/cliente_view";
+import ClienteController from "./ClienteController";
+import { getHeapCodeStatistics } from "v8";
 
 
 export default { 
@@ -256,35 +261,122 @@ export default {
         userCode,
         totalPrice,
         orderNotes,
+        client,
+        itens
       } = request.body;
 
       const ordensRepository = getRepository(Ordem);
 
-      const data : any = {
-        cd_id_ccli: userCode,
-        dt_criado: new Date(),
-        vl_total: totalPrice,
-        tx_obs: orderNotes,
-        cd_habil_tipo: 0
-      };
+      const clientesRepository = getRepository(Clientefinal);
 
-      const schema = Yup.object().shape({
-        cd_id_ccli: Yup.string().required(),
-        dt_criado: Yup.date().default(() => new Date()),
-        vl_total: Yup.string().required(),
-        tx_obs: Yup.string().required(),
-        cd_habil_tipo: Yup.number().required()
+      const existCliente = await clientesRepository.findOne({
+        where: {
+          nm_nome: client.clientName
+        }
       });
 
-      await schema.validate(data, {
-        abortEarly: false
-      });
+      if(existCliente != undefined) {
+        const codPessoa = existCliente.cd_pessoa;
+        const data : any = {
+          cd_id_ccli: userCode,
+          dt_criado: new Date(),
+          vl_total: totalPrice,
+          tx_obs: orderNotes,
+          cd_habil_tipo: 0,
+          cd_clientefinal: codPessoa,
+          itens
+        };
 
-      const ordemRepository = ordensRepository.create(data);
+        const schema = Yup.object().shape({
+          cd_id_ccli: Yup.string().required(),
+          dt_criado: Yup.date().default(() => new Date()),
+          vl_total: Yup.string().required(),
+          tx_obs: Yup.string().required(),
+          cd_habil_tipo: Yup.number().required(),
+          cd_clientefinal: Yup.number().required(),
+          itens: Yup.array(
+            Yup.object().shape({
+              nm_produto: Yup.string().nullable(),
+              cd_codigogerado: Yup.string().required(),
+              vl_preco: Yup.string().required()
+            })
+          )
+        });
 
-      await ordensRepository.save(ordemRepository);
+        await schema.validate(data, {
+          abortEarly: false,
+        });
 
-      return response.status(201).json(ordemRepository);
+        const ordemRepository = ordensRepository.create(data);
+
+        await ordensRepository.save(ordemRepository);
+
+        return response.status(201).json(ordemRepository);
+      } else {
+        // CRIAR NOVO CLIENTE E SALVAR ORDEM
+        const clienteData : any = {
+          nm_nome: client.clientName,
+          tx_fone: client.clientPhone,
+          tx_email: client.clientEmail,
+          tx_obs: client.clientNotes,
+          cd_ordem_id: 1
+        }
+
+        const createCliente = await ClienteController.create(request, response, clienteData);
+
+        if(createCliente != undefined){
+          if(createCliente.statusCode === 201) {
+
+            const existClienteCreated = await clientesRepository.findOne({
+              where: {
+                nm_nome: client.clientName
+              }
+            });
+            const responseClienteId = existClienteCreated?.cd_pessoa;
+
+            const data : any = {
+              cd_id_ccli: userCode,
+              dt_criado: new Date(),
+              vl_total: totalPrice,
+              tx_obs: orderNotes,
+              cd_habil_tipo: 0,
+              cd_clientefinal: responseClienteId,
+              itens
+            };
+
+            const schema = Yup.object().shape({
+              cd_id_ccli: Yup.string().required(),
+              dt_criado: Yup.date().default(() => new Date()),
+              vl_total: Yup.string().required(),
+              tx_obs: Yup.string().required(),
+              cd_habil_tipo: Yup.number().required(),
+              cd_clientefinal: Yup.number().required(),
+              itens: Yup.array(
+                Yup.object().shape({
+                  nm_produto: Yup.string().nullable(),
+                  cd_codigogerado: Yup.string().required(),
+                  vl_preco: Yup.number().required()
+                })
+              )
+            });
+
+            await schema.validate(data, {
+              abortEarly: false,
+            });
+
+            const ordemRepository = ordensRepository.create(data);
+
+            await ordensRepository.save(ordemRepository);
+
+            return response.json(ordemRepository);
+          } else {
+            return response.status(createCliente.statusCode).json(createCliente.json);
+          }
+        } else {
+          return;
+        }
+      }
+      
 
     }catch(err){
       return response.status(400).json({ "Erro" : err });
@@ -304,13 +396,13 @@ export default {
       const ordens = await ordensRepository.find({
         where: {
           cd_id_ccli: searchId
-        }
+        },relations: ['itens']
       });
 
       if(ordens.length === 0) {
         return response.status(204).json({ "Vazio" : "Nenhuma Ordem Cadastrada" });
       } else {
-        return response.json(ordemView.renderMany(ordens));
+        return response.json(ordemView.renderManyWithItens(ordens));
       }
 
     }catch(err) {
@@ -328,10 +420,7 @@ export default {
 
       const ordens = await ordensRepository.find({
         where: [
-          { cd_id_ccli: searchId },
-          { cd_habil_tipo: 217 },
-          { cd_habil_tipo: 218 },
-          { cd_habil_tipo: 219 }
+          { cd_id_ccli: searchId, cd_habil_tipo: LessThanOrEqual(219) },
         ]
       });
 
@@ -356,10 +445,7 @@ export default {
 
       const ordens = await ordensRepository.find({
         where: [
-          { cd_id_ccli: searchId },
-          { cd_habil_tipo: 221 },
-          { cd_habil_tipo: 222 },
-          { cd_habil_tipo: 223 }
+          { cd_id_ccli: searchId, cd_habil_tipo: MoreThan(219) },
         ]
       });
 

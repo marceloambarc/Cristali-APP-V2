@@ -10,7 +10,9 @@ export default {
   async index(request: Request, response: Response) {
     const clientesFinalRepository = getRepository(Clientefinal);
 
-    const clientesFinal = await clientesFinalRepository.find();
+    const clientesFinal = await clientesFinalRepository.find({
+      relations: ['ordens']
+    });
 
     if(clientesFinal.length === 0){
       return response.status(204).json({ "Vazio": "Nenhum Cliente Final Cadastrado" });
@@ -50,7 +52,7 @@ export default {
       if(existCliente === undefined){
         return response.status(404).json({ "Erro" : "Cliente não Econtrado." });
       }else{
-        return response.json(clienteView.renderWithOrder(existCliente));
+        return response.json(clienteView.render(existCliente));
       }
     }catch(err){
       return response.status(400).json({ "Erro" : err });
@@ -93,7 +95,7 @@ export default {
     }
   },
 
-  async create(request: Request, response: Response) {
+  async create(request: Request, response: Response, clienteData?: object) {
     try {
 
       /*
@@ -106,34 +108,71 @@ export default {
         clientName,
         clientPhone,
         clientEmail,
-        clientNotes
+        clientNotes,
+        orderId
       } = request.body;
 
       const clientesFinalRepository = getRepository(Clientefinal);
 
-      const data: any = {
-        nm_nome: clientName,
-        tx_fone: clientPhone,
-        tx_email: clientEmail,
-        tx_obs: clientNotes
-      };
+      if(clientName === undefined) {
+        if(clienteData === undefined) {
+          return response.status(400).json({ "Erro" : "Parâmetros não Enviados." });
+        } else {
+          const schema = Yup.object().shape({
+            nm_nome: Yup.string().required(),
+            tx_fone: Yup.string().required(),
+            tx_email: Yup.string().required(),
+            tx_obs: Yup.string().required(),
+            cd_ordem_id: Yup.number().required()
+          });
 
-      const schema = Yup.object().shape({
-        nm_nome: Yup.string().required(),
-        tx_fone: Yup.string().required(),
-        tx_email: Yup.string().required(),
-        tx_obs: Yup.string().required()
-      });
+          await schema.validate(clienteData, {
+            abortEarly: false,
+          });
 
-      await schema.validate(data, {
-        abortEarly: false,
-      });
+          const clientefinalRepository = clientesFinalRepository.create(clienteData);
 
-      const clienteFinalRepository = clientesFinalRepository.create(data);
+          await clientesFinalRepository.save(clientefinalRepository);
 
-      await clientesFinalRepository.save(clienteFinalRepository);
+          return;
+        }
+      } else {
+        const existCliente = await clientesFinalRepository.findOne({
+          where: {
+            nm_nome: clientName
+          }
+        });
 
-      return response.status(201).json(clienteFinalRepository);
+        if(existCliente != undefined) {
+          const data: any = {
+            nm_nome: clientName,
+            tx_fone: clientPhone,
+            tx_email: clientEmail,
+            tx_obs: clientNotes,
+            cd_ordem_id: orderId
+          };
+
+          const schema = Yup.object().shape({
+            nm_nome: Yup.string().required(),
+            tx_fone: Yup.string().required(),
+            tx_email: Yup.string().required(),
+            tx_obs: Yup.string().required(),
+            cd_ordem_id: Yup.number().required()
+          });
+
+          await schema.validate(data, {
+            abortEarly: false,
+          });
+
+          const clientefinalRepository = clientesFinalRepository.create(data);
+
+          await clientesFinalRepository.save(clientefinalRepository);
+
+          return response.status(201).json(clientefinalRepository);
+        } else {
+          return response.status(409).json({ "Erro" : "Cliente Já Cadastrado." });
+        }
+      }
 
     }catch(err){
       return response.status(400).json({ "Erro": err });
@@ -152,7 +191,7 @@ export default {
   
       const clientes = await clientesFinalRepository.find({
         where: {
-          senhas: searchId
+          cd_id_ccli: searchId
         }
       });
 

@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { View, Text, StatusBar } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { useAuth } from "../../hooks/auth";
+
+import { COLLECTION_DEVICE_TOKEN } from "../../config/storage";
 
 import { Header } from "../../components/Header";
 import { CristaliButton } from "../../components/CristaliButton";
@@ -18,6 +21,7 @@ import { useEffect } from "react";
 import { api } from "../../services/api";
 
 export function UnfinishedSale() {
+  const { user, clientToken } = useAuth();
   const [loading, setLoading] = useState(true);
 
   const [unfinisedSales, setUnfinishedSales] = useState<OrderProps[]>([]);
@@ -27,6 +31,8 @@ export function UnfinishedSale() {
   const [searchClientPhone, setSearchClientPhone] = useState('');
   const [searchClientEmail, setSearchClientEmail] = useState('');
   const [searchClientNotes, setSearchClientNotes] = useState('');
+
+  const [isLogSended, setIsLogSended] = useState(false);
 
   const navigation = useNavigation();
 
@@ -42,11 +48,29 @@ export function UnfinishedSale() {
     })
   }
 
+  async function handleLogSend(logText: string) {
+    if(isLogSended)
+      return;
+    api.post('evento',{
+      userCode: user.userCode,
+      eventDescription: logText,
+      userToken: clientToken,
+      deviceToken: COLLECTION_DEVICE_TOKEN
+    }).then(() => {
+      setIsLogSended(true);
+    }).catch(res => {
+      setIsLogSended(false);
+    }).finally(() => {
+      setLoading(false);
+    });
+  }
+
   useEffect(() => {
     if(!loading) {
       return;
     } else {
       loadUnfinishedSales();
+      handleLogSend(`${user.userName} Consultou Vendas Salvas.`);
     }
   },[]);
 

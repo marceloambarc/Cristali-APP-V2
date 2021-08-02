@@ -57,7 +57,6 @@ controllerRouter.get('/order/:id', clientAuth, OrdemController.show);
 controllerRouter.post('/opensales', clientAuth, OrdemController.showOpenSales);
 controllerRouter.post('/insertedsales', clientAuth, OrdemController.showInsertedSales);
 controllerRouter.post('/selectedpaymentsales', clientAuth, OrdemController.showSelectedPaymentSales);
-controllerRouter.post('/order', clientAuth, OrdemController.create);
 controllerRouter.put('/order/:id', clientAuth, OrdemController.edit);
 controllerRouter.delete('/order/:id', clientAuth, OrdemController.delete);
 

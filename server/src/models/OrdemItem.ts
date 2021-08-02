@@ -1,15 +1,10 @@
-import { Entity, PrimaryColumn, ManyToOne, Column, Index } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, ManyToOne, Column, Index, JoinColumn } from 'typeorm';
 import Ordem from './Ordem';
 
 @Entity()
 export default class Ordemitem {
 
-  @PrimaryColumn()
-  @Index("ix_ordemitem1", { synchronize: false })
-  @ManyToOne(() => Ordem, (ordem) => ordem.cd_id, { primary: true, })
-  cd_ordem_id: number;
-
-  @PrimaryColumn("numeric")
+  @PrimaryGeneratedColumn()
   @Index("ix_ordemitem2", { synchronize: false })
   cd_id: number;
 
@@ -22,5 +17,10 @@ export default class Ordemitem {
 
   @Column("numeric")
   vl_preco: number;
+
+  @Index("ix_ordemitem1", { synchronize: false })
+  @ManyToOne(() => Ordem, ordem => ordem.itens, { primary: true, })
+  @JoinColumn({ name: 'cd_ordem_id' })
+  ordem: Ordem;
   
 }

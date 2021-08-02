@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, StatusBar, Dimensions, Platform } from "react-native";
+import { View, Text, TouchableOpacity, StatusBar, Dimensions, Platform, Alert } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { FontAwesome5 } from '@expo/vector-icons'; 
 import { useAuth } from '../../hooks/auth';
 
 import { styles } from "./styles";
 import { theme } from "../../global";
+
+import { COLLECTION_DEVICE_TOKEN } from "../../config/storage";
 
 import { MoneyInput } from "../../components/MoneyInput";
 import { CristaliInput } from "../../components/CristaliInput";
@@ -18,7 +20,7 @@ import { OrderProps } from "../../components/Order";
 import { api } from "../../services/api";
 
 export function History() {
-  const { user } = useAuth();
+  const { user, clientToken } = useAuth();
   const [loading, setLoading] = useState(true);
   const [orderHistory, setOrderHistory] = useState<OrderProps[]>([]);
   const [historyCount, setHistoryCount] = useState(0);
@@ -32,6 +34,9 @@ export function History() {
   const [firstDate, setFirstDate] = useState<Date>(momentum);
   const [secondDate, setSecondDate] = useState<Date>(new Date());
 
+  const [isLogSended, setIsLogSended] = useState(false);
+  const [isHistoryDeleted, setIsHistoryDeleted] = useState(false);
+
   async function handleSetTotal(){
     setTotal(orderHistory.reduce((a,v) =>  a = a + parseFloat(v.totalPrice.replace('.','').replace(',','')) , 0).toString());
   }
@@ -41,18 +46,48 @@ export function History() {
     event.setDate(-30);
     setMomentum(event);
     setFirstDate(event);
+    setLoading(false);
   }
 
   async function getHistory(){
     api.get(`order/${user.id}`).then(res => {
       setOrderHistory(res.data);
-      setLoading(false);
     })
+  }
+
+  async function handleLogSend(logText: string) {
+    if(isLogSended)
+      return;
+    setLoading(true);
+    api.post('evento',{
+      userCode: user.userCode,
+      eventDescription: logText,
+      userToken: clientToken,
+      deviceToken: COLLECTION_DEVICE_TOKEN
+    }).then(() => {
+      setIsLogSended(true);
+    }).catch(res => {
+      setIsLogSended(false);
+    }).finally(() => {
+      setLoading(false);
+    });
+  }
+
+  async function deleteHistory() {
+    if(isHistoryDeleted)
+      return;
+    api.delete(`myOrders/hitory/${user.userCode}`).then(() => {
+      setIsHistoryDeleted(true);
+    }).catch(err => {
+      Alert.alert(err);
+    }).finally(() => {
+      setLoading(false);
+    });
   }
 
   useEffect(() => {
     getHistory();
-    setLoading(false);
+    deleteHistory();
     setHistoryCount(orderHistory.length);
     handleSetTotal();
     handleSetMomentum();
@@ -86,6 +121,7 @@ export function History() {
   const handleSecondConfirm = (date: Date) => {
     setSecondDate(date);
     hideSecondDatePicker();
+    handleLogSend(`${user.userName} Consultou Histórico de ${firstDate} até ${secondDate}`);
   }
 
   if(loading){

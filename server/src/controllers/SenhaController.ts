@@ -34,13 +34,15 @@ export default {
   
       const senhasRepository = getRepository(Senha);
   
-      const existSenha = await senhasRepository.findOneOrFail({
-        where: {
-          tx_cgc: searchCgc
+      const existSenha = await senhasRepository.findOneOrFail(
+        {
+          where: {
+            tx_cgc: searchCgc
+          },relations: ['clientes']
         }
-      });
+      );
 
-      return response.json(senhaView.render(existSenha));
+      return response.json(senhaView.renderWithClients(existSenha));
 
     }catch(err) {
       return response.status(400).json({ "Erro" : err });

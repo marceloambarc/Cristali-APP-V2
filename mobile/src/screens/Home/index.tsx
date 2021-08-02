@@ -1,17 +1,23 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../../hooks/auth';
 
 import { Background } from '../../components/Background';
 import { Logo } from '../../components/Logo';
+import { Loading } from '../../components/Loading';
 import { CristaliButton } from '../../components/CristaliButton';
 
 import { styles } from './styles';
 import { theme } from '../../global';
+import { COLLECTION_TOKEN, COLLECTION_DEVICE_TOKEN } from '../../config/storage';
+import { api } from '../../services/api';
 
 export function Home(){
   const { user, signOut } = useAuth();
+  const [loading, setLoading] = useState(true);
+  const [isLogSended, setIsLogSended] = useState(false);
+  const logText = `${user.userName} ENTROU NO SISTEMA.`
 
   const navigation = useNavigation();
 
@@ -31,59 +37,88 @@ export function Home(){
     signOut();
   }
 
-  return (
-    <Background>
-      <View style={styles.container}>
-        <View style={styles.logoContainer}>
-          <Logo 
-            subtext
-          />
-        </View>
+  async function handleLogSend() {
+    if(isLogSended)
+      return;
+    api.post('evento',{
+      userCode: user.userCode,
+      eventDescription: logText,
+      userToken: COLLECTION_TOKEN,
+      deviceToken: COLLECTION_DEVICE_TOKEN
+    }).then(() => {
+      setIsLogSended(true);
+    }).catch(res => {
+      setIsLogSended(false);
+    }).finally(() => {
+      setLoading(false);
+    })
+  }
 
+  useEffect(() => {
+    if(!loading)
+      return;
+    handleLogSend()
+  },[]);
 
-        <View style={styles.banner}>
-          <Text style={styles.username}>{ user?.userName }</Text>
-        </View>
-
-        <View style={styles.painel}>
-          <View style={styles.painelButton}>
-            <CristaliButton 
-              color={`${theme.colors.Config}`} 
-              title="Histórico"
-              onPress={handleHistoryNavigation}
+  if(loading) {
+    return (
+      <Loading />
+    );
+  } else {
+    return (
+      <Background>
+        <View style={styles.container}>
+          <View style={styles.logoContainer}>
+            <Logo 
+              subtext
             />
           </View>
-          <View style={styles.painelButton}>
-            <CristaliButton 
-              color={`${theme.colors.Continue}`} 
-              title="Carregar Venda"
-              onPress={handleSavedSaleNavigation}
-            />
+  
+  
+          <View style={styles.banner}>
+            <Text style={styles.username}>{ user?.userName }</Text>
           </View>
-          <View style={styles.painelButton}>
-            <CristaliButton
-              color={`${theme.colors.Continue}`} 
-              title="Nova Venda" 
-              onPress={handleNewSaleNavigation}
-            />
+  
+          <View style={styles.painel}>
+            <View style={styles.painelButton}>
+              <CristaliButton 
+                color={`${theme.colors.Config}`} 
+                title="Histórico"
+                onPress={handleHistoryNavigation}
+              />
+            </View>
+            <View style={styles.painelButton}>
+              <CristaliButton 
+                color={`${theme.colors.Continue}`} 
+                title="Carregar Venda"
+                onPress={handleSavedSaleNavigation}
+              />
+            </View>
+            <View style={styles.painelButton}>
+              <CristaliButton
+                color={`${theme.colors.Continue}`} 
+                title="Nova Venda" 
+                onPress={handleNewSaleNavigation}
+              />
+            </View>
           </View>
+  
+          <View style={styles.footer}>
+            <View style={styles.footerRow}>
+              <CristaliButton 
+                color={`${theme.colors.Cancel}`} 
+                title="Sair"
+                onPress={handleSignOut}
+              />
+            </View>
+            <View style={styles.footerRow}>
+  
+            </View>
+            
+          </View>
+         
         </View>
-
-        <View style={styles.footer}>
-          <View style={styles.footerRow}>
-            <CristaliButton 
-              color={`${theme.colors.Cancel}`} 
-              title="Sair"
-              onPress={handleSignOut}
-            />
-          </View>
-          <View style={styles.footerRow}>
-
-          </View>
-          
-        </View>
-       
-      </View>
-    </Background>
-  );
+      </Background>
+    );
+  }
 }

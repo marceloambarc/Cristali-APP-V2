@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, ScrollView, StatusBar, KeyboardAvoidingView, Platform, Dimensions, TouchableOpacity, Alert, TextInput, ActivityIndicator } from "react-native";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import {  useNavigation, useRoute } from "@react-navigation/native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AntDesign } from '@expo/vector-icons';
 import uuid from 'react-native-uuid';
@@ -9,7 +9,7 @@ import { useAuth } from "../../hooks/auth";
 import { styles } from "./styles";
 import { theme } from "../../global";
 
-import { COLLECTION_ITEMS } from "../../config/storage";
+import { COLLECTION_ITEMS, COLLECTION_DEVICE_TOKEN } from "../../config/storage";
 import { OrderProps } from "../../components/Order";
 
 import { Divider } from "../../components/Divider";
@@ -20,6 +20,7 @@ import { CristaliButton } from "../../components/CristaliButton";
 import { Header } from "../../components/Header";
 import { SearchButton } from "../../components/SearchButton";
 import { Loading } from "../../components/Loading";
+import { api } from "../../services/api";
 
 export interface ItemProps {
   id: number;
@@ -32,7 +33,7 @@ export let itemCounter = 1;
 
 export function NewSale() {
   const [loading, setLoading] = useState(true);
-  const { user } = useAuth();
+  const { user, clientToken } = useAuth();
   const navigation = useNavigation();
   const route = useRoute();
 
@@ -48,6 +49,8 @@ export function NewSale() {
 
   const [totalPrice, setTotalPrice] = useState('');
 
+  const [isLogSended, setIsLogSended] = useState(false);
+
   async function removeStorage(){
     try {
       await AsyncStorage.removeItem(COLLECTION_ITEMS);
@@ -55,6 +58,30 @@ export function NewSale() {
       alert(err);
     }
   }
+
+  async function handleLogSend(logText: string) {
+    if(isLogSended)
+      return;
+    api.post('evento',{
+      userCode: user.userCode,
+      eventDescription: logText,
+      userToken: clientToken,
+      deviceToken: COLLECTION_DEVICE_TOKEN
+    }).then(() => {
+      setIsLogSended(true);
+    }).catch(res => {
+      setIsLogSended(false);
+    }).finally(() => {
+      setLoading(false);
+    });
+  }
+
+  useEffect(() => {
+    if(isLogSended)
+      return
+    setLoading(true);
+    handleLogSend(`${user.userName} INICIOU UMA VENDA PARA ${clientName}.`)
+  },[clientName]);
 
   useEffect(() => {
     removeStorage()
@@ -125,6 +152,7 @@ export function NewSale() {
       Alert.alert('Insira um Produto.');
     } else {
       handleSave();
+      handleLogSend(`${user.userName} INSERIU PRODUTOS / VL_TOTAL: ${sellPrice}.`);
       navigation.navigate('Checkout', {
         clientName,
         clientPhone,
