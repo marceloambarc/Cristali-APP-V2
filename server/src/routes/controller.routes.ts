@@ -7,6 +7,7 @@ import EventoController from '../controllers/EventoController';
 import OrdemController from '../controllers/OrdemController';
 import SenhaController from '../controllers/SenhaController';
 import TokenController from '../controllers/TokenController';
+import OrdemPayController from '../controllers/OrdemPayController';
 
 const controllerRouter = Router();
 
@@ -59,5 +60,9 @@ controllerRouter.post('/insertedsales', clientAuth, OrdemController.showInserted
 controllerRouter.post('/selectedpaymentsales', clientAuth, OrdemController.showSelectedPaymentSales);
 controllerRouter.put('/order/:id', clientAuth, OrdemController.edit);
 controllerRouter.delete('/order/:id', clientAuth, OrdemController.delete);
+
+// -- Ordens De Pagamento
+
+controllerRouter.get('/paymentOrder/:id', clientAuth, OrdemPayController.show);
 
 export default controllerRouter;

@@ -109,7 +109,7 @@ export default {
         clientPhone,
         clientEmail,
         clientNotes,
-        userCode
+        userCode,
       } = request.body;
 
       const clientesFinalRepository = getRepository(Clientefinal);

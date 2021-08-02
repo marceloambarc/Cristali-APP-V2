@@ -9,9 +9,7 @@ import Ordem from "../models/Ordem";
 import ordemView from "../view/ordem_view";
 
 import Clientefinal from "../models/Clientefinal";
-import clienteView from "../view/cliente_view";
 import ClienteController from "./ClienteController";
-import { getHeapCodeStatistics } from "v8";
 
 
 export default { 
@@ -282,9 +280,9 @@ export default {
           dt_criado: new Date(),
           vl_total: totalPrice,
           tx_obs: orderNotes,
-          cd_habil_tipo: 0,
+          cd_habil_tipo: 217,
           cd_clientefinal: codPessoa,
-          itens
+          itens,
         };
 
         const schema = Yup.object().shape({

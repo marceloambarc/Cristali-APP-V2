@@ -1,5 +1,6 @@
 import { Column, Entity, Index, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import Ordemitem from './Ordemitem';
+import OrdemPagamento from './Ordempagamento';
 
 @Entity()
 export default class Ordem {
@@ -33,5 +34,11 @@ export default class Ordem {
   })
   @JoinColumn({ name: 'cd_ordem_id' })
   itens: Ordemitem[];
+
+  @OneToMany(() => OrdemPagamento, pagamento => pagamento.ordem,{
+    cascade: ['insert', 'update']
+  })
+  @JoinColumn({ name: 'ordem_pagamento' })
+  ordem_pagamento: OrdemPagamento[];
 
 }

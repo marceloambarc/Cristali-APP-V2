@@ -1,5 +1,6 @@
 import Ordem from "../models/Ordem";
 import itemView from "./item_view";
+import ordempagamentoView from "./ordempagamento_view";
 
 export default {
   render(ordem: Ordem) {
@@ -23,6 +24,13 @@ export default {
       condition: ordem.cd_habil_tipo,
       itens: itemView.renderMany(ordem.itens)
     };
+  },
+
+  renderPayment(ordem: Ordem) {
+    return {
+      condition: ordem.cd_habil_tipo,
+      payment: ordempagamentoView.renderMany(ordem.ordem_pagamento)
+    }
   },
 
   renderMany(ordens: Ordem[]) {
