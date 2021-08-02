@@ -109,7 +109,7 @@ export default {
         clientPhone,
         clientEmail,
         clientNotes,
-        orderId
+        userCode
       } = request.body;
 
       const clientesFinalRepository = getRepository(Clientefinal);
@@ -123,6 +123,7 @@ export default {
             tx_fone: Yup.string().required(),
             tx_email: Yup.string().required(),
             tx_obs: Yup.string().required(),
+            cd_id_ccli: Yup.string().required(),
             cd_ordem_id: Yup.number().required()
           });
 
@@ -149,7 +150,8 @@ export default {
             tx_fone: clientPhone,
             tx_email: clientEmail,
             tx_obs: clientNotes,
-            cd_ordem_id: orderId
+            cd_id_ccli: userCode,
+            cd_ordem_id: userCode
           };
 
           const schema = Yup.object().shape({
@@ -157,6 +159,7 @@ export default {
             tx_fone: Yup.string().required(),
             tx_email: Yup.string().required(),
             tx_obs: Yup.string().required(),
+            cd_id_ccli: Yup.string().required(),
             cd_ordem_id: Yup.number().required()
           });
 

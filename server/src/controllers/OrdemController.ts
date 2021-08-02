@@ -319,6 +319,7 @@ export default {
           tx_fone: client.clientPhone,
           tx_email: client.clientEmail,
           tx_obs: client.clientNotes,
+          cd_id_ccli: userCode,
           cd_ordem_id: 1
         }
 
