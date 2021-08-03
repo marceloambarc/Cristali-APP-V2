@@ -5,7 +5,7 @@ export const styles = StyleSheet.create({
   container: {
     width: '100%',
     backgroundColor: theme.colors.input,
-    height: Dimensions.get('window').height * .15,
+    height: Dimensions.get('window').height * .12,
     justifyContent: 'center',
     alignItems: 'center'
   },

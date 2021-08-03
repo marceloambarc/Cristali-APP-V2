@@ -11,13 +11,16 @@ import { styles } from './styles';
 import { theme } from '../../global';
 
 export function SignIn() {
-  const { loading, signIn } = useAuth();
+  const { loading, user, clientToken ,sendLog ,signIn } = useAuth();
   const [cgc, setCgc] = useState('');
   const [password, setPassword] = useState('');
 
   async function handleSignIn() {
     try{
-      await signIn({cgc, password})
+      await signIn({cgc, password}).then(async res => {
+        const logText = `${user.userName} ENTROU NO SISTEMA`;
+        const response = await sendLog({logText, clientToken});
+      })
     }catch(err){
       Alert.alert(err);
     }

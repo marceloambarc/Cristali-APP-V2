@@ -19,10 +19,10 @@ import { theme } from "../../global";
 import { useEffect } from "react";
 
 import { api } from "../../services/api";
-import { Alert } from "react-native";
 
 export function UnfinishedSale() {
-  const { user, clientToken } = useAuth();
+  const { user, clientToken, sendLog } = useAuth();
+  const logText = `${user.userName} CONSULTOU VENDAS SALVAS.`;
   const [loading, setLoading] = useState(true);
 
   const [unfinisedSales, setUnfinishedSales] = useState<OrderProps[]>([]);
@@ -32,11 +32,7 @@ export function UnfinishedSale() {
   const [searchCondition, setCondition] = useState(0);
   const [searchOrderNotes, setSearchOrderNotes] = useState('');
 
-  const [isLogSended, setIsLogSended] = useState(false);
-
   const navigation = useNavigation();
-
-  const logText =`${user.userName} CONSULTOU VENDAS SALVAS.`;
 
   async function loadUnfinishedSales() {
     const response = await api.get(`/myOrders/saved/${user.userCode}`);
@@ -44,36 +40,12 @@ export function UnfinishedSale() {
     setLoading(false);
   }
 
-  async function handleLogSend() {
-    if(isLogSended)
-      return;
-    api.post('/evento',{
-      userCode: user.userCode,
-      eventDescription: logText,
-      userToken: clientToken,
-      deviceToken: COLLECTION_DEVICE_TOKEN
-    },{
-      headers: { 'Authorization' : 'Bearer '+clientToken }
-    }).then(() => {
-      setIsLogSended(true);
-      Alert.alert('Envio de LOG DE SALVAS')
-    }).catch(err => {
-      setIsLogSended(false);
-      Alert.alert(
-        'Erro',
-        `${err}`,
-      );
-    }).finally(() => {
-      setLoading(false);
-    });
-  }
-
   useEffect(() => {
     if(!loading) {
       return;
     } else {
       loadUnfinishedSales();
-      handleLogSend();
+      sendLog({logText, clientToken});
     }
   },[]);
 

@@ -2,7 +2,7 @@ import React, { createContext, useState, useEffect, useContext, ReactNode } from
 import { Alert } from 'react-native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { COLLECTION_USER, COLLECTION_TOKEN } from "../config/storage";
+import { COLLECTION_USER, COLLECTION_TOKEN, COLLECTION_DEVICE_TOKEN } from "../config/storage";
 import { api } from '../services/api';
 
 export interface UserProps {
@@ -18,6 +18,11 @@ interface AuthProps {
   children: ReactNode
 }
 
+interface LogProps {
+  logText: string,
+  clientToken: string
+}
+
 interface AuthContextData {
   signed: boolean;
   user: UserProps;
@@ -25,6 +30,7 @@ interface AuthContextData {
   loading: boolean;
   signIn({cgc, password} : UserProps): Promise<void>;
   signOut: () => Promise<void>;
+  sendLog({logText, clientToken} : LogProps): Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextData>({} as AuthContextData);
@@ -39,9 +45,12 @@ function AuthProvider({ children } : AuthProps) {
     api.post('/login',{
       cgc, password
     }).then(res => {
+      const logText = `${user.userName} ENTROU NO SISTEMA`;
       AsyncStorage.setItem(COLLECTION_USER, JSON.stringify(res.data.user));
+      AsyncStorage.setItem(COLLECTION_TOKEN, JSON.stringify(res.data.token));
       setClientToken(res.data.token);
       setUser(res.data.user);
+      sendLog({logText, clientToken});
       setLoading(false);
     }).catch(err => {
 
@@ -72,8 +81,27 @@ function AuthProvider({ children } : AuthProps) {
 
   async function loadStoragedData() {
     const storagedUser = await AsyncStorage.getItem(COLLECTION_USER);
-    if(storagedUser) {
-      //const userLogged = JSON.parse(storagedUser) as UserProps;
+    const storagedUserToken = await AsyncStorage.getItem(COLLECTION_TOKEN);
+    if(storagedUser && storagedUserToken) {
+      setUser(JSON.parse(storagedUser) as UserProps);
+      setClientToken(JSON.parse(storagedUserToken));
+
+      const logText = `${user.userName} ENTROU NOVAMENTE`;
+      sendLog({logText, clientToken});
+    }
+  }
+
+  async function sendLog({logText, clientToken} : LogProps) {
+    const storagedToken = await AsyncStorage.getItem(COLLECTION_DEVICE_TOKEN);
+    if(storagedToken){
+      const response = await api.post('/evento',{
+        userCode: user.userCode,
+        eventDescription: logText,
+        userToken: clientToken,
+        deviceToken: JSON.parse(storagedToken)
+      },{
+        headers: {'Authorization': 'Bearer '+clientToken}
+      });
     }
   }
 
@@ -82,7 +110,7 @@ function AuthProvider({ children } : AuthProps) {
   },[]);
 
   return (
-    <AuthContext.Provider value={{ signed: !!user, user, clientToken, signIn, signOut, loading }}>
+    <AuthContext.Provider value={{ signed: !!user, user, clientToken, signIn, signOut, sendLog, loading }}>
       { children }
     </AuthContext.Provider>
   );

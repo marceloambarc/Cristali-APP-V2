@@ -21,7 +21,7 @@ import { OrderProps } from "../../components/Order";
 import { api } from "../../services/api";
 
 export function History() {
-  const { user, clientToken } = useAuth();
+  const { user, clientToken, sendLog } = useAuth();
   const [loading, setLoading] = useState(true);
   const [orderHistory, setOrderHistory] = useState<OrderProps[]>([]);
   const [historyCount, setHistoryCount] = useState(0);
@@ -35,14 +35,15 @@ export function History() {
   const [firstDate, setFirstDate] = useState<Date>(momentum);
   const [secondDate, setSecondDate] = useState<Date>(new Date());
 
-  const [isLogSended, setIsLogSended] = useState(false);
   const [isHistoryDeleted, setIsHistoryDeleted] = useState(false);
+
+  const logText = `${user.userName} Consultou Histórico de ${firstDate} até ${secondDate}`;
 
   const navigation = useNavigation();
 
   async function handleSetTotal(){
     if(historyCount > 0){
-      setTotal(orderHistory.reduce((a,v) =>  a = a + parseFloat(v.ordem.totalPrice.replace('.','').replace(',','')) , 0).toString());
+      setTotal(orderHistory.reduce((a,v) =>  a = a + parseFloat(v.totalPrice.replace('.','').replace(',','')) , 0).toString());
     }
   }
 
@@ -59,22 +60,6 @@ export function History() {
       setOrderHistory(res.data);
     }).catch(() => {
       navigation.navigate('Home');
-    })
-  }
-
-  async function handleLogSend(logText: string) {
-    if(isLogSended)
-      return;
-    setLoading(true);
-    api.post('/evento',{
-      userCode: user.userCode,
-      eventDescription: logText,
-      userToken: clientToken,
-      deviceToken: COLLECTION_DEVICE_TOKEN
-    }).then(() => {
-      setIsLogSended(true);
-    }).catch(res => {
-      setIsLogSended(false);
     })
   }
 
@@ -99,7 +84,7 @@ export function History() {
   },[]);
 
   function handleOrderSelect(orderSelect: OrderProps){
-    alert('Selected ' + orderSelect.ordem.id);
+    alert('Selected ' + orderSelect.id);
   }
 
   const showSecondDatePicker = () => {
@@ -126,7 +111,7 @@ export function History() {
   const handleSecondConfirm = (date: Date) => {
     setSecondDate(date);
     hideSecondDatePicker();
-    handleLogSend(`${user.userName} Consultou Histórico de ${firstDate} até ${secondDate}`);
+    sendLog({logText, clientToken});
   }
 
   if(loading){

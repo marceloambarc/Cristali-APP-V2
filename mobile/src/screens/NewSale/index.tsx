@@ -9,7 +9,7 @@ import { useAuth } from "../../hooks/auth";
 import { styles } from "./styles";
 import { theme } from "../../global";
 
-import { COLLECTION_ITEMS, COLLECTION_DEVICE_TOKEN } from "../../config/storage";
+import { COLLECTION_ITEMS } from "../../config/storage";
 
 import { OrderProps } from "../../components/Order";
 
@@ -20,7 +20,6 @@ import { TextArea } from "../../components/TextArea";
 import { CristaliButton } from "../../components/CristaliButton";
 import { Header } from "../../components/Header";
 import { SearchButton } from "../../components/SearchButton";
-import { Loading } from "../../components/Loading";
 import { api } from "../../services/api";
 
 export interface ItemProps {
@@ -33,8 +32,7 @@ export interface ItemProps {
 export let itemCounter = 1;
 
 export function NewSale() {
-  const [loading, setLoading] = useState(true);
-  const { user, clientToken } = useAuth();
+  const { user, clientToken, sendLog } = useAuth();
   const navigation = useNavigation();
   const route = useRoute();
 
@@ -53,8 +51,6 @@ export function NewSale() {
   const [sellPrice, setSellPrice] = useState(0);
   const [qt, setQt] = useState(0);
 
-  const [isLogSended, setIsLogSended] = useState(false);
-
   async function removeStorage(){
     try {
       await AsyncStorage.removeItem(COLLECTION_ITEMS);
@@ -62,29 +58,6 @@ export function NewSale() {
       alert(err);
     }
   }
-
-  async function handleLogSend(logText: string) {
-    if(isLogSended)
-      return;
-    api.post('/evento',{
-      userCode: user.userCode,
-      eventDescription: logText,
-      userToken: clientToken,
-      deviceToken: COLLECTION_DEVICE_TOKEN
-    }).then(() => {
-      setIsLogSended(true);
-    }).catch(res => {
-      setIsLogSended(false);
-    }).finally(() => {
-      setLoading(false);
-    });
-  }
-
-  useEffect(() => {
-    if(isLogSended)
-      return
-    handleLogSend(`${user.userName} INICIOU UMA VENDA PARA ${clientName}.`)
-  },[]);
 
   useEffect(() => {
     removeStorage()
@@ -111,7 +84,7 @@ export function NewSale() {
     setList(prev => prev.filter(item => item.id !== id));
     setQt(prev => prev -1);
     var value = parseInt(price.replace(/\D/g, ""));
-    setSellPrice(value - sellPrice);
+    setSellPrice(sellPrice - value);
   }
 
   const handleAdd = (index: number, price: string) => {
@@ -122,7 +95,7 @@ export function NewSale() {
       var value = parseInt(price.replace(/\D/g, ""));
       setList(prev => [...prev.slice(0, index + 1), newItem, ...prev.slice(index + 1)]);
       setQt(prev => prev + 1);
-      setSellPrice(value + sellPrice);
+      setSellPrice(sellPrice + value);
     }
   }
 
@@ -165,30 +138,55 @@ export function NewSale() {
 
   function handleContinue() {
     if(qt <= 0) {
-      Alert.alert('Insira um Produto.');
-    } else {
-      handleSave();
-      handleLogSend(`${user.userName} INSERIU PRODUTOS / VL_TOTAL: ${sellPrice}.`);
-      navigation.navigate('Checkout', {
-        orderId,
-        clientName,
-        clientPhone,
-        clientEmail,
-        clientNotes,
-        qt,
-        list: list,
-        totalPrice: sellPrice.toString()
-      });
+      Alert.alert(
+        'Atenção',
+        'Insira um Produto'
+      );
+      return;
+    }
+
+    if(clientName === '' || clientName.length < 5) {
+      Alert.alert(
+        'Atenção',
+        'Insira o Nome do Cliente'
+      );
+      return;
+    }
+
+    if(clientNotes === '' || clientPhone === '' || clientEmail === '') {
+      Alert.alert(
+        'Atenção!',
+        'Deseja prosseguir sem os dados complementares do Cliente?',
+        [
+          { text: "Sim", onPress: () => handleFinish() },
+          {
+            text: "Não",
+            onPress: () => {},
+            style: "cancel"
+          }
+        ]
+      )
     }
   }
 
-  if(loading) {
-    return (
-      <Loading />
-    );
-  } else {
-    return (
-      <KeyboardAvoidingView
+  function handleFinish() {
+    handleSave();
+    const logText = `${user.userName} INICIOU UMA VENDA PARA ${clientName} / VL TOTAL ${sellPrice.toString()}.`;
+    sendLog({logText, clientToken});
+    navigation.navigate('Checkout', {
+      orderId,
+      clientName,
+      clientPhone,
+      clientEmail,
+      clientNotes,
+      qt,
+      list: list,
+      totalPrice: sellPrice.toString()
+    });
+  }
+
+  return (
+    <KeyboardAvoidingView
       style={{flex: 1}}
       keyboardVerticalOffset={(Platform.OS === 'ios')? 7 : 0}
       contentContainerStyle={{backgroundColor: 'transparent'}}
@@ -402,13 +400,13 @@ export function NewSale() {
                         <AntDesign name="plus" size={24} color="white" />
                       </TouchableOpacity>
                     }
-                    {list.length > 1 && (
+                    {index < list.length - 1 && (
                       <TouchableOpacity
                         style={[styles.listButton, {backgroundColor: theme.colors.Cancel}]}
                         onPress={() => handleDelete(item.id, item.price)}
                       >
                         <AntDesign name="minus" size={24} color="black" />
-                      </TouchableOpacity>
+                    </TouchableOpacity>
                     )}
                   </View>
                 ))}
@@ -431,7 +429,5 @@ export function NewSale() {
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
-    );
-  }
-
+  );
 }

@@ -58,7 +58,7 @@ export function Money() {
   }
 
   function handleFinal() {
-    const notes = paymentMethod + ' ' + orderParams.ordem.orderNotes;
+    const notes = paymentMethod + ' ' + orderParams.orderNotes;
     handleSetNewCondition(221);
     if(isMoney) {
       handleLogSend(`${user.userName} Finalizou uma venda por ${paymentMethod}.`);
@@ -72,7 +72,7 @@ export function Money() {
   }
 
   async function handleSetNewCondition(condition: number) {
-    await api.post(`/order/condition/${orderParams.ordem.id}`,{
+    await api.post(`/order/condition/${orderParams.id}`,{
       condition: condition
     });
   }

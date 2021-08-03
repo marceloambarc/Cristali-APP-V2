@@ -1,23 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { Alert, Text, View } from 'react-native';
+import React from 'react';
+import { Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../../hooks/auth';
 
 import { Background } from '../../components/Background';
 import { Logo } from '../../components/Logo';
-import { Loading } from '../../components/Loading';
 import { CristaliButton } from '../../components/CristaliButton';
 
 import { styles } from './styles';
 import { theme } from '../../global';
-import { COLLECTION_DEVICE_TOKEN } from '../../config/storage';
-import { api } from '../../services/api';
 
 export function Home(){
   const { user, clientToken, signOut } = useAuth();
-  const [loading, setLoading] = useState(true);
-  const [isLogSended, setIsLogSended] = useState(false);
-  const logText = `${user.userName} ENTROU NO SISTEMA.`
 
   const navigation = useNavigation();
 
@@ -37,38 +31,6 @@ export function Home(){
     signOut();
   }
 
-  async function handleLogSend() {
-    if(isLogSended)
-      return;
-    api.post('/evento',{
-      userCode: user.userCode,
-      eventDescription: logText,
-      userToken: clientToken,
-      deviceToken: COLLECTION_DEVICE_TOKEN
-    },{
-      headers: { 'Authorization' : 'Bearer '+clientToken }
-    }).then(() => {
-      setIsLogSended(true);
-      Alert.alert('Evento enviado.');
-    }).catch(res => {
-      setIsLogSended(false);
-      Alert.alert('Evento Não enviado.');
-    }).finally(() => {
-      setLoading(false);
-    })
-  }
-
-  useEffect(() => {
-    if(!loading)
-      return;
-    handleLogSend()
-  },[]);
-
-  if(loading) {
-    return (
-      <Loading />
-    );
-  } else {
     return (
       <Background>
         <View style={styles.container}>
@@ -81,6 +43,7 @@ export function Home(){
   
           <View style={styles.banner}>
             <Text style={styles.username}>{ user?.userName }</Text>
+            <Text>{clientToken}</Text>
           </View>
   
           <View style={styles.painel}>
@@ -124,5 +87,4 @@ export function Home(){
         </View>
       </Background>
     );
-  }
 }
