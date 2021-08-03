@@ -19,53 +19,32 @@ interface MoneyProps {
   isMoney?: boolean
 }
 
-interface ItemsOutProps {
-  gCode: string;
-  price: string;
-  productName: string;
-}
-
 export function Money() {
-  const { user, clientToken } = useAuth();
+  const { user, clientToken, sendLog } = useAuth();
   const navigation = useNavigation();
 
   const route = useRoute();
   const orderParams = route.params as OrderProps;
   const [loading, setLoading] = useState(true);
   const [isLogSended, setIsLogSended] = useState(false);
-  const [items, setItems] = useState<ItemsOutProps[]>([]);
+  const [list, setList] = useState<ItemProps[]>([]);
 
   const moneyParams = route.params as MoneyProps;
   const isMoney = moneyParams.isMoney;
 
   const [paymentMethod, setPaymentMethod] = useState('');
 
-  async function handleLogSend(logText: string) {
-    if(isLogSended)
-    return;
-    api.post('evento',{
-      userCode: user.userCode,
-      eventDescription: logText,
-      userToken: clientToken,
-      deviceToken: COLLECTION_DEVICE_TOKEN
-    }).then(() => {
-      setIsLogSended(true);
-    }).catch(res => {
-      setIsLogSended(false);
-    }).finally(() => {
-      setLoading(false);
-    });
-  }
-
   function handleFinal() {
     const notes = paymentMethod + ' ' + orderParams.orderNotes;
     handleSetNewCondition(221);
     if(isMoney) {
-      handleLogSend(`${user.userName} Finalizou uma venda por ${paymentMethod}.`);
+      const logText = `${user.userName} FINALIZOU UMA VENDA PARA ${paymentMethod}.`;
+      sendLog({logText, clientToken});
       navigation.setParams({ moneyParams: null });
       navigation.navigate('Final');
     } else {
-      handleLogSend(`${user.userName} Finalizou uma venda por Dinheiro.`);
+      const logText = `${user.userName} FINALIZOU UMA VENDA EM DINHEIRO.`;
+      sendLog({logText, clientToken});
       navigation.setParams({moneyParams: null});
       navigation.navigate('Final');
     }
@@ -81,7 +60,7 @@ export function Money() {
     const response = await AsyncStorage.getItem(COLLECTION_ITEMS);
     const storage: ItemProps[] = response ? JSON.parse(response) : [];
 
-    setItems(storage)
+    setList(storage)
     setLoading(false);
   }
 
@@ -112,7 +91,7 @@ export function Money() {
           </Text>
 
           {
-          items.map(item => {
+          list.map(item => {
             return (
               <Text key={item.gCode} style={{color: 'black'}}>{item.gCode}, {item.productName}, {item.price}</Text>
             )

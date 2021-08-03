@@ -101,7 +101,7 @@ export function NewSale() {
 
   async function handleSave() {
     for (let index = 0; index <= list.length; index++) {
-      if(list[index].productName != undefined) {
+      if(list[index].price != undefined && list[index].price != '') {
         const newItem = {
           gCode: uuid.v4(),
           productName: list[index].productName,
@@ -113,23 +113,8 @@ export function NewSale() {
 
         await AsyncStorage.setItem(
           COLLECTION_ITEMS,
-          JSON.stringify([...COLLECTION_ITEMS, newItem])
+          JSON.stringify([...itens, newItem])
         );
-        await api.post('/order',{
-          userCode: user.userCode,
-          totalPrice,
-          orderNotes,
-          client: {
-            clientName,
-            clientPhone,
-            clientEmail,
-            clientNotes,
-            userCode: user.userCode
-          },
-          itens: list
-        }).then(res => {
-          setOrderId(res.data.cd_id);
-        })
       } else {
         return;
       }
@@ -167,6 +152,8 @@ export function NewSale() {
         ]
       )
     }
+
+    handleFinish();
   }
 
   function handleFinish() {
@@ -174,7 +161,7 @@ export function NewSale() {
     const logText = `${user.userName} INICIOU UMA VENDA PARA ${clientName} / VL TOTAL ${sellPrice.toString()}.`;
     sendLog({logText, clientToken});
     navigation.navigate('Checkout', {
-      orderId,
+      id: orderId,
       clientName,
       clientPhone,
       clientEmail,

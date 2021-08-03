@@ -9,6 +9,7 @@ import { styles } from './styles';
 import { theme } from '../../global';
 
 import { OrderProps } from '../../components/Order';
+import { ClientProps } from '../../components/ClientComponent';
 
 import { Header } from '../../components/Header';
 import { CristaliInput } from '../../components/CristaliInput';
@@ -22,6 +23,7 @@ export function PagSeguroScreen() {
   const route = useRoute();
 
   const orderParams = route.params as OrderProps;
+  const clientParams = route.params as ClientProps;
 
   const [loading, setLoading] = useState(true);
 
@@ -39,10 +41,10 @@ export function PagSeguroScreen() {
 
   useEffect(() => {
     if(orderParams){
-      setClientName(orderParams.cliente.clientName);
-      setClientPhone(orderParams.cliente.clientPhone);
-      setClientNotes(orderParams.cliente.clientNotes);
-      setClientEmail(orderParams.cliente.clientEmail);
+      setClientName(clientParams.clientName);
+      setClientPhone(clientParams.clientPhone);
+      setClientNotes(clientParams.clientNotes);
+      setClientEmail(clientParams.clientEmail);
     }
     setLoading(false);
   },[orderParams]);
@@ -111,21 +113,7 @@ export function PagSeguroScreen() {
                 autoCompleteType='off'
                 autoCorrect={false}
                 keyboardType='email-address'
-              />            
-              <CristaliInput 
-              value={expirateMonth}
-              autoCapitalize='none'
-              autoCompleteType='off'
-              autoCorrect={false}
-              keyboardType='email-address'
               />
-              <CristaliInput 
-              value={expirateYear}
-              autoCapitalize='none'
-              autoCompleteType='off'
-              autoCorrect={false}
-              keyboardType='email-address'
-            />
             </View>
             <View style={styles.inputContainer}>
               <Text style={styles.inputText}>Celular do(a) Cliente</Text>

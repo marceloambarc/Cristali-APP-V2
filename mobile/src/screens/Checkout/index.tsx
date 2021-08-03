@@ -7,9 +7,11 @@ import { styles } from './styles';
 import { theme } from '../../global';
 
 import { OrderProps } from "../../components/Order";
+import { ClientProps } from '../../components/ClientComponent';
+import { ItemProps } from '../NewSale';
 
 import { api } from '../../services/api';
-import { COLLECTION_TOKEN } from '../../config/storage';
+import { COLLECTION_ITEMS } from '../../config/storage';
 
 import { Header } from '../../components/Header';
 import { Divider } from '../../components/Divider';
@@ -17,10 +19,10 @@ import { CristaliButton } from '../../components/CristaliButton';
 import { CheckOutButton } from '../../components/CheckOutButton';
 import { MoneyInput } from '../../components/MoneyInput';
 import { Loading } from '../../components/Loading';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export function Checkout() {
-  const { user, clientToken } = useAuth();
+  const { user, clientToken, sendLog } = useAuth();
   const [pagSeguroPressed, setPagSeguroPressed] = useState(false);
   const [moneyPressed, setMoneyPressed] = useState(false);
   const [otherPressed, setOtherPressed] = useState(false);
@@ -36,27 +38,36 @@ export function Checkout() {
   const [totalPrice, setTotalPrice] = useState('');
   const [qt, setQt] = useState<string | undefined>('');
 
+  
+
   const navigation = useNavigation()
   const route = useRoute();
+
   const orderParams = route.params as OrderProps;
+  const clientParams = route.params as ClientProps;
 
   async function handleSetNewCondition() {
-    await api.post(`/order/condition/${orderId}`,{
+    /*await api.post(`/order/condition/${orderId}`,{
       condition: 218
-    });
+    },{
+      headers: { 'Authorization' : 'Bearer ' +clientToken }
+    });*/
   }
+
+
 
   useEffect(() => {
     if(orderParams){
       handleSetNewCondition();
-      setOrderId(orderParams.ordem.id);
-      setOrderNotes(orderParams.ordem.orderNotes);
-      setClientName(orderParams.cliente.clientName);
-      setClientPhone(orderParams.cliente.clientPhone);
-      setClientEmail(orderParams.cliente.clientEmail);
-      setClientNotes(orderParams.cliente.clientNotes);
-      setTotalPrice(orderParams.ordem.totalPrice);
-      setQt(orderParams.ordem.qt);
+      setOrderId(orderParams.id);
+      setOrderNotes(orderParams.orderNotes);
+      setTotalPrice(orderParams.totalPrice);
+      setQt(orderParams.qt);
+
+      setClientName(clientParams.clientName);
+      setClientPhone(clientParams.clientPhone);
+      setClientEmail(clientParams.clientEmail);
+      setClientNotes(clientParams.clientNotes);
     }
     setLoading(false);
   },[orderParams]);
@@ -66,7 +77,8 @@ export function Checkout() {
       Alert.alert('Selicione um modo de Pagamento.');
     } else {
       if(pagSeguroPressed) {
-        handleSendLog(`${user.userName} iniciou Checkou para PAGSEGURO`);
+        const logText = `${user.userName} INICIOU CHECKOUT PARA PAGSEGURO`;
+        sendLog({logText, clientToken});
         navigation.navigate('PagSeguro',{
           ordem: {
             id: orderId,
@@ -82,7 +94,8 @@ export function Checkout() {
           }
         });
       } else if(moneyPressed) {
-        handleSendLog(`${user.userName} iniciou Checkou para DINHEIRO`);
+        const logText = `${user.userName} iniciou Checkou para DINHEIRO`;
+        sendLog({logText, clientToken});
         navigation.navigate('Money',{
           isMoney: true,
           ordem: {
@@ -99,7 +112,8 @@ export function Checkout() {
           }
         });
       } else {
-        handleSendLog(`${user.userName} iniciou Checkou para OUTROS MÉTODOS DE PAGAMENTO`);
+        const logText = `${user.userName} iniciou Checkou para OUTROS MÉTODOS DE PAGAMENTO`;
+        sendLog({logText, clientToken});
         navigation.navigate('Money',{
           isMoney: false,
           ordem: {
@@ -116,15 +130,6 @@ export function Checkout() {
           }
         });
       }
-    }
-
-    async function handleSendLog(logText: string) {
-      await api.post('/evento',{
-        userCode: user.userCode,
-        eventDescription: logText,
-        userToken: clientToken,
-        deviceToken: COLLECTION_TOKEN
-      });
     }
   }
 

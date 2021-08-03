@@ -50,7 +50,6 @@ function AuthProvider({ children } : AuthProps) {
       AsyncStorage.setItem(COLLECTION_TOKEN, JSON.stringify(res.data.token));
       setClientToken(res.data.token);
       setUser(res.data.user);
-      sendLog({logText, clientToken});
       setLoading(false);
     }).catch(err => {
 
@@ -87,14 +86,19 @@ function AuthProvider({ children } : AuthProps) {
       setClientToken(JSON.parse(storagedUserToken));
 
       const logText = `${user.userName} ENTROU NOVAMENTE`;
-      sendLog({logText, clientToken});
+      await sendLog({logText, clientToken}).catch(err => {
+        Alert.alert(
+          'Erro',
+          `${err}`
+        )
+      })
     }
   }
 
   async function sendLog({logText, clientToken} : LogProps) {
     const storagedToken = await AsyncStorage.getItem(COLLECTION_DEVICE_TOKEN);
     if(storagedToken){
-      const response = await api.post('/evento',{
+      await api.post('/evento',{
         userCode: user.userCode,
         eventDescription: logText,
         userToken: clientToken,

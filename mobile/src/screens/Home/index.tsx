@@ -43,7 +43,6 @@ export function Home(){
   
           <View style={styles.banner}>
             <Text style={styles.username}>{ user?.userName }</Text>
-            <Text>{clientToken}</Text>
           </View>
   
           <View style={styles.painel}>

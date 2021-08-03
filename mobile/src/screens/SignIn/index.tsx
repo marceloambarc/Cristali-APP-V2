@@ -17,10 +17,15 @@ export function SignIn() {
 
   async function handleSignIn() {
     try{
-      await signIn({cgc, password}).then(async res => {
-        const logText = `${user.userName} ENTROU NO SISTEMA`;
-        const response = await sendLog({logText, clientToken});
-      })
+      await signIn({cgc, password});
+
+      const logText = `${user.userName} ENTROU NO SISTEMA`;
+      await sendLog({logText, clientToken}).catch(err =>  {
+        Alert.alert(
+          'Erro',
+          `${err}`
+        )
+      });
     }catch(err){
       Alert.alert(err);
     }
