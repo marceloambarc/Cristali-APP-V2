@@ -84,20 +84,22 @@ export const styles = StyleSheet.create({
   },
   list: {
     flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
     paddingVertical: Dimensions.get('window').height * .015
   },
   listProdutContainer: {
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center'
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
   },
   sellPriceContainer: {
-
+    alignItems: 'flex-start',
+    flexDirection: 'row',
+    width: '50%'
   },
   productTitleContainer: {
-    width: '50%'
+    width: '100%'
   },
   listProductTitle: {
     fontFamily: theme.fonts.heading,
@@ -105,6 +107,7 @@ export const styles = StyleSheet.create({
   },
   listButton: {
     padding: 10,
+    marginLeft: 10,
     borderRadius: 10,
     marginHorizontal: Dimensions.get('window').width * .007
   }

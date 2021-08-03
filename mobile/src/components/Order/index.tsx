@@ -3,23 +3,18 @@ import { View, Text, TouchableOpacity, TouchableOpacityProps } from "react-nativ
 
 import { styles } from "./styles";
 import { theme } from "../../global";
-import { ClientProps } from "../ClientComponent";
 
 export interface OrderProps {
   open?: boolean;
-  ordem: {
-    id: number;
-    userCode: string;
-    createdAt: string;
-    totalPrice: string;
-    orderNotes: string;
-    condition: number;
-    clientCode: number;
-    itens?:[{id: number, productName: string, gCode: string, price: number}],
-    qt?: string;
-  },
-  cliente: ClientProps;
-
+  id: number;
+  userCode: number;
+  createdAt: string;
+  totalPrice: string;
+  orderNotes: string;
+  condition: number;
+  clientCode: number;
+  itens?:[{id: number, productName: string, gCode: string, price: number}],
+  qt?: string;
 }
 
 interface OrderComponentProps extends TouchableOpacityProps {
@@ -44,22 +39,22 @@ export function Order({ data, ...rest } : OrderComponentProps ) {
     <View style={styles.content}>
       <View>
         <Text style={styles.title}>
-          { data.ordem.userCode }
+          { data.userCode }
         </Text>
 
         <Text style={styles.text}>
-          { data.ordem.createdAt }
+          { data.createdAt }
         </Text>
 
         <Text style={styles.text}>
-          { data.ordem.totalPrice }
+          { data.totalPrice }
         </Text>
       </View>
     </View>
 
     <View>
       <Text style={styles.number}>Número</Text>
-      <Text style={styles.text}>#{ data.ordem.id }</Text>
+      <Text style={styles.text}>#{ data.id }</Text>
     </View>
     
 

@@ -427,19 +427,7 @@ export default {
       if(ordens.length === 0) {
         return response.status(204).json({ "Vazio" : "Nenhuma Ordem Salva" });
       } else {
-        ordens.map(async ordem => {
-          const searchId = ordem.cd_clientefinal;
-          const clientesRepository = getRepository(Clientefinal);
-          const cliente = await clientesRepository.findOne({
-            where: {
-              cd_pessoa: searchId
-            }
-          });
-          if(cliente != undefined){
-            return response.json({"ordem": ordemView.render(ordem), "cliente": clienteView.render(cliente)});
-          }
-        
-        })
+        return response.json(ordemView.renderMany(ordens));
         
       }
 

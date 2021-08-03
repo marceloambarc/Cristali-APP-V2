@@ -25,7 +25,7 @@ interface ItemsOutProps {
   productName: string;
 }
 
-export function MoneyScreen() {
+export function Money() {
   const { user, clientToken } = useAuth();
   const navigation = useNavigation();
 

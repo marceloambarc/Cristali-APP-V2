@@ -19,7 +19,7 @@ import { theme } from "../../global";
 import { useEffect } from "react";
 
 import { api } from "../../services/api";
-import { ClientProps } from "../../components/ClientComponent";
+import { Alert } from "react-native";
 
 export function UnfinishedSale() {
   const { user, clientToken } = useAuth();
@@ -32,28 +32,19 @@ export function UnfinishedSale() {
   const [searchCondition, setCondition] = useState(0);
   const [searchOrderNotes, setSearchOrderNotes] = useState('');
 
-  const [searchClienteName, setSearchClienteName] = useState('');
-  const [searchClientPhone, setSearchClientPhone] = useState('');
-  const [searchClientEmail, setSearchClientEmail] = useState('');
-  const [searchClientNotes, setSearchClientNotes] = useState('');
-
   const [isLogSended, setIsLogSended] = useState(false);
 
   const navigation = useNavigation();
 
+  const logText =`${user.userName} CONSULTOU VENDAS SALVAS.`;
+
   async function loadUnfinishedSales() {
-    api.post(`/myOrders/saved/${user.userCode}`,{
-        condition: 0
-    }).then(res => {
-      setUnfinishedSales(res.data);
-    }).catch(err => {
-      console.warn(err);
-    }).finally(() => {
-      setLoading(false);
-    })
+    const response = await api.get(`/myOrders/saved/${user.userCode}`);
+    setUnfinishedSales(response.data);
+    setLoading(false);
   }
 
-  async function handleLogSend(logText: string) {
+  async function handleLogSend() {
     if(isLogSended)
       return;
     api.post('/evento',{
@@ -61,10 +52,17 @@ export function UnfinishedSale() {
       eventDescription: logText,
       userToken: clientToken,
       deviceToken: COLLECTION_DEVICE_TOKEN
+    },{
+      headers: { 'Authorization' : 'Bearer '+clientToken }
     }).then(() => {
       setIsLogSended(true);
-    }).catch(res => {
+      Alert.alert('Envio de LOG DE SALVAS')
+    }).catch(err => {
       setIsLogSended(false);
+      Alert.alert(
+        'Erro',
+        `${err}`,
+      );
     }).finally(() => {
       setLoading(false);
     });
@@ -75,36 +73,23 @@ export function UnfinishedSale() {
       return;
     } else {
       loadUnfinishedSales();
-      handleLogSend(`${user.userName} Consultou Vendas Salvas.`);
+      handleLogSend();
     }
   },[]);
 
   function handleOrderSelect(orderSelect: OrderProps){
-    setSearchOrderId(orderSelect.ordem.id);
-    setSearchOrderNotes(orderSelect.ordem.orderNotes);
-    setTotalPrice(orderSelect.ordem.totalPrice);
-    setCondition(orderSelect.ordem.condition);
-
-    setSearchClienteName(orderSelect.cliente.clientName);
-    setSearchClientPhone(orderSelect.cliente.clientPhone);
-    setSearchClientEmail(orderSelect.cliente.clientEmail);
-    setSearchClientNotes(orderSelect.cliente.clientNotes);
+    setSearchOrderId(orderSelect.id);
+    setSearchOrderNotes(orderSelect.orderNotes);
+    setTotalPrice(orderSelect.totalPrice);
+    setCondition(orderSelect.condition);
   }
 
   function handleLoadSale(){
     navigation.navigate('NewSale',{
-      ordem: {
-        searchOrderId,
-        searchOrderNotes,
-        searchTotalPrice,
-        searchCondition
-      },
-      cliente: {
-        searchClienteName,
-        searchClientPhone,
-        searchClientEmail,
-        searchClientNotes
-      }
+      searchOrderId,
+      searchOrderNotes,
+      searchTotalPrice,
+      searchCondition
     });
   }
 

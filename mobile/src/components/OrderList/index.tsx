@@ -12,9 +12,9 @@ export function OrderList({ data, handleOrderSelect } : OrderListProps) {
   return (
     <FlatList
       data={data}
-      keyExtractor={item => String(item.id)}
+      keyExtractor={item => item.id.toString()}
       renderItem={({ item }) => (
-        <Order 
+        <Order
           data={item} 
           onPress={() => handleOrderSelect(item)}
         />

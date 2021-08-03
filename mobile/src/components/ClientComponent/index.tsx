@@ -11,6 +11,7 @@ export interface ClientProps {
   clientPhone: string;
   clientEmail: string;
   clientNotes: string;
+  userCode: string;
 }
 
 interface ClientComponentProps extends TouchableOpacityProps {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View } from 'react-native';
+import { Alert, Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../../hooks/auth';
 
@@ -26,7 +26,7 @@ export function Home(){
   }
 
   function handleSavedSaleNavigation(){
-    navigation.navigate('SavedSale');
+    navigation.navigate('UnfinishedSale');
   }
 
   function handleNewSaleNavigation(){
@@ -45,10 +45,14 @@ export function Home(){
       eventDescription: logText,
       userToken: clientToken,
       deviceToken: COLLECTION_DEVICE_TOKEN
+    },{
+      headers: { 'Authorization' : 'Bearer '+clientToken }
     }).then(() => {
       setIsLogSended(true);
+      Alert.alert('Evento enviado.');
     }).catch(res => {
       setIsLogSended(false);
+      Alert.alert('Evento Não enviado.');
     }).finally(() => {
       setLoading(false);
     })

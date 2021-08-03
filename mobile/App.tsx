@@ -71,7 +71,7 @@ export default function App(){
   async function sendToken(deviceToken: string) {
     AsyncStorage.setItem(COLLECTION_DEVICE_TOKEN, JSON.stringify(deviceToken));
     api.post('/token',{
-      deviceToken: deviceToken
+      deviceToken
     }).then(() => {
       setLoading(false);
     }).catch(err => {
@@ -88,6 +88,8 @@ export default function App(){
             }) },
           ]
         );
+      } else if(err.message.includes("401")) {
+        Alert.alert('Problema de Credenciais!');
       } else {
         Alert.alert('Ops', 'Problema de Conexão, Verifique sua Rede.');
         setLoading(false);

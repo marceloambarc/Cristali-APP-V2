@@ -53,10 +53,13 @@ function AuthProvider({ children } : AuthProps) {
         setLoading(false);
       }else if(res === '401'){
         Alert.alert('Sessão Terminada, Faça login novamente.');
+        setLoading(false);
       }else if(res === '419'){
         Alert.alert('Senha Incorreta.');
+        setLoading(false);
       }else{
         Alert.alert('Problema na Conexão.');
+        setLoading(false);
       }
 
     });

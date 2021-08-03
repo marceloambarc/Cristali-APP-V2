@@ -89,15 +89,10 @@ export function NewSale() {
   useEffect(() => {
     removeStorage()
     if(orderParams){
-      setClientName(orderParams.cliente.clientName);
-      setClientPhone(orderParams.cliente.clientPhone);
-      setClientEmail(orderParams.cliente.clientEmail);
-      setClientNotes(orderParams.cliente.clientNotes);
-
-      setOrderId(orderParams.ordem.id);
-      setOrderNotes(orderParams.ordem.orderNotes);
-      setTotalPrice(orderParams.ordem.totalPrice);
-      setCondition(orderParams.ordem.condition);
+      setOrderId(orderParams.id);
+      setOrderNotes(orderParams.orderNotes);
+      setTotalPrice(orderParams.totalPrice);
+      setCondition(orderParams.condition);
     }
     
   },[orderParams]);

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, StatusBar, Dimensions, Platform, Alert } from "react-native";
+import { useNavigation } from '@react-navigation/native';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { FontAwesome5 } from '@expo/vector-icons'; 
 import { useAuth } from '../../hooks/auth';
@@ -37,8 +38,12 @@ export function History() {
   const [isLogSended, setIsLogSended] = useState(false);
   const [isHistoryDeleted, setIsHistoryDeleted] = useState(false);
 
+  const navigation = useNavigation();
+
   async function handleSetTotal(){
-    setTotal(orderHistory.reduce((a,v) =>  a = a + parseFloat(v.ordem.totalPrice.replace('.','').replace(',','')) , 0).toString());
+    if(historyCount > 0){
+      setTotal(orderHistory.reduce((a,v) =>  a = a + parseFloat(v.ordem.totalPrice.replace('.','').replace(',','')) , 0).toString());
+    }
   }
 
   async function handleSetMomentum(){
@@ -50,8 +55,10 @@ export function History() {
   }
 
   async function getHistory(){
-    api.get(`/order/${user.id}`).then(res => {
+    api.get(`/myOrders/history/${user.userCode}`).then(res => {
       setOrderHistory(res.data);
+    }).catch(() => {
+      navigation.navigate('Home');
     })
   }
 
@@ -74,10 +81,12 @@ export function History() {
   async function deleteHistory() {
     if(isHistoryDeleted)
       return;
-    api.delete(`/myOrders/history/${user.userCode}`).then(() => {
+    api.delete(`/myOrders/history/${user.userCode}`,{
+      headers: { 'Authorization' : 'Bearer '+clientToken }
+    }).then(() => {
       setIsHistoryDeleted(true);
-    }).catch(err => {
-      Alert.alert(err);
+    }).catch(() => {
+      return;
     })
   }
 
@@ -176,7 +185,7 @@ export function History() {
                 style={styles.calendar}
                 onPress={showDatePicker}
               >
-                <FontAwesome5 name="calendar-alt" size={Dimensions.get('window').height * .05} color="black" />
+                <FontAwesome5 name="calendar-alt" size={Dimensions.get('window').height * .04} color="black" />
               </TouchableOpacity>
                 <View style={styles.datepickedContainer}>
                   <Text style={styles.datepickedTitle}>Data Inicial</Text>
@@ -188,7 +197,7 @@ export function History() {
                 style={styles.calendar}
                 onPress={showSecondDatePicker}
               >
-                <FontAwesome5 name="calendar-alt" size={Dimensions.get('window').height * .05} color="black" />
+                <FontAwesome5 name="calendar-alt" size={Dimensions.get('window').height * .04} color="black" />
               </TouchableOpacity>
                 <View style={styles.datepickedContainer}>
                   <Text style={styles.datepickedTitle}>Data Final</Text>

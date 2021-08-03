@@ -41,7 +41,7 @@ controllerRouter.delete('/senha/:cgc', clientAuth, SenhaController.delete);
 
 controllerRouter.get('/token', clientAuth, TokenController.index);
 controllerRouter.post('/token/:id', clientAuth, TokenController.show);
-controllerRouter.post('/token', clientAuth, TokenController.create);
+controllerRouter.post('/token', TokenController.create);
 
 // -- TODOS OS CLIENTES FINAIS
 

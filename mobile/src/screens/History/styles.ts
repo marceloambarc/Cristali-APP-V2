@@ -11,12 +11,11 @@ export const styles = StyleSheet.create({
   },
   historyArea: {
     width: '100%',
-    marginTop: Dimensions.get('window').height * 0.15
   },
   titleContainer: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    marginBottom: Dimensions.get('window').height *.03,
+    marginBottom: Dimensions.get('window').height *.02,
   },
   title: {
     fontFamily: theme.fonts.heading,
@@ -29,17 +28,18 @@ export const styles = StyleSheet.create({
   },
   datepickedContainer: {
     justifyContent: 'flex-start',
-    lineHeight: 3
+    lineHeight: 1
   },
   datepickedTitle: {
     fontFamily: theme.fonts.heading,
-    color: theme.colors.title
+    color: theme.colors.title,
+    fontSize: 12
   },
   datepicked: {
     alignItems: 'center',
     marginRight: 20,
     fontFamily: theme.fonts.text,
-    color: theme.colors.text
+    color: theme.colors.text,
   },
   subtitleContainer: {
     flexDirection: 'row',

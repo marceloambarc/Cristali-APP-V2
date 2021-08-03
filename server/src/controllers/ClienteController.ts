@@ -10,9 +10,7 @@ export default {
   async index(request: Request, response: Response) {
     const clientesFinalRepository = getRepository(Clientefinal);
 
-    const clientesFinal = await clientesFinalRepository.find({
-      relations: ['ordens']
-    });
+    const clientesFinal = await clientesFinalRepository.find();
 
     if(clientesFinal.length === 0){
       return response.status(204).json({ "Vazio": "Nenhum Cliente Final Cadastrado" });
