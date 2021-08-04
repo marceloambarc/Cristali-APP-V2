@@ -8,10 +8,6 @@ import { theme } from '../../global';
 
 import { OrderProps } from "../../components/Order";
 import { ClientProps } from '../../components/ClientComponent';
-import { ItemProps } from '../NewSale';
-
-import { api } from '../../services/api';
-import { COLLECTION_ITEMS } from '../../config/storage';
 
 import { Header } from '../../components/Header';
 import { Divider } from '../../components/Divider';
@@ -19,7 +15,6 @@ import { CristaliButton } from '../../components/CristaliButton';
 import { CheckOutButton } from '../../components/CheckOutButton';
 import { MoneyInput } from '../../components/MoneyInput';
 import { Loading } from '../../components/Loading';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export function Checkout() {
   const { user, clientToken, sendLog, handleSetNewCondition } = useAuth();
@@ -70,18 +65,13 @@ export function Checkout() {
         sendLog({logText, clientToken});
         handleSetNewCondition({id: orderParams.id, condition: 219});
         navigation.navigate('PagSeguro',{
-          ordem: {
-            id: orderId,
-            qt,
-            totalPrice,
-            orderNotes
-          },
-          client: {
-            clientName,
-            clientPhone,
-            clientEmail,
-            clientNotes,
-          }
+          id: orderId,
+          clientName,
+          clientPhone,
+          clientEmail,
+          clientNotes,
+          qt,
+          totalPrice
         });
       } else if(moneyPressed) {
         const logText = `${user.userName} iniciou Checkout para DINHEIRO`;
@@ -167,7 +157,6 @@ export function Checkout() {
               value={totalPrice}
               editable={false}
             />
-            <Text>{orderParams.id}</Text>
           </View>
   
           <Divider />

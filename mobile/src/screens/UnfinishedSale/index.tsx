@@ -3,8 +3,6 @@ import { View, Text, StatusBar } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../../hooks/auth";
 
-import { COLLECTION_DEVICE_TOKEN } from "../../config/storage";
-
 import { Header } from "../../components/Header";
 import { CristaliButton } from "../../components/CristaliButton";
 import { CristaliInput } from "../../components/CristaliInput";

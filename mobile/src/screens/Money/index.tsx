@@ -53,14 +53,14 @@ export function Money() {
       sendLog({logText, clientToken});
       handleSetNewCondition({id: orderId,condition: 221});
       handleCreatePaymentOrder()
-      navigation.setParams({ moneyParams: null });
+      navigation.setParams({moneyParams: null, orderParams: null, clientParams: null});
       navigation.navigate('Final');
     } else {
       const logText = `${user.userName} FINALIZOU UMA VENDA EM DINHEIRO.`;
       sendLog({logText, clientToken});
       handleSetNewCondition({id: orderId,condition: 221});
       handleCreatePaymentOrder()
-      navigation.setParams({moneyParams: null});
+      navigation.setParams({moneyParams: null, orderParams: null, clientParams: null});
       navigation.navigate('Final');
     }
   }
@@ -118,14 +118,6 @@ export function Money() {
             O valor deve ser acertado posteriormente 
             com o departamento financeiro da Cristali.
           </Text>
-
-          {
-          list.map(item => {
-            return (
-              <Text key={item.cd_codigogerado} style={{color: 'black'}}>{item.cd_codigogerado}, {item.nm_produto}, {item.vl_preco}</Text>
-            )
-          })
-        }
 
         </View>
 

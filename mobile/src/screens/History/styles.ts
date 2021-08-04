@@ -68,6 +68,7 @@ export const styles = StyleSheet.create({
     overflow: 'hidden'
   },
   list: {
-    marginBottom: Dimensions.get('window').height * 0.3
+    marginBottom: Dimensions.get('window').height * 0.01,
+    height: Dimensions.get('window').height * 0.5
   }
 });

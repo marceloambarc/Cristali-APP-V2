@@ -133,7 +133,7 @@ export default {
 
           await clientesFinalRepository.save(clientefinalRepository);
 
-          return;
+          return response.status(201);
         }
       } else {
         const existCliente = await clientesFinalRepository.findOne({

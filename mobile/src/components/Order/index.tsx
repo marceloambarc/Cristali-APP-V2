@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, TouchableOpacityProps } from "react-native";
+import { useAuth } from "../../hooks/auth";
 
 import { styles } from "./styles";
 import { theme } from "../../global";
+import { api } from "../../services/api";
+
+import { ClientProps } from "../ClientComponent";
 
 export interface OrderProps {
   open?: boolean;
@@ -13,7 +17,7 @@ export interface OrderProps {
   orderNotes: string;
   condition: number;
   clientCode: number;
-  itens?:[{id: number, productName: string, gCode: string, price: number}],
+  itens?:[{id: number, nm_produto: string, cd_codigogerado: string, vl_preco: number}];
   qt?: string;
 }
 
@@ -22,6 +26,17 @@ interface OrderComponentProps extends TouchableOpacityProps {
 }
 
 export function Order({ data, ...rest } : OrderComponentProps ) {
+  const { clientToken } = useAuth();
+  const [client, setClient] = useState<ClientProps>({} as ClientProps);
+  
+  useEffect(() => {
+    api.get(`/client/${data.clientCode}`,{
+      headers: { 'Authorization' : 'Bearer ' +clientToken }
+    }).then(res => {
+      setClient(res.data);
+    })
+  },[]);
+
   return (
     <TouchableOpacity
       style={
@@ -39,7 +54,7 @@ export function Order({ data, ...rest } : OrderComponentProps ) {
     <View style={styles.content}>
       <View>
         <Text style={styles.title}>
-          { data.userCode }
+          { client.clientName }
         </Text>
 
         <Text style={styles.text}>
