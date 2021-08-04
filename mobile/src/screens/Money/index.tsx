@@ -52,21 +52,23 @@ export function Money() {
       const logText = `${user.userName} FINALIZOU UMA VENDA PARA ${paymentMethod}.`;
       sendLog({logText, clientToken});
       handleSetNewCondition({id: orderId,condition: 221});
-      handleCreatePaymentOrder()
-      navigation.setParams({moneyParams: null, orderParams: null, clientParams: null});
-      navigation.navigate('Final');
+      handleCreatePaymentOrder();
+      handleNavigation();
     } else {
       const logText = `${user.userName} FINALIZOU UMA VENDA EM DINHEIRO.`;
       sendLog({logText, clientToken});
       handleSetNewCondition({id: orderId,condition: 221});
-      handleCreatePaymentOrder()
-      navigation.setParams({moneyParams: null, orderParams: null, clientParams: null});
-      navigation.navigate('Final');
+      handleCreatePaymentOrder();
+      handleNavigation();
     }
   }
 
   async function handleCreatePaymentOrder() {
     Alert.alert('TODO PAYMENT ORDER');
+  }
+
+  function handleNavigation() {
+    navigation.navigate('Final');
   }
 
   async function loadItems() {

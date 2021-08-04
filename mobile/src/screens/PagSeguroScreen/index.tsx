@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, StatusBar, Image } from 'react-native';
+import { View, Text, ScrollView, StatusBar, Image, Alert } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { useAuth } from '../../hooks/auth';
 
 import { api } from '../../services/api';
 import { pgapi } from '../../services/pgapi';
@@ -19,6 +20,7 @@ import { Banner } from '../../components/Banner';
 import { Loading } from '../../components/Loading';
 
 export function PagSeguroScreen() {
+  const { user, clientToken, sendLog } = useAuth();
   const navigation = useNavigation();
   const route = useRoute();
 
@@ -29,8 +31,13 @@ export function PagSeguroScreen() {
 
   const [clientName, setClientName] = useState('');
   const [clientPhone, setClientPhone] = useState('');
-  const [clientEmail, setClientNotes] = useState('');
-  const [clientNotes, setClientEmail] = useState('');
+  const [clientNotes, setClientNotes] = useState('');
+  const [clientEmail, setClientEmail] = useState('');
+
+  const [orderNotes, setOrderNotes] = useState('');
+  const [orderId, setOrderId] = useState(0);
+  const [totalPrice, setTotalPrice] = useState('');
+  const [qt, setQt] = useState<string | undefined>('');
 
   const [cardName, setCardName] = useState('');
   const [cardNumber, setCardNumber] = useState('');
@@ -40,14 +47,21 @@ export function PagSeguroScreen() {
   const [cvv, setCvv] = useState('');
 
   useEffect(() => {
-    if(orderParams){
+    if(clientParams){
       setClientName(clientParams.clientName);
       setClientPhone(clientParams.clientPhone);
       setClientNotes(clientParams.clientNotes);
       setClientEmail(clientParams.clientEmail);
     }
+
+    if(orderParams){
+      setOrderId(orderParams.id);
+      setOrderNotes(orderParams.orderNotes);
+      setTotalPrice(orderParams.totalPrice);
+      setQt(orderParams.qt);
+    }
     setLoading(false);
-  },[orderParams]);
+  },[orderParams, clientParams]);
 
   function validate() {
     if(cardName!= '' && cardName != undefined){
@@ -59,22 +73,24 @@ export function PagSeguroScreen() {
             handleConcludeSale();
             //handleVerify()
           }else{
-            alert('Insira do Código de Verificação do Cartão de Crédito');
+            Alert.alert('Atenção','Insira do Código de Verificação do Cartão de Crédito');
           }
         }else{
-          alert('Insira a Data de Validade do Cartão de Crédito');
+          Alert.alert('Atenção','Insira a Data de Validade do Cartão de Crédito');
         }
       }else{
-        alert('Insira o Número do Cartão de Crédito');
+        Alert.alert('Atenção','Insira o Número do Cartão de Crédito');
       }
     }else{
-      alert('Insira o Nome Impresso no Cartão');
+      Alert.alert('Atenção','Insira o Nome Impresso no Cartão');
     }
   }
 
   function handleConcludeSale() {
     //handleSendPagSeguro()
     //handleSendOrderPayment()
+    const logText = `${user.userName} FINALIZOU VENDA PELO PAGSEGURO`;
+    sendLog({logText, clientToken});
     navigation.setParams({orderParams: null});
     navigation.navigate('Final');
   }

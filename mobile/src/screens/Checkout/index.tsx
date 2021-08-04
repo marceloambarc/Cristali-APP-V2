@@ -74,7 +74,7 @@ export function Checkout() {
           totalPrice
         });
       } else if(moneyPressed) {
-        const logText = `${user.userName} iniciou Checkout para DINHEIRO`;
+        const logText = `${user.userName} INICIOU CHECKOUT PARA DINHEIRO`;
         sendLog({logText, clientToken});
         handleSetNewCondition({id: orderParams.id, condition: 219});
         navigation.navigate('Money',{
@@ -88,7 +88,7 @@ export function Checkout() {
           totalPrice
         });
       } else {
-        const logText = `${user.userName} iniciou Checkou para OUTROS MÉTODOS DE PAGAMENTO`;
+        const logText = `${user.userName} INICIOU CHECKOU PARA OUTROS MÉTODOS DE PAGAMENTO`;
         sendLog({logText, clientToken});
         handleSetNewCondition({id: orderParams.id, condition: 219});
         navigation.navigate('Money',{

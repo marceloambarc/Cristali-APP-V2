@@ -12,7 +12,19 @@ export function Final(){
   const navigation = useNavigation();
 
   function handleBeggining(){
-    navigation.dispatch(StackActions.push('Home'));
+    navigation.navigate('Home',{
+      userCode: '',
+      totalPrice: '',
+      orderNotes: '',
+      client: {
+        clientName: '',
+        clientPhone: '',
+        clientEmail: '',
+        clientNotes: '',
+        userCode: ''
+      },
+      itens: []
+    });
   }
 
   return (
