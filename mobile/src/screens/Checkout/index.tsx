@@ -70,6 +70,7 @@ export function Checkout() {
           clientPhone,
           clientEmail,
           clientNotes,
+          orderNotes,
           qt,
           totalPrice
         });
@@ -84,6 +85,7 @@ export function Checkout() {
           clientPhone,
           clientEmail,
           clientNotes,
+          orderNotes,
           qt,
           totalPrice
         });
@@ -98,6 +100,7 @@ export function Checkout() {
           clientPhone,
           clientEmail,
           clientNotes,
+          orderNotes,
           qt,
           totalPrice
         });

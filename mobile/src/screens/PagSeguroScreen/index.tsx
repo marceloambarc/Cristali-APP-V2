@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, StatusBar, Image, Alert } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import uuid from 'react-native-uuid';
 import { useAuth } from '../../hooks/auth';
 
+import { token } from '../../../credentials';
 import { api } from '../../services/api';
 import { pgapi } from '../../services/pgapi';
 
@@ -20,7 +22,7 @@ import { Banner } from '../../components/Banner';
 import { Loading } from '../../components/Loading';
 
 export function PagSeguroScreen() {
-  const { user, clientToken, sendLog } = useAuth();
+  const { user, clientToken, handleSetNewCondition, sendLog } = useAuth();
   const navigation = useNavigation();
   const route = useRoute();
 
@@ -45,6 +47,9 @@ export function PagSeguroScreen() {
   const [expirateMonth, setExpirateMonth] = useState('');
   const [expirateYear, setExpirateYear] = useState('');
   const [cvv, setCvv] = useState('');
+
+  const value = parseInt(totalPrice);
+  const codeDoc = String(uuid.v4(orderId.toString()));
 
   useEffect(() => {
     if(clientParams){
@@ -87,12 +92,48 @@ export function PagSeguroScreen() {
   }
 
   function handleConcludeSale() {
-    //handleSendPagSeguro()
-    //handleSendOrderPayment()
+    handleSendPagSeguro()
+    handleSetNewCondition({id: orderId, condition: 220})
     const logText = `${user.userName} FINALIZOU VENDA PELO PAGSEGURO`;
     sendLog({logText, clientToken});
     navigation.setParams({orderParams: null});
     navigation.navigate('Final');
+  }
+
+  async function handleSendPagSeguro() {
+
+    await pgapi.post('/charges',
+    {
+      "reference_id": "a0f6d012-4e4f-489d-be56-4e5c1ed10f07",
+      "description": "piy",
+      "amount": {
+        "value": 32100,
+        "currency": "BRL"
+      },
+      "payment_method": {
+        "type": "CREDIT_CARD",
+        "installments": 1,
+        "capture": false,
+        "card": {
+          "number": "4111111111111111",
+          "exp_month": "03",
+          "exp_year": "2026",
+          "security_code": "123",
+          "holder": {
+            "name": "Jose da Silva"
+          }
+        }
+      },
+      "notification_urls": [
+        "https://192.168.15.200/order/ex-00001/"
+      ]
+    }
+    ).catch(err => {
+      console.warn(err);
+      Alert.alert('ERRO NO PAGSEGURO', `${err}`)
+    }).then(res => {
+      console.log(res);
+    })
   }
 
   if(loading){
@@ -150,6 +191,11 @@ export function PagSeguroScreen() {
   
             <View style={styles.titleContainer}>
               <Text style={[styles.title, {fontSize: 18}]}>Informações no cartão de Crédito</Text>
+              <Text>{totalPrice}</Text>
+              <Text>{codeDoc}</Text>
+              <Text>{orderNotes}</Text>
+              <Text>{expirateMonth}</Text>
+              <Text>{expirateYear}</Text>
             </View>
             <View style={styles.bodyContainer}>
               <View style={styles.inputContainer}>

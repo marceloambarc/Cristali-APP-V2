@@ -256,13 +256,16 @@ export default {
         VAI PARA O BANCO { cd_id_ccli, dt_criado, vl_total, tx_obs, cd_habil_tipo }
       */
       
-      const { 
+      var { 
         userCode,
         totalPrice,
         orderNotes,
         client,
         itens
       } = request.body;
+
+      if(orderNotes === '')
+        orderNotes = 'Observação Não Inserida';
 
       itens.forEach(item => {
         if(item.cd_codigogerado === '')

@@ -25,8 +25,7 @@ export default class OrdemPagamento {
   @Column("nvarchar", { length: 255 })
   code_doc: string;
 
-  @ManyToOne(() => Ordem, ordem => ordem.ordem_pagamento, { primary: true, })
-  @JoinColumn({ name: 'ordem_pagamento' })
-  ordem: Ordem;
+  @Column()
+  cd_ordem: number;
 
 }

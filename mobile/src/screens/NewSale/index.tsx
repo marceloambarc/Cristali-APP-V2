@@ -188,6 +188,7 @@ export function NewSale() {
         clientPhone,
         clientEmail,
         clientNotes,
+        orderNotes,
         qt,
         list: list,
         totalPrice: sellPrice.toString()
