@@ -23,14 +23,22 @@ interface LogProps {
   clientToken: string
 }
 
+interface ConditionProps {
+  id: number;
+  condition: number;
+}
+
 interface AuthContextData {
   signed: boolean;
   user: UserProps;
   clientToken: string;
   loading: boolean;
+  isSignInLogSended: boolean;
   signIn({cgc, password} : UserProps): Promise<void>;
   signOut: () => Promise<void>;
   sendLog({logText, clientToken} : LogProps): Promise<void>;
+  sendLoginLog(clientToken : string): Promise<void>;
+  handleSetNewCondition({id, condition} : ConditionProps) : Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextData>({} as AuthContextData);
@@ -39,6 +47,7 @@ function AuthProvider({ children } : AuthProps) {
   const [user, setUser] = useState<UserProps>({} as UserProps);
   const [clientToken, setClientToken] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isSignInLogSended, setIsSignInLogSended] = useState(false);
 
   async function signIn({ cgc, password } : UserProps) {
     setLoading(true);
@@ -84,14 +93,6 @@ function AuthProvider({ children } : AuthProps) {
     if(storagedUser && storagedUserToken) {
       setUser(JSON.parse(storagedUser) as UserProps);
       setClientToken(JSON.parse(storagedUserToken));
-
-      const logText = `${user.userName} ENTROU NOVAMENTE`;
-      await sendLog({logText, clientToken}).catch(err => {
-        Alert.alert(
-          'Erro',
-          `${err}`
-        )
-      })
     }
   }
 
@@ -105,8 +106,41 @@ function AuthProvider({ children } : AuthProps) {
         deviceToken: JSON.parse(storagedToken)
       },{
         headers: {'Authorization': 'Bearer '+clientToken}
-      });
+      }).catch(() => {
+        Alert.alert('Erro se LOG');
+      }).then(() => {
+        Alert.alert('LOG ENVIADO');
+      })
     }
+  }
+
+  async function sendLoginLog(clientToken : string) {
+    const storagedToken = await AsyncStorage.getItem(COLLECTION_DEVICE_TOKEN);
+    if(storagedToken){
+      await api.post('/evento',{
+        userCode: user.userCode,
+        eventDescription: `${user.userName} ENTROU NO SISTEMA`,
+        userToken: clientToken,
+        deviceToken: JSON.parse(storagedToken)
+      },{
+        headers: {'Authorization': 'Bearer '+clientToken}
+      }).catch(() => {
+        Alert.alert('Erro de LoginLOG');
+      }).then(() => {
+        Alert.alert('LOGIN LOG ENVIADO');
+      })
+      setIsSignInLogSended(true);
+    }
+  }
+
+  async function handleSetNewCondition({id, condition}: ConditionProps) {
+    await api.put(`/order/condition/${id}`,{
+      condition: condition
+    },{
+      headers: { 'Authorization' : 'Bearer ' +clientToken }
+    }).catch(err => {
+      Alert.alert(`ERRO NO ENVIO DA CONDIÇÃO ${condition}, id: ${id}`, `${err}`)
+    })
   }
 
   useEffect(() => {
@@ -114,7 +148,18 @@ function AuthProvider({ children } : AuthProps) {
   },[]);
 
   return (
-    <AuthContext.Provider value={{ signed: !!user, user, clientToken, signIn, signOut, sendLog, loading }}>
+    <AuthContext.Provider value={{ 
+      signed: !!user, 
+      user, 
+      clientToken, 
+      signIn, 
+      signOut, 
+      sendLog,
+      sendLoginLog,
+      handleSetNewCondition,
+      loading,
+      isSignInLogSended
+    }}>
       { children }
     </AuthContext.Provider>
   );

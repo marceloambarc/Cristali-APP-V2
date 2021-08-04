@@ -1,5 +1,5 @@
-import React, { useState, useCallback } from 'react';
-import { Text, View, KeyboardAvoidingView, Platform, ActivityIndicator } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Text, View, KeyboardAvoidingView, Platform, ActivityIndicator, Alert } from 'react-native';
 import { useNavigation, useRoute, useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAuth } from '../../hooks/auth';
@@ -7,53 +7,66 @@ import { useAuth } from '../../hooks/auth';
 import { CristaliButton } from '../../components/CristaliButton';
 import { CristaliInput } from '../../components/CristaliInput';
 
-import { COLLECTION_ITEMS, COLLECTION_DEVICE_TOKEN } from '../../config/storage';
+import { COLLECTION_ITEMS } from '../../config/storage';
+import { api } from '../../services/api';
+
 import { ItemProps } from '../NewSale';
 import { OrderProps } from '../../components/Order';
+import { ClientProps } from '../../components/ClientComponent';
 
 import { styles } from './styles';
 import { theme } from '../../global';
-import { api } from '../../services/api';
 
 interface MoneyProps {
   isMoney?: boolean
 }
 
 export function Money() {
-  const { user, clientToken, sendLog } = useAuth();
+  const { user, clientToken, sendLog, handleSetNewCondition } = useAuth();
   const navigation = useNavigation();
 
   const route = useRoute();
   const orderParams = route.params as OrderProps;
+  const moneyParams = route.params as MoneyProps;
+  const clientParams = route.params as ClientProps;
+
   const [loading, setLoading] = useState(true);
-  const [isLogSended, setIsLogSended] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState('');
   const [list, setList] = useState<ItemProps[]>([]);
 
-  const moneyParams = route.params as MoneyProps;
-  const isMoney = moneyParams.isMoney;
+  const [clientName, setClientName] = useState('');
+  const [clientPhone, setClientPhone] = useState('');
+  const [clientEmail, setClientEmail] = useState('');
+  const [clientNotes, setClientNotes] = useState('');
 
-  const [paymentMethod, setPaymentMethod] = useState('');
+  const [orderNotes, setOrderNotes] = useState('');
+  const [orderId, setOrderId] = useState(0);
+  const [totalPrice, setTotalPrice] = useState('');
+  const [qt, setQt] = useState<string | undefined>('');
+
+  const isMoney = moneyParams.isMoney;
 
   function handleFinal() {
     const notes = paymentMethod + ' ' + orderParams.orderNotes;
-    handleSetNewCondition(221);
     if(isMoney) {
       const logText = `${user.userName} FINALIZOU UMA VENDA PARA ${paymentMethod}.`;
       sendLog({logText, clientToken});
+      handleSetNewCondition({id: orderId,condition: 221});
+      handleCreatePaymentOrder()
       navigation.setParams({ moneyParams: null });
       navigation.navigate('Final');
     } else {
       const logText = `${user.userName} FINALIZOU UMA VENDA EM DINHEIRO.`;
       sendLog({logText, clientToken});
+      handleSetNewCondition({id: orderId,condition: 221});
+      handleCreatePaymentOrder()
       navigation.setParams({moneyParams: null});
       navigation.navigate('Final');
     }
   }
 
-  async function handleSetNewCondition(condition: number) {
-    await api.post(`/order/condition/${orderParams.id}`,{
-      condition: condition
-    });
+  async function handleCreatePaymentOrder() {
+    Alert.alert('TODO PAYMENT ORDER');
   }
 
   async function loadItems() {
@@ -64,9 +77,25 @@ export function Money() {
     setLoading(false);
   }
 
+  useEffect(() => {
+    if(orderParams){
+      setOrderId(orderParams.id);
+      setOrderNotes(orderParams.orderNotes);
+      setTotalPrice(orderParams.totalPrice);
+      setQt(orderParams.qt);
+    }
+
+    if(clientParams) {
+      setClientName(clientParams.clientName);
+      setClientPhone(clientParams.clientPhone);
+      setClientEmail(clientParams.clientEmail);
+      setClientNotes(clientParams.clientNotes);
+    }
+    setLoading(false);
+  },[orderParams, clientParams]);
+
   useFocusEffect(useCallback(() => {
     loadItems();
-    handleSetNewCondition(219);
   },[]));
 
   return (
@@ -93,7 +122,7 @@ export function Money() {
           {
           list.map(item => {
             return (
-              <Text key={item.gCode} style={{color: 'black'}}>{item.gCode}, {item.productName}, {item.price}</Text>
+              <Text key={item.cd_codigogerado} style={{color: 'black'}}>{item.cd_codigogerado}, {item.nm_produto}, {item.vl_preco}</Text>
             )
           })
         }

@@ -12,6 +12,9 @@ import { theme } from "../../global";
 import { COLLECTION_ITEMS } from "../../config/storage";
 
 import { OrderProps } from "../../components/Order";
+import { ClientProps } from "../../components/ClientComponent";
+
+import { api } from "../../services/api";
 
 import { Divider } from "../../components/Divider";
 import { CristaliInput } from "../../components/CristaliInput";
@@ -20,13 +23,12 @@ import { TextArea } from "../../components/TextArea";
 import { CristaliButton } from "../../components/CristaliButton";
 import { Header } from "../../components/Header";
 import { SearchButton } from "../../components/SearchButton";
-import { api } from "../../services/api";
 
 export interface ItemProps {
   id: number;
-  gCode: string;
-  productName: string;
-  price: string;
+  cd_codigogerado: string;
+  vl_preco: string;
+  nm_produto: string;
 }
 
 export let itemCounter = 1;
@@ -37,6 +39,7 @@ export function NewSale() {
   const route = useRoute();
 
   const orderParams = route.params as OrderProps;
+  const clientParams = route.params as ClientProps;
 
   const [clientName, setClientName] = useState('');
   const [clientPhone, setClientPhone] = useState('');
@@ -67,17 +70,24 @@ export function NewSale() {
       setTotalPrice(orderParams.totalPrice);
       setCondition(orderParams.condition);
     }
+
+    if(clientParams) {
+      setClientName(clientParams.clientName);
+      setClientPhone(clientParams.clientPhone);
+      setClientEmail(clientParams.clientEmail);
+      setClientNotes(clientParams.clientNotes);
+    }
     
-  },[orderParams]);
+  },[orderParams, clientParams]);
 
-  const [list, setList] = useState<ItemProps[]>([{id: 0, gCode: '', price: '', productName: ''}]);
+  const [list, setList] = useState<ItemProps[]>([{id: 0, cd_codigogerado: '', vl_preco: '', nm_produto: ''}]);
 
-  const handleChange = (price: string, id: ItemProps['id']) => {
-    setList(prev => prev.map(item => item.id === id? {...item, price} : item));
+  const handleChange = (vl_preco: string, id: ItemProps['id']) => {
+    setList(prev => prev.map(item => item.id === id? {...item, vl_preco} : item));
   }
 
-  const handleTitleChange = (productName: string, id: ItemProps['id']) => {
-    setList(prev => prev.map(item => item.id === id? {...item, productName} : item));
+  const handleTitleChange = (nm_produto: string, id: ItemProps['id']) => {
+    setList(prev => prev.map(item => item.id === id? {...item, nm_produto} : item));
   }
 
   const handleDelete = (id: ItemProps['id'], price: string) => {
@@ -87,12 +97,12 @@ export function NewSale() {
     setSellPrice(sellPrice - value);
   }
 
-  const handleAdd = (index: number, price: string) => {
-    const newItem = {id: itemCounter ++, gCode: '', price: '', productName: ''}
-    if(price === '') {
+  const handleAdd = (index: number, vl_preco: string) => {
+    const newItem = {id: itemCounter ++, cd_codigogerado: '', vl_preco: '', nm_produto: ''}
+    if(vl_preco === '') {
       alert('Insira o Preço do Produto.');
     } else {
-      var value = parseInt(price.replace(/\D/g, ""));
+      var value = parseInt(vl_preco.replace(/\D/g, ""));
       setList(prev => [...prev.slice(0, index + 1), newItem, ...prev.slice(index + 1)]);
       setQt(prev => prev + 1);
       setSellPrice(sellPrice + value);
@@ -101,11 +111,11 @@ export function NewSale() {
 
   async function handleSave() {
     for (let index = 0; index <= list.length; index++) {
-      if(list[index].price != undefined && list[index].price != '') {
+      if(list[index].vl_preco != undefined && list[index].vl_preco != '') {
         const newItem = {
-          gCode: uuid.v4(),
-          productName: list[index].productName,
-          price: list[index].price
+          cd_codigogerado: uuid.v4(),
+          nm_produto: list[index].nm_produto,
+          vl_preco: list[index].vl_preco
         };
 
         const storage = await AsyncStorage.getItem(COLLECTION_ITEMS);
@@ -156,20 +166,45 @@ export function NewSale() {
     handleFinish();
   }
 
+  async function handleCreateOrder() {
+    api.post(`/order`,{
+      userCode: user.userCode,
+      totalPrice: sellPrice,
+      orderNotes,
+      client: {
+        clientName,
+        clientPhone,
+        clientEmail,
+        clientNotes,
+        userCode: user.userCode
+      },
+      itens: list
+    },{
+      headers: {'Authorization': 'Bearer '+clientToken}
+    }).then(res => {
+      navigation.navigate('Checkout', {
+        id: res.data.cd_id,
+        clientName,
+        clientPhone,
+        clientEmail,
+        clientNotes,
+        qt,
+        list: list,
+        totalPrice: sellPrice.toString()
+      });
+    }).catch(err => {
+      Alert.alert(
+        'Erro Criação ORDEM',
+        `${err}`
+      )
+    });
+  }
+
   function handleFinish() {
     handleSave();
     const logText = `${user.userName} INICIOU UMA VENDA PARA ${clientName} / VL TOTAL ${sellPrice.toString()}.`;
     sendLog({logText, clientToken});
-    navigation.navigate('Checkout', {
-      id: orderId,
-      clientName,
-      clientPhone,
-      clientEmail,
-      clientNotes,
-      qt,
-      list: list,
-      totalPrice: sellPrice.toString()
-    });
+    handleCreateOrder();
   }
 
   return (
@@ -347,14 +382,14 @@ export function NewSale() {
                             <MoneyInput
                               type={'money'}
                               key={item.id}
-                              value={item.price}
+                              value={item.vl_preco}
                               productInsert
                               editable={false}
                               autoCorrect={false}
                             />
                             <View style={styles.productTitleContainer}>
                               <CristaliInput 
-                                value={item.productName}
+                                value={item.nm_produto}
                                 onChangeText={e => handleTitleChange(e, item.id)}
                                 placeholder="Produto..."
                                 clientInput
@@ -369,7 +404,7 @@ export function NewSale() {
                         <MoneyInput
                           type={'money'}
                           key={item.id}
-                          value={item.price}
+                          value={item.vl_preco}
                           onChangeText={e => handleChange(e, item.id)}
                           placeholder='Insira o Valor do Produto'
                           keyboardType='numeric'
@@ -382,7 +417,7 @@ export function NewSale() {
                       :
                       <TouchableOpacity
                         style={[styles.listButton, {backgroundColor: theme.colors.Success}]}
-                        onPress={() => handleAdd(index, item.price)}
+                        onPress={() => handleAdd(index, item.vl_preco)}
                       >
                         <AntDesign name="plus" size={24} color="white" />
                       </TouchableOpacity>
@@ -390,13 +425,40 @@ export function NewSale() {
                     {index < list.length - 1 && (
                       <TouchableOpacity
                         style={[styles.listButton, {backgroundColor: theme.colors.Cancel}]}
-                        onPress={() => handleDelete(item.id, item.price)}
+                        onPress={() => handleDelete(item.id, item.vl_preco)}
                       >
                         <AntDesign name="minus" size={24} color="black" />
                     </TouchableOpacity>
                     )}
                   </View>
                 ))}
+              </View>
+
+              <Divider />
+
+              <View style={[styles.clientInput, {marginTop: Dimensions.get('screen').height * 0.03, marginBottom: Dimensions.get('screen').height * 0.03}]}>
+                <View style={styles.inputTextRow}>
+                  <View style={styles.inputTextCol}>
+                    <Text style={styles.inputBannerText}>
+                      Anotações da Venda
+                    </Text>
+                  </View>
+                  <View style={styles.inputTextCol}>
+                    <Text style={styles.inputLabel}>
+                      Máximo de 50 caracteres
+                    </Text>
+                  </View>
+                </View>
+                <TextArea 
+                  multiline
+                  maxLength={50}
+                  numberOfLines={5}
+                  autoCorrect={false}
+                  autoCapitalize="none"
+                  value={orderNotes}
+                  onChangeText={setOrderNotes}
+                  returnKeyType='done'
+                />
               </View>
 
               <Divider />

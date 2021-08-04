@@ -264,6 +264,17 @@ export default {
         itens
       } = request.body;
 
+      itens.forEach(item => {
+        if(item.cd_codigogerado === '')
+          item.cd_codigogerado = 'Código Vazio';
+        if(item.nm_produto === '')
+          item.nm_produto = 'Nome Não Inserido';
+        if(item.vl_preco)
+          item.vl_preco = parseInt(item.vl_preco.replace(/\D/g, ""));
+        if(item.vl_preco === '')
+          item.vl_preco = 0;
+      });
+
       const ordensRepository = getRepository(Ordem);
 
       const clientesRepository = getRepository(Clientefinal);
@@ -295,6 +306,7 @@ export default {
           cd_clientefinal: Yup.number().required(),
           itens: Yup.array(
             Yup.object().shape({
+              id: Yup.number().strip(),
               nm_produto: Yup.string().nullable(),
               cd_codigogerado: Yup.string().required(),
               vl_preco: Yup.string().required()
@@ -379,6 +391,7 @@ export default {
       
 
     }catch(err){
+      console.log(err);
       return response.status(400).json({ "Erro" : err });
     }
   },

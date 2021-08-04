@@ -41,12 +41,10 @@ export function UnfinishedSale() {
   }
 
   useEffect(() => {
-    if(!loading) {
+    if(!loading)
       return;
-    } else {
-      loadUnfinishedSales();
-      sendLog({logText, clientToken});
-    }
+    loadUnfinishedSales();
+    sendLog({logText, clientToken});
   },[]);
 
   function handleOrderSelect(orderSelect: OrderProps){

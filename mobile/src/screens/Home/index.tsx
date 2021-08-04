@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../../hooks/auth';
@@ -11,7 +11,7 @@ import { styles } from './styles';
 import { theme } from '../../global';
 
 export function Home(){
-  const { user, clientToken, signOut } = useAuth();
+  const { user, clientToken, isSignInLogSended, sendLoginLog, signOut } = useAuth();
 
   const navigation = useNavigation();
 
@@ -30,6 +30,12 @@ export function Home(){
   async function handleSignOut(){
     signOut();
   }
+
+  useEffect(() => {
+    if(isSignInLogSended)
+      return;
+    sendLoginLog(clientToken)
+  },[]);
 
     return (
       <Background>

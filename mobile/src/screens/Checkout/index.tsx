@@ -22,7 +22,7 @@ import { Loading } from '../../components/Loading';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export function Checkout() {
-  const { user, clientToken, sendLog } = useAuth();
+  const { user, clientToken, sendLog, handleSetNewCondition } = useAuth();
   const [pagSeguroPressed, setPagSeguroPressed] = useState(false);
   const [moneyPressed, setMoneyPressed] = useState(false);
   const [otherPressed, setOtherPressed] = useState(false);
@@ -38,39 +38,28 @@ export function Checkout() {
   const [totalPrice, setTotalPrice] = useState('');
   const [qt, setQt] = useState<string | undefined>('');
 
-  
-
   const navigation = useNavigation()
   const route = useRoute();
 
   const orderParams = route.params as OrderProps;
   const clientParams = route.params as ClientProps;
 
-  async function handleSetNewCondition() {
-    /*await api.post(`/order/condition/${orderId}`,{
-      condition: 218
-    },{
-      headers: { 'Authorization' : 'Bearer ' +clientToken }
-    });*/
-  }
-
-
-
   useEffect(() => {
     if(orderParams){
-      handleSetNewCondition();
       setOrderId(orderParams.id);
       setOrderNotes(orderParams.orderNotes);
       setTotalPrice(orderParams.totalPrice);
       setQt(orderParams.qt);
-
+      handleSetNewCondition({id: orderParams.id, condition: 218});
+    }
+    if(clientParams) {
       setClientName(clientParams.clientName);
       setClientPhone(clientParams.clientPhone);
       setClientEmail(clientParams.clientEmail);
       setClientNotes(clientParams.clientNotes);
     }
     setLoading(false);
-  },[orderParams]);
+  },[orderParams, clientParams]);
 
   function validate(){
     if(!pagSeguroPressed && !moneyPressed && !otherPressed) {
@@ -79,6 +68,7 @@ export function Checkout() {
       if(pagSeguroPressed) {
         const logText = `${user.userName} INICIOU CHECKOUT PARA PAGSEGURO`;
         sendLog({logText, clientToken});
+        handleSetNewCondition({id: orderParams.id, condition: 219});
         navigation.navigate('PagSeguro',{
           ordem: {
             id: orderId,
@@ -94,40 +84,32 @@ export function Checkout() {
           }
         });
       } else if(moneyPressed) {
-        const logText = `${user.userName} iniciou Checkou para DINHEIRO`;
+        const logText = `${user.userName} iniciou Checkout para DINHEIRO`;
         sendLog({logText, clientToken});
+        handleSetNewCondition({id: orderParams.id, condition: 219});
         navigation.navigate('Money',{
           isMoney: true,
-          ordem: {
-            id: orderId,
-            qt,
-            totalPrice,
-            orderNotes
-          },
-          client: {
-            clientName,
-            clientPhone,
-            clientEmail,
-            clientNotes,
-          }
+          id: orderId,
+          clientName,
+          clientPhone,
+          clientEmail,
+          clientNotes,
+          qt,
+          totalPrice
         });
       } else {
         const logText = `${user.userName} iniciou Checkou para OUTROS MÉTODOS DE PAGAMENTO`;
         sendLog({logText, clientToken});
+        handleSetNewCondition({id: orderParams.id, condition: 219});
         navigation.navigate('Money',{
           isMoney: false,
-          ordem: {
-            id: orderId,
-            qt,
-            totalPrice,
-            orderNotes
-          },
-          client: {
-            clientName,
-            clientPhone,
-            clientEmail,
-            clientNotes,
-          }
+          id: orderId,
+          clientName,
+          clientPhone,
+          clientEmail,
+          clientNotes,
+          qt,
+          totalPrice
         });
       }
     }
@@ -185,6 +167,7 @@ export function Checkout() {
               value={totalPrice}
               editable={false}
             />
+            <Text>{orderParams.id}</Text>
           </View>
   
           <Divider />
