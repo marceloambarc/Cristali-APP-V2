@@ -511,10 +511,13 @@ export default {
   async pSeguro(request: Request, response: Response) {
     try {
 
-      const payload = request.body;
-      const header = request.headers;
+      const { payload } = request.body;
+      const { document } = request.params;
+      const { header } = request.headers;
 
-      const hash = createHash("sha256").update(`${payload}-${pagSegurotoken}`).digest('hex')
+      const hash = createHash("sha256").update(`${payload}-${pagSegurotoken}`).digest('hex');
+
+      console.log(header, document, payload);
 
     }catch(err) {
       return response.status(400).json({ "Erro": err });

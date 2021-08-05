@@ -49,6 +49,8 @@ export function PagSeguroScreen() {
   const [expirateYear, setExpirateYear] = useState('');
   const [cvv, setCvv] = useState('123');
 
+  const [pagSeguroId, setPagSeguroId] = useState('');
+
   const value = parseInt(totalPrice);
   const codeDoc = String(uuid.v4(orderId.toString()));
 
@@ -69,12 +71,15 @@ export function PagSeguroScreen() {
     setLoading(false);
   },[orderParams, clientParams]);
 
+  useEffect(() => {
+    setExpirateMonth(expirate.split('/')[0]);
+    setExpirateYear(expirate.split('/')[1]);
+  },[expirate]);
+
   function validate() {
     if(cardName!= '' && cardName != undefined){
       if(cardNumber != '' && cardNumber != undefined){
         if(expirate != '' && expirate != undefined){
-          setExpirateMonth(expirate.split('/')[0]);
-          setExpirateYear(expirate.split('/')[1]);
           if(cvv != '' && cvv != undefined){
             handleConcludeSale();
             //handleVerify()
@@ -92,23 +97,24 @@ export function PagSeguroScreen() {
     }
   }
 
+  
   function handleConcludeSale() {
-    handleSendPagSeguro()
-    if(!createdPagSeguro)
+    if(createdPagSeguro){
+      Alert.alert('Cobrança já enviada');
       return;
-    handleSetNewCondition({id: orderId, condition: 220})
-    const logText = `${user.userName} FINALIZOU VENDA PELO PAGSEGURO`;
-    sendLog({logText, clientToken});
-    navigation.setParams({orderParams: null});
-    navigation.navigate('Final');
+    } else {
+      setLoading(true);
+      handleSendPagSeguro()
+    }
+
   }
 
   async function handleSendPagSeguro() {
 
-    await pgapi.post('/charges',
+    const response = await pgapi.post('/charges',
     {
-      "reference_id": "a0f6d012-4e4f-489d-be56-4e5c1ed10f07",
-      "description": "piy",
+      "reference_id": `${codeDoc}`,
+      "description": `${orderNotes}`,
       "amount": {
         "value": `${value}`,
         "currency": "BRL"
@@ -119,8 +125,8 @@ export function PagSeguroScreen() {
         "capture": false,
         "card": {
           "number": `${cardNumber}`,
-          "exp_month": "03",
-          "exp_year": "2026",
+          "exp_month": `${expirateMonth}`,
+          "exp_year": `${expirateYear}`,
           "security_code": `${cvv}`,
           "holder": {
             "name": `${cardName}`
@@ -134,10 +140,23 @@ export function PagSeguroScreen() {
     ).catch(err => {
       console.warn(err);
       Alert.alert('ERRO NO PAGSEGURO', `${err}`)
-    }).then(res => {
+    });
+    if(response) {
       setCreatedPagSeguro(true);
-      console.log(res);
-    })
+      console.log(response.data.id);
+          setPagSeguroId(response.data.id);
+  
+          handleSetNewCondition({id: orderId, condition: 220});
+    
+          const logText = `${user.userName} FINALIZOU VENDA PELO PAGSEGURO`;
+          sendLog({logText, clientToken});
+          Alert.alert('Enviado pag Seguro');
+          setLoading(false);
+          
+          navigation.navigate('Confirmation',{
+            id: response.data.id
+          });
+    }
   }
 
   if(loading){
@@ -200,6 +219,7 @@ export function PagSeguroScreen() {
               <Text>{orderNotes}</Text>
               <Text>{expirateMonth}</Text>
               <Text>{expirateYear}</Text>
+              <Text>{createdPagSeguro}</Text>
             </View>
             <View style={styles.bodyContainer}>
               <View style={styles.inputContainer}>
@@ -248,11 +268,11 @@ export function PagSeguroScreen() {
   
           <View style={styles.footer}>
             <CristaliButton 
-              title="Finalizar"
+              title="Continuar"
               color={`${theme.colors.Success}`}
               onPress={validate}
             />
-          </View>   
+          </View>
         </View>
       </ScrollView>
     );

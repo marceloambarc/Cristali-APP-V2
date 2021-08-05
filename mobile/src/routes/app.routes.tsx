@@ -10,6 +10,7 @@ import { Checkout } from '../screens/Checkout';
 import { Money } from '../screens/Money';
 import { PagSeguroScreen } from '../screens/PagSeguroScreen';
 import { Final } from '../screens/Final';
+import { Confirmation } from '../screens/Confirmation';
 
 const AppStack = createStackNavigator();
 
@@ -26,6 +27,7 @@ export function AppRoutes() {
       <AppStack.Screen name="Checkout" component={Checkout} />
       <AppStack.Screen name="Money" component={Money} />
       <AppStack.Screen name="PagSeguro" component={PagSeguroScreen} />
+      <AppStack.Screen name="Confirmation" component={Confirmation} />
       <AppStack.Screen name="Final" component={Final} />
       
     </AppStack.Navigator>

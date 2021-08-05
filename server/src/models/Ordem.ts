@@ -35,10 +35,4 @@ export default class Ordem {
   @JoinColumn({ name: 'cd_ordem_id' })
   itens: Ordemitem[];
 
-  @OneToMany(() => OrdemPagamento, pagamento => pagamento.ordem,{
-    cascade: ['insert', 'update']
-  })
-  @JoinColumn({ name: 'ordem_pagamento' })
-  ordem_pagamento: OrdemPagamento[];
-
 }

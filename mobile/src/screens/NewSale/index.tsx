@@ -90,10 +90,10 @@ export function NewSale() {
     setList(prev => prev.map(item => item.id === id? {...item, nm_produto} : item));
   }
 
-  const handleDelete = (id: ItemProps['id'], price: string) => {
+  const handleDelete = (id: ItemProps['id'], vl_preco: string) => {
     setList(prev => prev.filter(item => item.id !== id));
     setQt(prev => prev -1);
-    var value = parseInt(price.replace(/\D/g, ""));
+    var value = parseInt(vl_preco.replace(/\D/g, ""));
     setSellPrice(sellPrice - value);
   }
 
@@ -131,7 +131,7 @@ export function NewSale() {
     }
   }
 
-  function handleContinue() {
+  async function handleContinue() {
     if(qt <= 0) {
       Alert.alert(
         'Atenção',
@@ -148,22 +148,25 @@ export function NewSale() {
       return;
     }
 
-    if(clientNotes === '' || clientPhone === '' || clientEmail === '') {
-      Alert.alert(
-        'Atenção!',
-        'Deseja prosseguir sem os dados complementares do Cliente?',
-        [
-          { text: "Sim", onPress: () => handleFinish() },
-          {
-            text: "Não",
-            onPress: () => {},
-            style: "cancel"
-          }
-        ]
-      )
+    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(clientEmail)) {
+      if(clientNotes === '' || clientPhone === '' || clientEmail === '') {
+        Alert.alert(
+          'Atenção!',
+          'Deseja prosseguir sem os dados complementares do Cliente?',
+          [
+            { text: "Sim", onPress: () => handleFinish() },
+            {
+              text: "Não",
+              onPress: () => {},
+              style: "cancel"
+            }
+          ]
+        )
+      }
+      handleFinish();
+    } else {
+      Alert.alert("OPS!", "Email do cliente é inválido!");
     }
-
-    handleFinish();
   }
 
   async function handleCreateOrder() {

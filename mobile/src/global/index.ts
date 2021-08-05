@@ -8,6 +8,7 @@ export const theme = {
     loginInput: '#F2D0C4',
     loginText: '#594F4D',
 
+    overlay: 'rgba(0,0,0,0.7)',
     background: '#CEDEE5',
     body: '#F2F3F5',
 
