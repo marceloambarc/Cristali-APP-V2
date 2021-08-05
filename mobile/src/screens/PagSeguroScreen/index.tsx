@@ -30,6 +30,7 @@ export function PagSeguroScreen() {
   const clientParams = route.params as ClientProps;
 
   const [loading, setLoading] = useState(true);
+  const [createdPagSeguro, setCreatedPagSeguro] = useState(false);
 
   const [clientName, setClientName] = useState('');
   const [clientPhone, setClientPhone] = useState('');
@@ -41,12 +42,12 @@ export function PagSeguroScreen() {
   const [totalPrice, setTotalPrice] = useState('');
   const [qt, setQt] = useState<string | undefined>('');
 
-  const [cardName, setCardName] = useState('');
-  const [cardNumber, setCardNumber] = useState('');
+  const [cardName, setCardName] = useState('Jose da Silva');
+  const [cardNumber, setCardNumber] = useState('4111111111111111');
   const [expirate, setExpirate] = useState('');
   const [expirateMonth, setExpirateMonth] = useState('');
   const [expirateYear, setExpirateYear] = useState('');
-  const [cvv, setCvv] = useState('');
+  const [cvv, setCvv] = useState('123');
 
   const value = parseInt(totalPrice);
   const codeDoc = String(uuid.v4(orderId.toString()));
@@ -93,6 +94,8 @@ export function PagSeguroScreen() {
 
   function handleConcludeSale() {
     handleSendPagSeguro()
+    if(!createdPagSeguro)
+      return;
     handleSetNewCondition({id: orderId, condition: 220})
     const logText = `${user.userName} FINALIZOU VENDA PELO PAGSEGURO`;
     sendLog({logText, clientToken});
@@ -107,7 +110,7 @@ export function PagSeguroScreen() {
       "reference_id": "a0f6d012-4e4f-489d-be56-4e5c1ed10f07",
       "description": "piy",
       "amount": {
-        "value": 32100,
+        "value": `${value}`,
         "currency": "BRL"
       },
       "payment_method": {
@@ -115,12 +118,12 @@ export function PagSeguroScreen() {
         "installments": 1,
         "capture": false,
         "card": {
-          "number": "4111111111111111",
+          "number": `${cardNumber}`,
           "exp_month": "03",
           "exp_year": "2026",
-          "security_code": "123",
+          "security_code": `${cvv}`,
           "holder": {
-            "name": "Jose da Silva"
+            "name": `${cardName}`
           }
         }
       },
@@ -132,6 +135,7 @@ export function PagSeguroScreen() {
       console.warn(err);
       Alert.alert('ERRO NO PAGSEGURO', `${err}`)
     }).then(res => {
+      setCreatedPagSeguro(true);
       console.log(res);
     })
   }

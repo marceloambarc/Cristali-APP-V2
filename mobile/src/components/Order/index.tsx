@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, TouchableOpacityProps } from "react-native";
+import { TextInputMask } from "react-native-masked-text";
 import { useAuth } from "../../hooks/auth";
 
 import { styles } from "./styles";
@@ -7,6 +8,7 @@ import { theme } from "../../global";
 import { api } from "../../services/api";
 
 import { ClientProps } from "../ClientComponent";
+
 
 export interface OrderProps {
   open?: boolean;
@@ -57,13 +59,21 @@ export function Order({ data, ...rest } : OrderComponentProps ) {
           { client.clientName }
         </Text>
 
-        <Text style={styles.text}>
-          { data.createdAt }
-        </Text>
+        <TextInputMask 
+          style={styles.text}
+          type={'datetime'}
+          textAlign='left'
+          value={data.createdAt}
+          editable={false}
+        />
 
-        <Text style={styles.text}>
-          { data.totalPrice }
-        </Text>
+        <TextInputMask 
+          style={styles.text}
+          type={'money'}
+          textAlign='left'
+          value={data.totalPrice.toString()}
+          editable={false}
+        />
       </View>
     </View>
 

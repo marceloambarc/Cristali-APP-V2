@@ -35,11 +35,11 @@ export function ClientComponent({ data, ...rest } : ClientComponentProps) {
           { data.clientName }
         </Text>
 
-        <Text style={styles.text}>
+        <Text numberOfLines={1} style={styles.text}>
           { data.clientEmail }
         </Text>
 
-        <Text style={styles.text}>
+        <Text numberOfLines={1} style={styles.text}>
           { data.clientNotes }
         </Text>
       </View>
