@@ -50,6 +50,7 @@ export function PagSeguroScreen() {
   const [cvv, setCvv] = useState('123');
 
   const [pagSeguroId, setPagSeguroId] = useState('');
+  const [pagSeguroReference, setPagSeguroReference] = useState('');
 
   const value = parseInt(totalPrice);
   const codeDoc = String(uuid.v4(orderId.toString()));
@@ -143,19 +144,19 @@ export function PagSeguroScreen() {
     });
     if(response) {
       setCreatedPagSeguro(true);
-      console.log(response.data.id);
-          setPagSeguroId(response.data.id);
   
-          handleSetNewCondition({id: orderId, condition: 220});
+      handleSetNewCondition({id: orderId, condition: 220});
     
-          const logText = `${user.userName} FINALIZOU VENDA PELO PAGSEGURO`;
-          sendLog({logText, clientToken});
-          Alert.alert('Enviado pag Seguro');
-          setLoading(false);
+      const logText = `${user.userName} FINALIZOU VENDA PELO PAGSEGURO`;
+      sendLog({logText, clientToken});
+      Alert.alert('Enviado pag Seguro');
+      setLoading(false);
           
-          navigation.navigate('Confirmation',{
-            id: response.data.id
-          });
+      navigation.navigate('Confirmation',{
+        id: response.data.id,
+        reference: response.data.payment_response.reference,
+        cardNumber: response.data.payment_method.card.last_digits
+      });
     }
   }
 

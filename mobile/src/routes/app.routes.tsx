@@ -11,6 +11,7 @@ import { Money } from '../screens/Money';
 import { PagSeguroScreen } from '../screens/PagSeguroScreen';
 import { Final } from '../screens/Final';
 import { Confirmation } from '../screens/Confirmation';
+import { SendConfirmation } from '../screens/SendConfirmation';
 
 const AppStack = createStackNavigator();
 
@@ -28,6 +29,7 @@ export function AppRoutes() {
       <AppStack.Screen name="Money" component={Money} />
       <AppStack.Screen name="PagSeguro" component={PagSeguroScreen} />
       <AppStack.Screen name="Confirmation" component={Confirmation} />
+      <AppStack.Screen name="SendConfirmation" component={SendConfirmation} />
       <AppStack.Screen name="Final" component={Final} />
       
     </AppStack.Navigator>

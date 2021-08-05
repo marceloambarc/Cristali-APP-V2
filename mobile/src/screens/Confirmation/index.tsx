@@ -10,23 +10,31 @@ import { CristaliButton } from '../../components/CristaliButton';
 import { pgapi } from '../../services/pgapi';
 import { useEffect } from 'react';
 
-interface Props {
+export interface PagSeguroConfirmationProps {
   id: string;
+  refence: string;
+  cardNumber: string;
 }
-
 
 export function Confirmation() {
   const [value, setValue] = useState('');
   const [pagSeguroId, setPagSeguroId] = useState('');
+  const [pagSeguroReference, setPagSeguroReference] = useState('');
+  const [pagSeguroCardNumber, setPagSeguroCardNumber] = useState('');
 
   const navigation = useNavigation();
   const route = useRoute();
 
-  const pagSeguroParams = route.params as Props;
+  const pagSeguroParams = route.params as PagSeguroConfirmationProps;
 
   useEffect(() => { 
-    setPagSeguroId(pagSeguroParams.id);
-  },[pagSeguroParams])
+    if(pagSeguroParams) {
+      setPagSeguroId(pagSeguroParams.id);
+      setPagSeguroReference(pagSeguroParams.refence);
+      setPagSeguroCardNumber(pagSeguroParams.cardNumber);
+    }
+
+  },[pagSeguroParams]);
 
   async function handleConfirm() {
     const sendValue = parseInt(value.replace(/\D/g, ""))
@@ -38,12 +46,14 @@ export function Confirmation() {
       console.log(err);
     });
     if(response) {
-      const reference = response.data.payment_response.reference;
-      const totalPrice = response.data.amout.value;
-      
+      navigation.navigate('SendConfirmation',{
+        id: pagSeguroId,
+        reference: pagSeguroReference,
+        cardNumber: pagSeguroCardNumber,
+        value: sendValue
+      })
     }
-      //navigation.setParams({orderParams: null});
-      //navigation.navigate('Final');
+
   }
 
   async function handleCancel() {
