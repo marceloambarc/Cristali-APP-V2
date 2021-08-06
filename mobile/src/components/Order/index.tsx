@@ -19,7 +19,7 @@ export interface OrderProps {
   orderNotes: string;
   condition: number;
   clientCode: number;
-  itens?:[{id: number, nm_produto: string, cd_codigogerado: string, vl_preco: number}];
+  itens?:[{id: number, cd_codigogerado: string, vl_preco: string, nm_produto: string}];
   qt?: string;
 }
 
@@ -62,6 +62,9 @@ export function Order({ data, ...rest } : OrderComponentProps ) {
         <TextInputMask 
           style={styles.text}
           type={'datetime'}
+          options={{
+            format: 'YYYY/MM/DD HH:mm:ss'
+          }}
           textAlign='left'
           value={data.createdAt}
           editable={false}

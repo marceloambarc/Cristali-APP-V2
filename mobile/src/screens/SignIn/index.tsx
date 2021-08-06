@@ -1,17 +1,24 @@
-import React, { useState, } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, View, StatusBar, ActivityIndicator, KeyboardAvoidingView, Platform, Alert, ScrollView } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAuth } from '../../hooks/auth';
+
+import { COLLECTION_USER } from '../../config/storage';
 
 import { Background } from '../../components/Background';
 import { Logo } from '../../components/Logo';
 import { CristaliInput } from '../../components/CristaliInput';
 import { CristaliButton } from '../../components/CristaliButton';
 
+import { UserProps } from '../../hooks/auth';
+
 import { styles } from './styles';
 import { theme } from '../../global';
 
 export function SignIn() {
   const { loading, signIn } = useAuth();
+  const [user, setUser] = useState<UserProps>({} as UserProps);
+
   const [cgc, setCgc] = useState('');
   const [password, setPassword] = useState('');
 
@@ -22,6 +29,20 @@ export function SignIn() {
       Alert.alert(err);
     }
   }
+
+  async function loadUserData() {
+    const storageUser = await AsyncStorage.getItem(COLLECTION_USER);
+    if(storageUser){
+      setUser(JSON.parse(storageUser));
+
+      setCgc(user.cgc);
+      setPassword(user.password);
+    }
+  }
+
+  useEffect(() => {
+    loadUserData()
+  },[]);
 
   if(Platform.OS === 'ios'){
     return (

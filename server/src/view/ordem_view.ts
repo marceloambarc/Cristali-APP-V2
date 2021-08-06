@@ -23,15 +23,9 @@ export default {
       totalPrice: ordem.vl_total,
       orderNotes: ordem.tx_obs,
       condition: ordem.cd_habil_tipo,
+      clientCode: ordem.cd_clientefinal,
       itens: itemView.renderMany(ordem.itens)
     };
-  },
-
-  renderPayment(ordem: Ordem) {
-    return {
-      condition: ordem.cd_habil_tipo,
-      payment: ordempagamentoView.renderMany(ordem.ordem_pagamento)
-    }
   },
 
   renderMany(ordens: Ordem[]) {

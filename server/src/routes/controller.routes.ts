@@ -47,7 +47,7 @@ controllerRouter.post('/token', TokenController.create);
 
 controllerRouter.get('/client', clientAuth, ClienteController.index);
 controllerRouter.get('/client/orders', clientAuth, ClienteController.showWithOrders);
-controllerRouter.get('/client/:id', clientAuth, ClienteController.show);
+controllerRouter.get('/client/:id', ClienteController.show);
 controllerRouter.post('/client', clientAuth, ClienteController.create);
 controllerRouter.put('/cliente/:id', clientAuth, ClienteController.edit);
 
@@ -58,8 +58,6 @@ controllerRouter.get('/order/:id', clientAuth, OrdemController.show);
 controllerRouter.post('/opensales', clientAuth, OrdemController.showOpenSales);
 controllerRouter.post('/insertedsales', clientAuth, OrdemController.showInsertedSales);
 controllerRouter.post('/selectedpaymentsales', clientAuth, OrdemController.showSelectedPaymentSales);
-controllerRouter.put('/order/:id', clientAuth, OrdemController.edit);
-controllerRouter.delete('/order/:id', clientAuth, OrdemController.delete);
 
 // -- Ordens De Pagamento
 

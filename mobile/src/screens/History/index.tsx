@@ -35,8 +35,6 @@ export function History() {
   const [firstDate, setFirstDate] = useState<Date>(momentum);
   const [secondDate, setSecondDate] = useState<Date>(new Date());
 
-  const [isHistoryDeleted, setIsHistoryDeleted] = useState(false);
-
   const logText = `${user.userName} Consultou Histórico de ${firstDate} até ${secondDate}`;
 
   const navigation = useNavigation();
@@ -52,7 +50,6 @@ export function History() {
     event.setDate(-30);
     setMomentum(event);
     setFirstDate(event);
-    setLoading(false);
   }
 
   async function getHistory(){
@@ -63,24 +60,12 @@ export function History() {
     })
   }
 
-  async function deleteHistory() {
-    if(isHistoryDeleted)
-      return;
-    api.delete(`/myOrders/history/${user.userCode}`,{
-      headers: { 'Authorization' : 'Bearer '+clientToken }
-    }).then(() => {
-      setIsHistoryDeleted(true);
-    }).catch(() => {
-      return;
-    })
-  }
-
   useEffect(() => {
-    deleteHistory();
     getHistory();
     setHistoryCount(orderHistory.length);
     handleSetTotal();
     handleSetMomentum();
+    setLoading(false);
   },[]);
 
   function handleOrderSelect(orderSelect: OrderProps){

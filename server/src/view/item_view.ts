@@ -5,9 +5,9 @@ export default {
     return {
       orderId: item.ordem,
       id: item.cd_id,
-      productName: item.nm_produto,
-      gCode: item.cd_codigogerado,
-      price: item.vl_preco
+      nm_produto: item.nm_produto,
+      cd_codigogerado: item.cd_codigogerado,
+      vl_preco: item.vl_preco
     };
   },
 

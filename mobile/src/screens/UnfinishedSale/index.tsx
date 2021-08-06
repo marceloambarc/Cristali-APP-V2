@@ -11,6 +11,7 @@ import { OrderList } from "../../components/OrderList";
 import { Loading } from "../../components/Loading";
 
 import { OrderProps } from "../../components/Order";
+import { ItemProps } from "../NewSale";
 
 import { styles } from "./styles";
 import { theme } from "../../global";
@@ -25,17 +26,19 @@ export function UnfinishedSale() {
 
   const [unfinisedSales, setUnfinishedSales] = useState<OrderProps[]>([]);
 
+  const [clientCode, setClientCode] = useState(0);
+
   const [searchOrderId, setSearchOrderId] = useState(0);
   const [searchTotalPrice, setTotalPrice] = useState('');
   const [searchCondition, setCondition] = useState(0);
   const [searchOrderNotes, setSearchOrderNotes] = useState('');
+  const [itens, setItens] =  useState<ItemProps[]>([{id: 0, cd_codigogerado: '', vl_preco: '', nm_produto: ''}]);
 
   const navigation = useNavigation();
 
   async function loadUnfinishedSales() {
     const response = await api.get(`/myOrders/saved/${user.userCode}`);
     setUnfinishedSales(response.data);
-    setLoading(false);
   }
 
   useEffect(() => {
@@ -43,22 +46,38 @@ export function UnfinishedSale() {
       return;
     loadUnfinishedSales();
     sendLog({logText, clientToken});
+    setLoading(false);
   },[]);
 
-  function handleOrderSelect(orderSelect: OrderProps){
+  async function handleOrderSelect(orderSelect: OrderProps){
     setSearchOrderId(orderSelect.id);
-    setSearchOrderNotes(orderSelect.orderNotes);
     setTotalPrice(orderSelect.totalPrice);
+    setSearchOrderNotes(orderSelect.orderNotes);
     setCondition(orderSelect.condition);
+    setClientCode(orderSelect.clientCode);
+
+    if(orderSelect.itens != undefined) {
+      setItens(orderSelect.itens);
+    }
   }
 
-  function handleLoadSale(){
-    navigation.navigate('NewSale',{
-      searchOrderId,
-      searchOrderNotes,
-      searchTotalPrice,
-      searchCondition
+  async function handleLoadSale(){
+    setLoading(true);
+    await api.get(`/client/${clientCode}`).then(res => {
+      setLoading(false)
+      navigation.navigate('NewSale',{
+        id: searchOrderId,
+        orderNotes: searchOrderNotes,
+        totalPrice: searchTotalPrice,
+        condition: searchCondition,
+        itens,
+        clientName: res.data.clientName,
+        clientPhone: res.data.clientPhone,
+        clientEmail: res.data.clientEmail,
+        clientNotes: res.data.clientNotes,
+      });
     });
+
   }
 
   if(loading) {
@@ -86,6 +105,11 @@ export function UnfinishedSale() {
         <View style={styles.inputContainer}>
           <CristaliInput 
             value={searchOrderId.toString()}
+            textAlign='center'
+            editable={false}
+          />
+          <CristaliInput 
+            value={clientCode.toString()}
             textAlign='center'
             editable={false}
           />

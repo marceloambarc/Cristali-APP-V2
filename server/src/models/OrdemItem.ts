@@ -19,7 +19,7 @@ export default class Ordemitem {
   vl_preco: number;
 
   @Index("ix_ordemitem1", { synchronize: false })
-  @ManyToOne(() => Ordem, ordem => ordem.itens, { primary: true, })
+  @ManyToOne(() => Ordem, ordem => ordem.itens, { onDelete: "CASCADE" })
   @JoinColumn({ name: 'cd_ordem_id' })
   ordem: Ordem;
   

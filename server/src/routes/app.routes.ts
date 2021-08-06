@@ -25,6 +25,7 @@ appRouter.get('/myClients/:id', ClienteController.userClients);
 // - TODAS AS ORDENS
 appRouter.get('/myOrders/:id', OrdemController.userOrders);
 appRouter.post('/order', clientAuth, OrdemController.create);
+appRouter.put('/order/:id', clientAuth, OrdemController.edit);
 appRouter.put('/order/condition/:id', clientAuth, OrdemController.editCondition);
 
 // - ORDENS SALVAS
@@ -35,6 +36,6 @@ appRouter.post('/paymentOrder', OrdemPayController.create);
 
 // - HISTÓRICO
 appRouter.get('/myOrders/history/:id', OrdemController.userHystory);
-appRouter.delete('/myOrders/history/:id', OrdemController.deleteUserHistory);
+appRouter.delete('/order', clientAuth, OrdemController.delete);
 
 export default appRouter;

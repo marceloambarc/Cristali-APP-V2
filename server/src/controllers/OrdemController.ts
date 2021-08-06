@@ -229,23 +229,31 @@ export default {
   },
 
   async delete(request: Request, response: Response) {
-    const { id } = request.params;
+    try {
 
-    const ordensRepository = getRepository(Ordem);
+      const ordensRepository = getRepository(Ordem);
 
-    const existOrdem = await ordensRepository.findOne({
-      where: { cd_id : id }
-    });
+      var d = new Date();
+      d.setDate(d.getDate()-30);
 
-    if(existOrdem === undefined){
-      return response.status(404).json({ "Erro" : "Ordem não encontrada." });
-    }else{
-      const deletedOrdem = await ordensRepository.delete(existOrdem);
-      if(deletedOrdem === undefined){
-        return response.status(400).json({ "Erro" : "Tivemos um erro ao Deletar Ordem" });
-      }else{
-        return response.status(200).json({ "OK!" : "Ordem Deletada com Sucesso!" });
+      const existOrdem = await ordensRepository.find({
+        where: {
+          dt_criado: LessThan(d)
+        }, relations: ['itens']
+      });
+
+      if(existOrdem.length <= 0) {
+        return response.status(302).json({ "Erro" : 'Nenhuma Ordem anterior a esta Data' });
+      } else {
+        existOrdem.map( async ordem => {
+          await ordensRepository.remove(ordem);
+        });
+
+        return response.status(200).json({});
       }
+
+    }catch(err) {
+      return response.status(400).json({ "Erro" : err });
     }
   },
 
@@ -289,6 +297,7 @@ export default {
       });
 
       if(existCliente != undefined) {
+
         const codPessoa = existCliente.cd_pessoa;
         const data : any = {
           cd_id_ccli: userCode,
@@ -437,13 +446,13 @@ export default {
       const ordens = await ordensRepository.find({
         where: [
           { cd_id_ccli: searchId, cd_habil_tipo: LessThanOrEqual(219) },
-        ]
+        ],relations: ['itens']
       });
 
       if(ordens.length === 0) {
         return response.status(204).json({ "Vazio" : "Nenhuma Ordem Salva" });
       } else {
-        return response.json(ordemView.renderMany(ordens));
+        return response.json(ordemView.renderManyWithItens(ordens));
         
       }
 
@@ -471,37 +480,6 @@ export default {
       } else {
         return response.json(ordemView.renderMany(ordens));
       }
-
-    }catch(err) {
-      return response.status(400).json({ "Erro" : err });
-    }
-  },
-
-  async deleteUserHistory(request: Request, response: Response) {
-    try {
-
-      const { id } = request.params;
-      const searchId = parseInt(id);
-
-      const ordensRepository = getRepository(Ordem);
-
-      var d = new Date();
-      d.setDate(d.getDate()-30);
-
-      const ordens = await ordensRepository.find({
-        where: [
-          { cd_id_ccli: searchId },
-          { dt_criado: LessThan(d) }
-        ]
-      });
-
-      if(ordens.length !== 0){
-        await ordensRepository.remove(ordens);
-
-        return response.status(200);
-      }
-
-      return;
 
     }catch(err) {
       return response.status(400).json({ "Erro" : err });

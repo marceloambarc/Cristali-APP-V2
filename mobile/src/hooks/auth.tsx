@@ -107,7 +107,7 @@ function AuthProvider({ children } : AuthProps) {
       },{
         headers: {'Authorization': 'Bearer '+clientToken}
       }).catch(() => {
-        Alert.alert('Erro se LOG');
+        Alert.alert('Erro de LOG');
       }).then(() => {
         Alert.alert('LOG ENVIADO');
       })
@@ -143,9 +143,9 @@ function AuthProvider({ children } : AuthProps) {
     })
   }
 
-  useEffect(() => {
+  /*useEffect(() => {
     loadStoragedData();
-  },[]);
+  },[]);*/
 
   return (
     <AuthContext.Provider value={{ 
