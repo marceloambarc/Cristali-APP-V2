@@ -13,7 +13,7 @@ import { Loading } from '../../components/Loading';
 
 export interface PagSeguroConfirmationProps {
   id: string;
-  refence: string;
+  reference: string;
   cardNumber: string;
 }
 
@@ -32,7 +32,7 @@ export function Confirmation() {
   useEffect(() => { 
     if(pagSeguroParams) {
       setPagSeguroId(pagSeguroParams.id);
-      setPagSeguroReference(pagSeguroParams.refence);
+      setPagSeguroReference(pagSeguroParams.reference);
       setPagSeguroCardNumber(pagSeguroParams.cardNumber);
       setLoading(false);
     }
@@ -62,17 +62,13 @@ export function Confirmation() {
   async function handleCancel() {
     navigation.goBack()
     const sendValue = parseInt(value.replace(/\D/g, ""))
-    /*pgapi.post(`/charges/${pagSeguroId}/cancel`,{
-      "amount": {
-        "value": sendValue
-      }
-    }).catch(err => {
+    pgapi.post(`/charges/${pagSeguroId}/cancel`).catch(err => {
       if(err instanceof SyntaxError) {
         alert(err.message);
       }
     }).then(res => {
       alert(res)
-    })*/
+    })
   }
 
   if(loading) {

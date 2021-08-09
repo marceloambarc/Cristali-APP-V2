@@ -37,7 +37,7 @@ export function SendConfirmation() {
   useEffect(() => {
     if(pagSeguroParams){
       setPagSeguroId(pagSeguroParams.id);
-      setPagSeguroReference(pagSeguroParams.refence);
+      setPagSeguroReference(pagSeguroParams.reference);
       setPagSeguroCardNumber(`XXXX-XXXX-XXXX-${pagSeguroParams.cardNumber}`);
     }
 
@@ -54,22 +54,19 @@ export function SendConfirmation() {
 
   function handleSendEmail() {
     Linking.openURL(`mailto:${ clientEmail }?subject=Compra Cristali&body=
-    Referencia: ${ pagSeguroReference };
+    Referência: ${ pagSeguroReference };
     Preço Total: R$ ${ value };
     Cartão de Crédito: ${ pagSeguroCardNumber };
     `);
+    navigation.setParams({orderParams: null});
+    navigation.navigate('Final');
   }
 
   function handleSendWhatsapp() {
-    // let companyPhoneSplit = companyPhone.split('(51) 9').join('5551');
-    // let companyWhatsapp = companyPhoneSplit.split('-').join('');
-
-    alert('Olá');
-    //Linking.openURL(`https://api.whatsapp.com/send?phone=${clientPhone}&text=Mensagem%20vinda%20do%20Aplicativo%20CompreMaisAki%3A%0APromo%C3%A7%C3%A3o%3A%20${productName}%0APre%C3%A7o%20sem%20Desconto%3A%20${productPrice}%0AValidade%20da%20Promo%C3%A7%C3%A3o%3A%20${productValidade}%0ADesconto%3A%20${productDiscount}%25%0ACom%20essa%20mensagem%20pelo%20App%20CompreMaisAki%20ganhe%20desconto%20de%3A%20${productDiscount}%25%0A%0A`);
+    Linking.openURL(`https://api.whatsapp.com/send?phone=5551992381515&text=%F0%9F%92%8E%20Ol%C3%A1!%20Comprovante%20Cristali%20%F0%9F%92%8E%20Refer%C3%AAncia%20PagSeguro%3A%20${ pagSeguroReference }%20Pre%C3%A7o%20Total%20da%20Compra%3A%20${ value }%20%C3%9Altimos%20D%C3%ADgitos%20CC%3A%20${ pagSeguroCardNumber }`);
+    navigation.setParams({orderParams: null});
+    navigation.navigate('Final');
   }
-
-        //navigation.setParams({orderParams: null});
-      //navigation.navigate('Final');
 
   return (
     <View

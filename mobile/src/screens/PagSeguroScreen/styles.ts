@@ -44,8 +44,8 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   codeCol: {
-    width: '50%',
-    paddingHorizontal: 20,
+    width: '51%',
+    paddingHorizontal: 13,
     justifyContent: 'center',
     alignItems: 'center'
   },

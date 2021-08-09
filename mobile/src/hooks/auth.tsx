@@ -2,7 +2,7 @@ import React, { createContext, useState, useEffect, useContext, ReactNode } from
 import { Alert } from 'react-native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { COLLECTION_USER, COLLECTION_TOKEN, COLLECTION_DEVICE_TOKEN } from "../config/storage";
+import { COLLECTION_USER, COLLECTION_TOKEN, COLLECTION_DEVICE_TOKEN, COLLECTION_PASSWORD } from "../config/storage";
 import { api } from '../services/api';
 
 export interface UserProps {
@@ -49,12 +49,22 @@ function AuthProvider({ children } : AuthProps) {
   const [loading, setLoading] = useState(false);
   const [isSignInLogSended, setIsSignInLogSended] = useState(false);
 
+  async function LoginViaStorage() {
+    const storagedUser = await AsyncStorage.getItem(COLLECTION_USER);
+    if(storagedUser) {
+      const userLogged = JSON.parse(storagedUser) as UserProps;
+      signIn({cgc: userLogged.cgc, password: userLogged.password});
+    } else {
+      return;
+    }
+  }
+
   async function signIn({ cgc, password } : UserProps) {
     setLoading(true);
     api.post('/login',{
       cgc, password
     }).then(res => {
-      const logText = `${user.userName} ENTROU NO SISTEMA`;
+      console.log(res.data.user);
       AsyncStorage.setItem(COLLECTION_USER, JSON.stringify(res.data.user));
       AsyncStorage.setItem(COLLECTION_TOKEN, JSON.stringify(res.data.token));
       setClientToken(res.data.token);
@@ -67,33 +77,27 @@ function AuthProvider({ children } : AuthProps) {
 
       if(res === '403'){
         Alert.alert('Usuário não Cadastrado!');
+        signOut();
         setLoading(false);
       }else if(res === '401'){
         Alert.alert('Sessão Terminada, Faça login novamente.');
+        signOut();
         setLoading(false);
       }else if(res === '419'){
         Alert.alert('Senha Incorreta.');
+        signOut();
         setLoading(false);
       }else{
         Alert.alert('Problema na Conexão.');
+        signOut();
         setLoading(false);
       }
-
     });
   }
 
   async function signOut() {
     setUser({} as UserProps);
     await AsyncStorage.removeItem(COLLECTION_USER);
-  }
-
-  async function loadStoragedData() {
-    const storagedUser = await AsyncStorage.getItem(COLLECTION_USER);
-    const storagedUserToken = await AsyncStorage.getItem(COLLECTION_TOKEN);
-    if(storagedUser && storagedUserToken) {
-      setUser(JSON.parse(storagedUser) as UserProps);
-      setClientToken(JSON.parse(storagedUserToken));
-    }
   }
 
   async function sendLog({logText, clientToken} : LogProps) {
@@ -140,12 +144,13 @@ function AuthProvider({ children } : AuthProps) {
       headers: { 'Authorization' : 'Bearer ' +clientToken }
     }).catch(err => {
       Alert.alert(`ERRO NO ENVIO DA CONDIÇÃO ${condition}, id: ${id}`, `${err}`)
-    })
+    });
   }
 
-  /*useEffect(() => {
-    loadStoragedData();
-  },[]);*/
+  useEffect(() => {
+    LoginViaStorage();
+    setLoading(false)
+  },[]);
 
   return (
     <AuthContext.Provider value={{ 

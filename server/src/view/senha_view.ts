@@ -8,18 +8,9 @@ export default {
       isActive: senha.in_ativo,
       userCode: senha.cd_ccli,
       userName: senha.nm_nomecli,
-      cgc: senha.tx_cgc
+      cgc: senha.tx_cgc,
+      password: senha.tx_senha
     };
-  },
-
-  renderWithClients(senha: Senha) {
-    return {
-      id: senha.id,
-      isActive: senha.in_ativo,
-      userCode: senha.cd_ccli,
-      userName: senha.nm_nomecli,
-      clientes: clienteView.render(senha.clientes)
-    }
   },
 
   renderMany(senhas: Senha[]) {

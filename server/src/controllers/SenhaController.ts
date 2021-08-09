@@ -42,7 +42,7 @@ export default {
         }
       );
 
-      return response.json(senhaView.renderWithClients(existSenha));
+      return response.json(senhaView.render(existSenha));
 
     }catch(err) {
       return response.status(400).json({ "Erro" : err });
@@ -51,6 +51,7 @@ export default {
 
   async login(request: Request, response: Response) {
     const { cgc, password } = request.body;
+    console.log(password);
 
     const senhasRepository = getRepository(Senha);
 

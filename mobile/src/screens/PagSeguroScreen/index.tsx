@@ -4,6 +4,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import uuid from 'react-native-uuid';
 import { useAuth } from '../../hooks/auth';
 
+import { isCreditCardObfuscated } from '../../config/options';
 import { token } from '../../../credentials';
 import { api } from '../../services/api';
 import { pgapi } from '../../services/pgapi';
@@ -20,8 +21,6 @@ import { Divider } from '../../components/Divider';
 import { CristaliButton } from '../../components/CristaliButton';
 import { Banner } from '../../components/Banner';
 import { Loading } from '../../components/Loading';
-
-// Usado como Máscara de CC
 import { InputMask } from '../../components/InputMask';
 
 export function PagSeguroScreen() {
@@ -113,7 +112,7 @@ export function PagSeguroScreen() {
   }
 
   async function handleSendPagSeguro() {
-
+    const cardNumberProto = cardNumber.replace(/\D/g,'');
     const response = await pgapi.post('/charges',
     {
       "reference_id": `${codeDoc}`,
@@ -127,7 +126,7 @@ export function PagSeguroScreen() {
         "installments": 1,
         "capture": false,
         "card": {
-          "number": `${cardNumber}`,
+          "number": `${cardNumberProto}`,
           "exp_month": `${expirateMonth}`,
           "exp_year": `${expirateYear}`,
           "security_code": `${cvv}`,
@@ -230,12 +229,8 @@ export function PagSeguroScreen() {
                   <InputMask
                     type={'credit-card'}
                     options={{
-                      obfuscated: true
+                      obfuscated: isCreditCardObfuscated
                     }}
-                    value={cardName}
-                    onChangeText={setCardName}
-                  />
-                  <CristaliInput
                     value={cardNumber}
                     onChangeText={setCardNumber}
                     keyboardType='number-pad'
@@ -260,6 +255,7 @@ export function PagSeguroScreen() {
                         }}
                         value={expirate}
                         onChangeText={setExpirate}
+                        textAlign='center'
                       />
                     </View>
                     <View style={styles.codeCol}>

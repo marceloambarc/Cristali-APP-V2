@@ -191,7 +191,7 @@ export function NewSale() {
   }
 
   async function handleOrder() {
-    if(orderId != 0) {
+    if(orderId !== 0 && orderId !== undefined) {
       const clientPhoneProto = clientPhone.replace(/\D/g,'');
       api.put(`/order/${orderId}`,{
         userCode: user.userCode,
@@ -243,6 +243,7 @@ export function NewSale() {
       });
     } else {
       const clientPhoneProto = clientPhone.replace(/\D/g,'');
+      Alert.alert('New');
       api.post(`/order`,{
         userCode: user.userCode,
         totalPrice: sellPrice,
@@ -330,6 +331,7 @@ export function NewSale() {
                       </Text>
                     </View>
                   </View>
+                  <Text>{orderId}</Text>
                   <CristaliInput 
                     clientInput
                     value={clientName}
