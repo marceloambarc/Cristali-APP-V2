@@ -108,11 +108,6 @@ export function UnfinishedSale() {
             textAlign='center'
             editable={false}
           />
-          <CristaliInput 
-            value={clientCode.toString()}
-            textAlign='center'
-            editable={false}
-          />
         </View>
         <View style={styles.buttonContainer}>
           <CristaliButton 

@@ -173,12 +173,37 @@ export default {
 
       const { id } = request.params;
 
-      const {
+      var {
         totalPrice,
-        orderNotes
-       } = request.body;
+        orderNotes,
+        itens,
+        clientId,
+        client,
+        userCode
+      } = request.body;
+
+      if(orderNotes === '')
+        orderNotes = 'Observação Não Inserida';
+
+      itens.forEach(item => {
+        if(item.cd_codigogerado === '')
+          item.cd_codigogerado = 'Código Vazio';
+        if(item.nm_produto === '')
+          item.nm_produto = 'Nome Não Inserido';
+        if(item.vl_preco)
+          item.vl_preco = parseInt(item.vl_preco.replace(/\D/g, ""));
+        if(item.vl_preco === '')
+          item.vl_preco = 0;
+      });
 
        const ordensRepository = getRepository(Ordem);
+       const clientesRepository = getRepository(Clientefinal);
+
+       const totalClienteOrdens = await ordensRepository.find({
+         where: {
+           cd_clientefinal: clientId
+         }
+       });
 
        const existOrdem = await ordensRepository.findOne({
         where: {
@@ -186,13 +211,112 @@ export default {
         }
       });
 
+      const existCliente = await clientesRepository.findOne({
+        where: {
+          nm_nome: client.clientName
+        }
+      });
+
+
       if(existOrdem === undefined){
         return response.status(404).json({ "Erro" : "Ordem não Existe." });
       }else{
-        existOrdem.vl_total = totalPrice;
-        existOrdem.tx_obs = orderNotes;
-        await ordensRepository.save(existOrdem);
-        return response.status(200).json(existOrdem);
+        if(totalClienteOrdens.length === 1){
+
+          if(existCliente != undefined) {
+
+            if(existOrdem.cd_clientefinal === clientId) {
+              
+              existOrdem.vl_total = totalPrice;
+              existOrdem.tx_obs = orderNotes;
+              existOrdem.cd_habil_tipo = 217;
+              existOrdem.itens = itens;
+
+              existCliente.tx_email = client.clientEmail;
+              existCliente.tx_fone = client.clientPhone;
+              existCliente.tx_obs = client.clientNotes;
+
+              await clientesRepository.save(existCliente);
+              await ordensRepository.save(existOrdem);
+
+              return response.status(200).json(existOrdem);
+            } else {
+              return response.status(406).json({ "Erro" : "Não é permitido alterar o Cliente após Criar Venda." });
+            }
+          } else {
+            return response.status(406).json({ 'Erro': 'Não é permitido Alterar o Nome do Cliente' });
+          }
+        } else {
+
+          if(existCliente != undefined) {
+
+            if(existCliente.tx_email != client.clientEmail || existCliente.tx_fone != client.clientPhone || existCliente.tx_obs != client.clientNotes) {
+
+              // CRIAR NOVO CLIENTE E SALVAR ORDEM
+              const clienteData : any = {
+                nm_nome: client.clientName,
+                tx_fone: client.clientPhone,
+                tx_email: client.clientEmail,
+                tx_obs: client.clientNotes,
+                cd_id_ccli: userCode,
+                cd_ordem_id: id
+              }
+
+              const createCliente = await ClienteController.create(request, response, clienteData);
+
+              if(createCliente != undefined){
+                if(createCliente.statusCode === 201) {
+      
+                  const existClienteCreated = await clientesRepository.findOne({
+                    where: {
+                      nm_nome: client.clientName,
+                      tx_fone: client.clientPhone,
+                      tx_email: client.clientEmail,
+                      tx_obs: client.clientNotes
+                    }
+                  });
+                  
+                  if(existClienteCreated != undefined) {
+                    const responseClienteId = existClienteCreated.cd_pessoa;
+                    console.log(responseClienteId);
+
+                    existOrdem.vl_total = totalPrice;
+                    existOrdem.tx_obs = orderNotes;
+                    existOrdem.cd_habil_tipo = 217;
+                    existOrdem.itens = itens;
+                    existOrdem.cd_clientefinal = existClienteCreated.cd_pessoa;
+
+                    console.log('Funcional')
+                    try {
+                      await ordensRepository.save(existOrdem);
+
+                      return response.status(201).json(existOrdem);
+                    } catch(err) {
+                      console.log(err);
+                    }
+
+                  }
+                } else {
+                  return response.status(createCliente.statusCode).json(createCliente.json);
+                }
+              } else {
+                return response.status(400).json({ 'Erro' : 'Não foi Possível Criar o Cliente.' });
+              }
+
+            } else {
+
+              existOrdem.vl_total = totalPrice;
+              existOrdem.tx_obs = orderNotes;
+              existOrdem.cd_habil_tipo = 217;
+              existOrdem.itens = itens;
+    
+              await ordensRepository.save(existOrdem);
+
+              return response.status(201).json({ 'Ok!' : 'Venda Editada.' });
+
+            }
+          }
+        }
       }
 
     }catch(err){
@@ -216,8 +340,8 @@ export default {
       });
 
       if(existOrdem === undefined){
-        return response.json(404).json({ "Erro" : "Ordem não Econtrada" });
-      }else{
+        return response.status(404).json({ "Erro" : "Ordem não Econtrada" });
+      } else {
         existOrdem.cd_habil_tipo = setCondition;
         await ordensRepository.save(existOrdem);
         return response.status(200).json(existOrdem);
@@ -239,6 +363,34 @@ export default {
       const existOrdem = await ordensRepository.find({
         where: {
           dt_criado: LessThan(d)
+        }, relations: ['itens']
+      });
+
+      if(existOrdem.length <= 0) {
+        return response.status(202).json({ "Ok!" : 'Nenhuma Ordem anterior a esta Data' });
+      } else {
+        existOrdem.map( async ordem => {
+          await ordensRepository.remove(ordem);
+        });
+
+        return response.status(200).json({});
+      }
+
+    }catch(err) {
+      return response.status(400).json({ "Erro" : err });
+    }
+  },
+
+  async deleteNotAllowed(request: Request, response: Response) {
+    try {
+      const { id } = request.params;
+      const searchId = parseInt(id);
+
+      const ordensRepository = getRepository(Ordem);
+      
+      const existOrdem = await ordensRepository.find({
+        where: {
+          cd_id: searchId
         }, relations: ['itens']
       });
 
@@ -336,6 +488,7 @@ export default {
 
         return response.status(201).json(ordemRepository);
       } else {
+
         // CRIAR NOVO CLIENTE E SALVAR ORDEM
         const clienteData : any = {
           nm_nome: client.clientName,

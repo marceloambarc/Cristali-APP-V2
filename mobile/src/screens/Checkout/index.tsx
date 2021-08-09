@@ -13,7 +13,7 @@ import { Header } from '../../components/Header';
 import { Divider } from '../../components/Divider';
 import { CristaliButton } from '../../components/CristaliButton';
 import { CheckOutButton } from '../../components/CheckOutButton';
-import { MoneyInput } from '../../components/MoneyInput';
+import { InputMask } from '../../components/InputMask';
 import { Loading } from '../../components/Loading';
 
 export function Checkout() {
@@ -154,7 +154,7 @@ export function Checkout() {
   
           <View style={styles.titleContainer}>
             <Text style={[styles.title, {fontSize: 18}]}>Total Pedido</Text>
-            <MoneyInput
+            <InputMask
               type={'money'}
               textAlign='center'
               value={totalPrice}

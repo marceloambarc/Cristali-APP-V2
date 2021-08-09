@@ -18,7 +18,7 @@ import { api } from "../../services/api";
 
 import { Divider } from "../../components/Divider";
 import { CristaliInput } from "../../components/CristaliInput";
-import { MoneyInput } from "../../components/MoneyInput";
+import { InputMask } from "../../components/InputMask";
 import { TextArea } from "../../components/TextArea";
 import { CristaliButton } from "../../components/CristaliButton";
 import { Header } from "../../components/Header";
@@ -44,6 +44,7 @@ export function NewSale() {
   const orderParams = route.params as OrderProps;
   const clientParams = route.params as ClientProps;
 
+  const [clientId, setClientId] = useState(0);
   const [clientName, setClientName] = useState('');
   const [clientPhone, setClientPhone] = useState('');
   const [clientEmail, setClientEmail] = useState('');
@@ -90,6 +91,7 @@ export function NewSale() {
       setClientPhone(clientParams.clientPhone);
       setClientEmail(clientParams.clientEmail);
       setClientNotes(clientParams.clientNotes);
+      setClientId(clientParams.id);
     }
     
   },[orderParams, clientParams]);
@@ -190,74 +192,91 @@ export function NewSale() {
 
   async function handleOrder() {
     if(orderId != 0) {
-      handleEditOrder()
+      const clientPhoneProto = clientPhone.replace(/\D/g,'');
+      api.put(`/order/${orderId}`,{
+        userCode: user.userCode,
+        totalPrice: sellPrice,
+        orderNotes,
+        clientId,
+        client: {
+          clientName,
+          clientPhone: clientPhoneProto,
+          clientEmail,
+          clientNotes,
+          userCode: user.userCode
+        },
+        itens: list
+      },{
+        headers: {'Authorization': 'Bearer '+clientToken}
+      }).then(res => {
+        Alert.alert(`${res}`);
+        const clientPhoneProto = clientPhone.replace(/\D/g,'');
+        navigation.navigate('Checkout', {
+          id: orderId,
+          clientName,
+          clientPhone: clientPhoneProto,
+          clientEmail,
+          clientNotes,
+          orderNotes,
+          qt,
+          list: list,
+          totalPrice: sellPrice.toString()
+        });
+      }).catch(err => {
+        const errorString = String(err);
+        const res = errorString.replace(/\D/g,'');
+  
+        if(res === '404'){
+          Alert.alert('Ops!','Esta venda não existe.');
+          
+        }else if(res === '401'){
+          Alert.alert('Sessão Terminada, Faça login novamente.');
+          setLoading(false);
+        }else if(res === '406'){
+          Alert.alert('Ops','Não é permitido Alterar o Cliente após criar a Venda');
+          setLoading(false);
+        }else{
+          Alert.alert(`${err}`);
+          setLoading(false);
+        }
+  
+      });
     } else {
-      handleCreateOrder()
+      const clientPhoneProto = clientPhone.replace(/\D/g,'');
+      api.post(`/order`,{
+        userCode: user.userCode,
+        totalPrice: sellPrice,
+        orderNotes,
+        client: {
+          clientName,
+          clientPhone: clientPhoneProto,
+          clientEmail,
+          clientNotes,
+          userCode: user.userCode
+        },
+        itens: list
+      },{
+        headers: {'Authorization': 'Bearer '+clientToken}
+      }).then(res => {
+        const clientPhoneProto = clientPhone.replace(/\D/g,'');
+        navigation.navigate('Checkout', {
+          id: res.data.cd_id,
+          clientName,
+          clientPhone: clientPhoneProto,
+          clientEmail,
+          clientNotes,
+          orderNotes,
+          qt,
+          list: list,
+          totalPrice: sellPrice.toString()
+        });
+      }).catch(err => {
+        Alert.alert(
+          'Erro Criação ORDEM',
+          `${err}`
+        )
+      });
     }
-  }
-
-  async function handleEditOrder() {
-    api.put(`/order/${orderId}`,{
-      userCode: user.userCode,
-      totalPrice: sellPrice,
-      orderNotes,
-      client: {
-        clientName,
-        clientPhone,
-        clientEmail,
-        clientNotes,
-        userCode: user.userCode
-      },
-      itens: list
-    },{
-      headers: {'Authorization': 'Bearer '+clientToken}
-    }).then(res => {
-      handleNavigate(res);
-    }).catch(err => {
-      Alert.alert(
-        'Erro Criação ORDEM',
-        `${err}`
-      )
-    });
-  }
-
-  async function handleCreateOrder() {
-    api.post(`/order`,{
-      userCode: user.userCode,
-      totalPrice: sellPrice,
-      orderNotes,
-      client: {
-        clientName,
-        clientPhone,
-        clientEmail,
-        clientNotes,
-        userCode: user.userCode
-      },
-      itens: list
-    },{
-      headers: {'Authorization': 'Bearer '+clientToken}
-    }).then(res => {
-      handleNavigate(res);
-    }).catch(err => {
-      Alert.alert(
-        'Erro Criação ORDEM',
-        `${err}`
-      )
-    });
-  }
-
-  function handleNavigate(res : AxiosResponse<any>) {
-    navigation.navigate('Checkout', {
-      id: res.data.cd_id,
-      clientName,
-      clientPhone,
-      clientEmail,
-      clientNotes,
-      orderNotes,
-      qt,
-      list: list,
-      totalPrice: sellPrice.toString()
-    });
   }
 
   if(loading) {
@@ -334,7 +353,8 @@ export function NewSale() {
                       </Text>
                     </View>
                   </View>
-                  <CristaliInput 
+                  <InputMask
+                    type={'cel-phone'}
                     clientInput
                     value={clientPhone}
                     onChangeText={setClientPhone}
@@ -412,7 +432,7 @@ export function NewSale() {
                   </View>
                   <View style={styles.orderCol}>
                     <Text style={styles.orderText}>Preço</Text>
-                    <MoneyInput
+                    <InputMask
                       type={'money'}
                       textAlign='center'
                       value={sellPrice.toString()}
@@ -438,7 +458,7 @@ export function NewSale() {
                         {index <= qt -1 ?
                           <View style={styles.listProdutContainer}>
                             <View style={styles.sellPriceContainer}>
-                              <MoneyInput
+                              <InputMask
                                 type={'money'}
                                 key={item.id}
                                 value={item.vl_preco}
@@ -460,7 +480,7 @@ export function NewSale() {
   
                           :
   
-                          <MoneyInput
+                          <InputMask
                             type={'money'}
                             key={item.id}
                             value={item.vl_preco}

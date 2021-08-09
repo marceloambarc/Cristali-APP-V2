@@ -8,13 +8,14 @@ import { theme } from "../../global";
 import { api } from "../../services/api";
 
 import { ClientProps } from "../ClientComponent";
+import { CristaliInput } from "../CristaliInput";
 
 
 export interface OrderProps {
   open?: boolean;
   id: number;
   userCode: number;
-  createdAt: string;
+  createdAt: Date;
   totalPrice: string;
   orderNotes: string;
   condition: number;
@@ -30,13 +31,30 @@ interface OrderComponentProps extends TouchableOpacityProps {
 export function Order({ data, ...rest } : OrderComponentProps ) {
   const { clientToken } = useAuth();
   const [client, setClient] = useState<ClientProps>({} as ClientProps);
+  const [dateFormat, setDateFormat] = useState('');
+
+  function handleFormatDate() {
+    const dateProto = new Date(data.createdAt);
+
+    const dateDay = dateProto.getDate();
+    const dateMonth = dateProto.getMonth();
+    const dateYear = dateProto.getFullYear();
+
+    const dateHour = dateProto.getHours();
+    const dateMinutes = dateProto.getMinutes();
+
+
+    setDateFormat(`${dateDay}/${dateMonth}/${dateYear} - ${dateHour}:${dateMinutes}`)
+  }
   
   useEffect(() => {
     api.get(`/client/${data.clientCode}`,{
       headers: { 'Authorization' : 'Bearer ' +clientToken }
     }).then(res => {
       setClient(res.data);
-    })
+    });
+
+    handleFormatDate()
   },[]);
 
   return (
@@ -59,14 +77,10 @@ export function Order({ data, ...rest } : OrderComponentProps ) {
           { client.clientName }
         </Text>
 
-        <TextInputMask 
+        <CristaliInput 
           style={styles.text}
-          type={'datetime'}
-          options={{
-            format: 'YYYY/MM/DD HH:mm:ss'
-          }}
           textAlign='left'
-          value={data.createdAt}
+          value={dateFormat}
           editable={false}
         />
 

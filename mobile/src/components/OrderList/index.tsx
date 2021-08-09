@@ -16,7 +16,7 @@ export function OrderList({ data, handleOrderSelect } : OrderListProps) {
       keyExtractor={item => item.id.toString()}
       renderItem={({ item }) => (
         <Order
-          data={item} 
+          data={item}
           onPress={() => handleOrderSelect(item)}
         />
       )}

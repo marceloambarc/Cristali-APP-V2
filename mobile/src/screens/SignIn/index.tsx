@@ -14,6 +14,7 @@ import { UserProps } from '../../hooks/auth';
 
 import { styles } from './styles';
 import { theme } from '../../global';
+import { InputMask } from '../../components/InputMask';
 
 export function SignIn() {
   const { loading, signIn } = useAuth();
@@ -24,7 +25,8 @@ export function SignIn() {
 
   async function handleSignIn() {
     try{
-      await signIn({cgc, password});
+      const cgcProto = cgc.replace(/\D/g, "");
+      await signIn({cgc: cgcProto, password});
     }catch(err){
       Alert.alert(err);
     }
@@ -75,7 +77,8 @@ export function SignIn() {
                   <View style={styles.credentials}>
                     <View style={styles.credentialsRow}>
                       <Text style={styles.cristaliInputText}>USUÁRIO</Text>
-                      <CristaliInput 
+                      <InputMask
+                        type={'cpf'}
                         textAlign='center'
                         value={cgc}
                         peachpuff

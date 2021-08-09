@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, StatusBar, Image, Alert } from 'react-native';
+import { View, Text, ScrollView, StatusBar, Image, Alert, KeyboardAvoidingView, Platform } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import uuid from 'react-native-uuid';
 import { useAuth } from '../../hooks/auth';
@@ -20,6 +20,9 @@ import { Divider } from '../../components/Divider';
 import { CristaliButton } from '../../components/CristaliButton';
 import { Banner } from '../../components/Banner';
 import { Loading } from '../../components/Loading';
+
+// Usado como Máscara de CC
+import { InputMask } from '../../components/InputMask';
 
 export function PagSeguroScreen() {
   const { user, clientToken, handleSetNewCondition, sendLog } = useAuth();
@@ -105,9 +108,8 @@ export function PagSeguroScreen() {
       return;
     } else {
       setLoading(true);
-      handleSendPagSeguro()
+      handleSendPagSeguro();
     }
-
   }
 
   async function handleSendPagSeguro() {
@@ -166,7 +168,12 @@ export function PagSeguroScreen() {
     );
   } else {
     return (
-      <ScrollView>
+      <KeyboardAvoidingView
+        style={{flex: 1}}
+        keyboardVerticalOffset={(Platform.OS === 'ios')? 5 : 0}
+        contentContainerStyle={{backgroundColor: 'transparent'}}
+        behavior={(Platform.OS === 'ios')? "padding" : undefined}
+      >
         <StatusBar
           barStyle='dark-content'
           backgroundColor={theme.colors.input}
@@ -175,15 +182,16 @@ export function PagSeguroScreen() {
           title='Pagamento'
           haveBack
         />
-        <View style={styles.container}>
+        <ScrollView>
+          <View style={styles.container}>
   
-          <View style={styles.titleContainer}>
-            <Image 
-              source={require('../../assets/pagseguro.png')}
-              style={styles.pagseguroImage}
-              resizeMode='contain'
-            />
-          </View>
+            <View style={styles.titleContainer}>
+              <Image 
+                source={require('../../assets/pagseguro.png')}
+                style={styles.pagseguroImage}
+                resizeMode='contain'
+              />
+            </View>
   
             <View style={styles.inputContainer}>
               <Text style={styles.inputText}>Email do(a) Cliente</Text>
@@ -205,77 +213,81 @@ export function PagSeguroScreen() {
               />
             </View>
   
-          <View style={styles.banner}>
-            <Banner />
-          </View>
-  
-          <Divider />
-  
-          <View style={styles.payment}>
-  
-            <View style={styles.titleContainer}>
-              <Text style={[styles.title, {fontSize: 18}]}>Informações no cartão de Crédito</Text>
-              <Text>{totalPrice}</Text>
-              <Text>{codeDoc}</Text>
-              <Text>{orderNotes}</Text>
-              <Text>{expirateMonth}</Text>
-              <Text>{expirateYear}</Text>
-              <Text>{createdPagSeguro}</Text>
+            <View style={styles.banner}>
+              <Banner />
             </View>
-            <View style={styles.bodyContainer}>
-              <View style={styles.inputContainer}>
-                <Text style={styles.inputText}>Número do Cartão</Text>
-                <CristaliInput 
-                  value={cardNumber}
-                  onChangeText={setCardNumber}
-                  keyboardType='number-pad'
-                />
-              </View>
-              <View style={styles.inputContainer}>
-                <Text style={styles.inputText}>Nome Impresso no Cartão</Text>
-                <CristaliInput 
-                  value={cardName}
-                  onChangeText={setCardName}
-                />
-              </View>
   
-              <View style={styles.code}>
-                <View style={styles.codeRow}>
-                  <View style={styles.codeCol}>
-                    <Text style={styles.inputText}>Validade</Text>
-                    <CristaliInput
-                      textAlign='center'
-                      maxLength={7}
-                      value={expirate}
-                      onChangeText={setExpirate}
-                      keyboardType='numbers-and-punctuation'
-                    />
-                  </View>
-                  <View style={styles.codeCol}>
-                    <Text style={styles.inputText}>Cód. de Verificação</Text>
-                    <CristaliInput 
-                      textAlign='center'
-                      keyboardType='number-pad'
-                      maxLength={3}
-                      value={cvv}
-                      onChangeText={setCvv}
-                    />
-                  </View>
-                </View> 
+           <Divider />
+  
+            <View style={styles.payment}>
+  
+              <View style={styles.titleContainer}>
+                <Text style={[styles.title, {fontSize: 18}]}>Informações no cartão de Crédito</Text>
               </View>
+              <View style={styles.bodyContainer}>
+                <View style={styles.inputContainer}>
+                  <Text style={styles.inputText}>Número do Cartão</Text>
+                  <InputMask
+                    type={'credit-card'}
+                    options={{
+                      obfuscated: true
+                    }}
+                    value={cardName}
+                    onChangeText={setCardName}
+                  />
+                  <CristaliInput
+                    value={cardNumber}
+                    onChangeText={setCardNumber}
+                    keyboardType='number-pad'
+                  />
+                </View>
+                <View style={styles.inputContainer}>
+                  <Text style={styles.inputText}>Nome Impresso no Cartão</Text>
+                  <CristaliInput
+                    value={cardName}
+                    onChangeText={setCardName}
+                  />
+                </View>
+  
+                <View style={styles.code}>
+                  <View style={styles.codeRow}>
+                    <View style={styles.codeCol}>
+                      <Text style={styles.inputText}>Validade</Text>
+                      <InputMask
+                        type={'datetime'}
+                        options={{
+                          format: 'MM/YYYY'
+                        }}
+                        value={expirate}
+                        onChangeText={setExpirate}
+                      />
+                    </View>
+                    <View style={styles.codeCol}>
+                      <Text style={styles.inputText}>Cód. de Verificação</Text>
+                      <CristaliInput 
+                        textAlign='center'
+                        keyboardType='number-pad'
+                        maxLength={3}
+                        value={cvv}
+                        onChangeText={setCvv}
+                      />
+                    </View>
+                  </View> 
+                </View>
               
+              </View>
+            </View>
+  
+            <View style={styles.footer}>
+              <CristaliButton 
+                title="Continuar"
+                color={`${theme.colors.Success}`}
+                onPress={validate}
+              />
             </View>
           </View>
-  
-          <View style={styles.footer}>
-            <CristaliButton 
-              title="Continuar"
-              color={`${theme.colors.Success}`}
-              onPress={validate}
-            />
-          </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </KeyboardAvoidingView>
     );
   }
 }

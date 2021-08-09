@@ -11,7 +11,19 @@ interface Props extends TextInputProps {
 export function CristaliInput({ clientInput, peachpuff = false, ...rest } : Props){
   return (
     <TextInput 
-      style={[styles.container, clientInput ? styles.extend : styles.desactivated, peachpuff? styles.color2 : styles.color1 ]}
+      style={[
+        styles.container, 
+        clientInput 
+          ?
+          styles.extend 
+          : 
+          styles.desactivated, 
+        peachpuff
+          ? 
+          styles.color2 
+          : 
+          styles.color1
+        ]}
       {...rest}
     />
   );

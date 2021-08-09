@@ -8,9 +8,7 @@ import { useAuth } from '../../hooks/auth';
 import { styles } from "./styles";
 import { theme } from "../../global";
 
-import { COLLECTION_DEVICE_TOKEN } from "../../config/storage";
-
-import { MoneyInput } from "../../components/MoneyInput";
+import { InputMask } from "../../components/InputMask";
 import { CristaliInput } from "../../components/CristaliInput";
 import { OrderList } from "../../components/OrderList";
 import { Header } from "../../components/Header";
@@ -188,7 +186,7 @@ export function History() {
               </View>
               <View style={styles.orderCol}>
                 <Text style={styles.orderText}>Total</Text>
-                <MoneyInput
+                <InputMask
                   type={"money"}
                   value={total}
                   editable={false}

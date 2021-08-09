@@ -9,7 +9,7 @@ interface Props extends TextInputMaskProps {
   productInsert?: boolean;
 }
 
-export function MoneyInput({ clientInput, peachpuff = false, productInsert = false, ...rest } : Props){
+export function InputMask({ clientInput, peachpuff = false, productInsert = false, ...rest } : Props){
   return (
     <TextInputMask 
       style={[

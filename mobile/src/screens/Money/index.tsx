@@ -13,6 +13,7 @@ import { api } from '../../services/api';
 import { ItemProps } from '../NewSale';
 import { OrderProps } from '../../components/Order';
 import { ClientProps } from '../../components/ClientComponent';
+import { Loading } from '../../components/Loading';
 
 import { styles } from './styles';
 import { theme } from '../../global';
@@ -100,59 +101,65 @@ export function Money() {
     loadItems();
   },[]));
 
-  return (
-    <KeyboardAvoidingView
-      style={{flexGrow: 1}}
-      keyboardVerticalOffset={(Platform.OS === 'ios')? 0 : 0}
-      contentContainerStyle={{backgroundColor: 'transparent'}}
-      behavior={ Platform.OS === 'ios'? 'padding' : undefined }
-    >
-      <View style={styles.container}>
-
-        <View style={styles.banner}>
-          <Text style={styles.title}>Atenção {user?.userName}</Text>
-          <Text style={styles.text}>
-            Você está recebendo com outra forma de 
-            pagamento sem ser pelo PAGSEGURO, ao 
-            confirmar esta transação, não significa que a
-            empresa irá receber o valor,
-
-            O valor deve ser acertado posteriormente 
-            com o departamento financeiro da Cristali.
-          </Text>
-
+  if(loading) {
+    return (
+      <Loading />
+    );
+  } else {
+    return (
+      <KeyboardAvoidingView
+        style={{flexGrow: 1}}
+        keyboardVerticalOffset={(Platform.OS === 'ios')? 0 : 0}
+        contentContainerStyle={{backgroundColor: 'transparent'}}
+        behavior={ Platform.OS === 'ios'? 'padding' : undefined }
+      >
+        <View style={styles.container}>
+  
+          <View style={styles.banner}>
+            <Text style={styles.title}>Atenção {user?.userName}</Text>
+            <Text style={styles.text}>
+              Você está recebendo com outra forma de 
+              pagamento sem ser pelo PAGSEGURO, ao 
+              confirmar esta transação, não significa que a
+              empresa irá receber o valor,
+  
+              O valor deve ser acertado posteriormente 
+              com o departamento financeiro da Cristali.
+            </Text>
+  
+          </View>
+  
+          {
+            isMoney?
+              <View />
+            :
+            <View style={styles.inputContainer}>
+              <Text style={styles.inputText}>Digite a forma de pagamento.</Text>
+              <CristaliInput 
+                clientInput
+                value={paymentMethod}
+                onChangeText={setPaymentMethod}
+              />
+            </View>
+          }
+  
+  
+          {
+            loading?
+              <ActivityIndicator color={`${theme.colors.primary}`} size='large' style={{marginTop: 70}} />
+            :
+  
+            <View style={styles.footer}>
+              <CristaliButton 
+                color={`${theme.colors.Success}`}
+                title="Finalizar"
+                onPress={handleFinal}
+              />
+            </View>
+          }
+        
         </View>
-
-        {
-          isMoney?
-            <View />
-          :
-          <View style={styles.inputContainer}>
-            <Text style={styles.inputText}>Digite a forma de pagamento.</Text>
-            <CristaliInput 
-              clientInput
-              value={paymentMethod}
-              onChangeText={setPaymentMethod}
-            />
-          </View>
-        }
-
-
-        {
-          loading?
-            <ActivityIndicator color={`${theme.colors.primary}`} size='large' style={{marginTop: 70}} />
-          :
-
-          <View style={styles.footer}>
-            <CristaliButton 
-              color={`${theme.colors.Success}`}
-              title="Finalizar"
-              onPress={handleFinal}
-            />
-          </View>
-        }
-      
-      </View>
-    </KeyboardAvoidingView>
-  );
+      </KeyboardAvoidingView>
+    );
+  }
 }
