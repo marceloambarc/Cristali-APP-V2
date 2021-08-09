@@ -209,7 +209,6 @@ export function NewSale() {
       },{
         headers: {'Authorization': 'Bearer '+clientToken}
       }).then(res => {
-        Alert.alert(`${res}`);
         const clientPhoneProto = clientPhone.replace(/\D/g,'');
         navigation.navigate('Checkout', {
           id: orderId,
@@ -243,7 +242,6 @@ export function NewSale() {
       });
     } else {
       const clientPhoneProto = clientPhone.replace(/\D/g,'');
-      Alert.alert('New');
       api.post(`/order`,{
         userCode: user.userCode,
         totalPrice: sellPrice,
@@ -331,7 +329,6 @@ export function NewSale() {
                       </Text>
                     </View>
                   </View>
-                  <Text>{orderId}</Text>
                   <CristaliInput 
                     clientInput
                     value={clientName}

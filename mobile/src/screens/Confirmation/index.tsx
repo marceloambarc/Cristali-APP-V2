@@ -15,10 +15,15 @@ export interface PagSeguroConfirmationProps {
   id: string;
   reference: string;
   cardNumber: string;
+  declined: boolean;
 }
 
 export function Confirmation() {
   const [loading, setLoading] = useState(true);
+
+  const [pagSeguroDeclined,setPagSeguroDeclined] = useState(false);
+  const [vrfy, setvrfy] = useState('');
+
   const [value, setValue] = useState('');
   const [pagSeguroId, setPagSeguroId] = useState('');
   const [pagSeguroReference, setPagSeguroReference] = useState('');
@@ -34,6 +39,13 @@ export function Confirmation() {
       setPagSeguroId(pagSeguroParams.id);
       setPagSeguroReference(pagSeguroParams.reference);
       setPagSeguroCardNumber(pagSeguroParams.cardNumber);
+      setPagSeguroDeclined(pagSeguroParams.declined);
+
+      if(pagSeguroDeclined === false){
+        setvrfy('false');
+      } else {
+        setvrfy('false');
+      }
       setLoading(false);
     }
 
@@ -62,7 +74,11 @@ export function Confirmation() {
   async function handleCancel() {
     navigation.goBack()
     const sendValue = parseInt(value.replace(/\D/g, ""))
-    pgapi.post(`/charges/${pagSeguroId}/cancel`).catch(err => {
+    pgapi.post(`/charges/${pagSeguroId}/cancel`,{
+      "amount": {
+        "value": sendValue
+      }
+    }).catch(err => {
       if(err instanceof SyntaxError) {
         alert(err.message);
       }
@@ -77,41 +93,66 @@ export function Confirmation() {
     );
   } else {
     return (
+      pagSeguroDeclined
+      ?
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.container}
       >
-        <View style={styles.body}>
-          <View style={styles.titleContainer}>
-            <Image 
-              source={require('../../assets/pagseguro.png')}
-              style={styles.pagseguroImage}
-              resizeMode='contain'
-            />
-          </View>
-          <Text style={styles.text}>Para Validação da Venda{"\n"} Confirme o Valor.</Text>
-          <InputMask
-            type={'money'}
-            value={value}
-            onChangeText={setValue}
-            textAlign='center'
+      <View style={styles.body}>
+        <View style={styles.titleContainer}>
+          <Image 
+            source={require('../../assets/pagseguro.png')}
+            style={styles.pagseguroImage}
+            resizeMode='contain'
           />
-          <Text>{pagSeguroId}</Text>
-          <View />
+        </View>
+        <Text style={styles.text}>Venda Recusada.{"\n"}Contate a Central{"\n"} do seu Cartão.</Text>
+        <View />
+          <CristaliButton
+            title='Finalizar'
+            color={`${theme.colors.Success}`}
+            onPress={handleConfirm}
+          />
+        </View>
+      </KeyboardAvoidingView>
+      :
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.container}
+      >
+      <View style={styles.body}>
+        <View style={styles.titleContainer}>
+          <Text>{vrfy}</Text>
+          <Image 
+            source={require('../../assets/pagseguro.png')}
+            style={styles.pagseguroImage}
+            resizeMode='contain'
+          />
+        </View>
+        <Text style={styles.text}>Para Validação da Venda{"\n"} Confirme o Valor.</Text>
+        <InputMask
+          type={'money'}
+          value={value}
+          onChangeText={setValue}
+          textAlign='center'
+        />
+        <Text>{vrfy}</Text>
+        <View />
   
-            <CristaliButton 
-              title='Finalizar'
-              color={`${theme.colors.Success}`}
-              onPress={handleConfirm}
-            />
-            <CristaliButton 
-              title='Cancelar Venda'
-              color={`${theme.colors.Cancel}`}
-              onPress={handleCancel}
-            />
+          <CristaliButton 
+            title='Finalizar'
+            color={`${theme.colors.Success}`}
+            onPress={handleConfirm}
+          />
+          <CristaliButton 
+            title='Cancelar Venda'
+            color={`${theme.colors.Cancel}`}
+            onPress={handleCancel}
+          />
   
         </View>
       </KeyboardAvoidingView>
-    );
+      );
   }
 }

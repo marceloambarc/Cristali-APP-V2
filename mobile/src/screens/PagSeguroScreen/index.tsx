@@ -44,15 +44,14 @@ export function PagSeguroScreen() {
   const [totalPrice, setTotalPrice] = useState('');
   const [qt, setQt] = useState<string | undefined>('');
 
-  const [cardName, setCardName] = useState('Jose da Silva');
-  const [cardNumber, setCardNumber] = useState('4111111111111111');
+  const [cardName, setCardName] = useState('');
+  const [cardNumber, setCardNumber] = useState('');
   const [expirate, setExpirate] = useState('');
   const [expirateMonth, setExpirateMonth] = useState('');
   const [expirateYear, setExpirateYear] = useState('');
-  const [cvv, setCvv] = useState('123');
+  const [cvv, setCvv] = useState('');
 
-  const [pagSeguroId, setPagSeguroId] = useState('');
-  const [pagSeguroReference, setPagSeguroReference] = useState('');
+  const [isDeclined, setIsDeclined] = useState(false);
 
   const value = parseInt(totalPrice);
   const codeDoc = String(uuid.v4(orderId.toString()));
@@ -150,14 +149,19 @@ export function PagSeguroScreen() {
     
       const logText = `${user.userName} FINALIZOU VENDA PELO PAGSEGURO`;
       sendLog({logText, clientToken});
-      Alert.alert('Enviado pag Seguro');
+      Alert.alert('Enviado PagSeguro');
       setLoading(false);
-          
-      navigation.navigate('Confirmation',{
-        id: response.data.id,
-        reference: response.data.payment_response.reference,
-        cardNumber: response.data.payment_method.card.last_digits
-      });
+
+      if(response.data.status === "DECLINED") {
+        setIsDeclined(true);
+
+        navigation.navigate('Confirmation',{
+          id: response.data.id,
+          reference: response.data.payment_response.reference,
+          cardNumber: response.data.payment_method.card.last_digits,
+          declined: isDeclined
+        });
+      }
     }
   }
 

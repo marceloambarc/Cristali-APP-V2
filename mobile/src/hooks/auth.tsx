@@ -48,23 +48,12 @@ function AuthProvider({ children } : AuthProps) {
   const [clientToken, setClientToken] = useState('');
   const [loading, setLoading] = useState(false);
   const [isSignInLogSended, setIsSignInLogSended] = useState(false);
-
-  async function LoginViaStorage() {
-    const storagedUser = await AsyncStorage.getItem(COLLECTION_USER);
-    if(storagedUser) {
-      const userLogged = JSON.parse(storagedUser) as UserProps;
-      signIn({cgc: userLogged.cgc, password: userLogged.password});
-    } else {
-      return;
-    }
-  }
-
+  
   async function signIn({ cgc, password } : UserProps) {
     setLoading(true);
     api.post('/login',{
       cgc, password
     }).then(res => {
-      console.log(res.data.user);
       AsyncStorage.setItem(COLLECTION_USER, JSON.stringify(res.data.user));
       AsyncStorage.setItem(COLLECTION_TOKEN, JSON.stringify(res.data.token));
       setClientToken(res.data.token);
@@ -146,11 +135,6 @@ function AuthProvider({ children } : AuthProps) {
       Alert.alert(`ERRO NO ENVIO DA CONDIÇÃO ${condition}, id: ${id}`, `${err}`)
     });
   }
-
-  useEffect(() => {
-    LoginViaStorage();
-    setLoading(false)
-  },[]);
 
   return (
     <AuthContext.Provider value={{ 

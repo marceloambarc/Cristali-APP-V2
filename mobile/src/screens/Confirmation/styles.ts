@@ -8,6 +8,7 @@ export const styles = StyleSheet.create({
   body: {
     alignItems: 'center',
     height: 430,
+    marginTop: 10,
     paddingHorizontal: 24,
     justifyContent: 'space-around'
   },

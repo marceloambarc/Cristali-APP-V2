@@ -76,7 +76,7 @@ export default function App(){
       setLoading(false);
     }).catch(err => {
       if(err.message.includes("409")) {
-        Alert.alert('Celular já cadastrado, Bem-vindo novamente.');
+        Alert.alert('Bem-vindo novamente.');
         setLoading(false);
       }else if(err.message.includes("400")) {
         Alert.alert(

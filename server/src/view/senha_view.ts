@@ -9,7 +9,6 @@ export default {
       userCode: senha.cd_ccli,
       userName: senha.nm_nomecli,
       cgc: senha.tx_cgc,
-      password: senha.tx_senha
     };
   },
 
