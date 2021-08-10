@@ -48,8 +48,7 @@ export function NewSale() {
   const [clientPhone, setClientPhone] = useState('');
   const [clientEmail, setClientEmail] = useState('');
   const [clientNotes, setClientNotes] = useState('');
-
-  const [clientNumber, setClientNumber] = useState(0);
+  
   const [orderId, setOrderId] = useState(0);
   const [orderNotes, setOrderNotes] = useState('');
   const [totalPrice, setTotalPrice] = useState('');

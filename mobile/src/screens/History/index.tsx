@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, StatusBar, Dimensions, Platform } from "react-native";
+import { View, Text, TouchableOpacity, StatusBar, Dimensions, Platform, Alert } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { FontAwesome5 } from '@expo/vector-icons'; 
@@ -21,6 +21,7 @@ import { api } from "../../services/api";
 export function History() {
   const { user, clientToken, sendLog } = useAuth();
   const [loading, setLoading] = useState(true);
+  const [loadingPrice, setLoadingPrice] = useState(true);
   const [orderHistory, setOrderHistory] = useState<OrderProps[]>([]);
   const [historyCount, setHistoryCount] = useState(0);
   const [total, setTotal] = useState('0');
@@ -37,37 +38,49 @@ export function History() {
 
   const navigation = useNavigation();
 
-  async function handleSetTotal(){
-    if(historyCount > 0){
-      setTotal(orderHistory.reduce((a,v) =>  a = a + parseFloat(v.totalPrice.replace('.','').replace(',','')) , 0).toString());
-    }
+  async function handleGetHistory() {
+    await api.get(`/myOrders/history/${user.userCode}`).then(res => {
+      setOrderHistory(res.data);
+      setHistoryCount(res.data.length);
+      setLoading(false);
+    }).catch(err => {
+      Alert.alert('Ops!',`${err}`);
+      navigation.navigate('Home');
+    });
   }
 
-  async function handleSetMomentum(){
+  async function handleSetMomentum() {
     var event = new Date();
     event.setDate(-30);
     setMomentum(event);
     setFirstDate(event);
   }
 
-  async function getHistory(){
-    api.get(`/myOrders/history/${user.userCode}`).then(res => {
-      setOrderHistory(res.data);
-    }).catch(() => {
-      navigation.navigate('Home');
-    })
+  async function handleReduce() {
+    const reducedTotal = orderHistory.reduce((a,v) =>  a = a + parseFloat(v.totalPrice) , 0).toString();
+    return reducedTotal;
+  }
+
+  async function handleHistory() {
+    await handleGetHistory()
+    await handleSetMomentum();
   }
 
   useEffect(() => {
-    getHistory();
-    setHistoryCount(orderHistory.length);
-    handleSetTotal();
-    handleSetMomentum();
-    setLoading(false);
+    handleHistory();
   },[]);
 
-  function handleOrderSelect(orderSelect: OrderProps){
-    alert('Selected ' + orderSelect.id);
+  useEffect(() => {
+    handleReduce().then(res => {
+      setLoadingPrice(false);
+      if(res.length === 0)
+        return;
+      setTotal(res);
+    });
+  },[orderHistory]);
+
+  function handleOrderSelect(orderSelect: OrderProps) {
+    Alert.alert(`Venda ${orderSelect.id}`, `Total da Venda: ${orderSelect.totalPrice}`);
   }
 
   const showSecondDatePicker = () => {
@@ -186,12 +199,17 @@ export function History() {
               </View>
               <View style={styles.orderCol}>
                 <Text style={styles.orderText}>Total</Text>
-                <InputMask
+                {
+                  loadingPrice?
+                  <Loading />
+                  :
+                  <InputMask
                   type={"money"}
                   value={total}
                   editable={false}
                   textAlign='center'
-                />
+                  />
+                }
               </View>
             </View>
   

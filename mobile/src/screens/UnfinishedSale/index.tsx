@@ -39,6 +39,7 @@ export function UnfinishedSale() {
   async function loadUnfinishedSales() {
     const response = await api.get(`/myOrders/saved/${user.userCode}`);
     setUnfinishedSales(response.data);
+    setLoading(false);
   }
 
   useEffect(() => {
@@ -46,7 +47,6 @@ export function UnfinishedSale() {
       return;
     loadUnfinishedSales();
     sendLog({logText, clientToken});
-    setLoading(false);
   },[]);
 
   async function handleOrderSelect(orderSelect: OrderProps){

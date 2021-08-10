@@ -11,7 +11,7 @@ export const styles = StyleSheet.create({
     paddingLeft: 6,
     paddingRight: 18,
     
-    marginVertical: 7
+    marginVertical: 5
   },
   content: {
     flex: 1,
@@ -23,7 +23,7 @@ export const styles = StyleSheet.create({
     fontFamily: theme.fonts.heading,
     color: theme.colors.title,
     fontSize: 15,
-    marginBottom: 4
+    marginBottom: 2
   },
   text: {
     fontFamily: theme.fonts.text,

@@ -44,6 +44,9 @@ export const theme = {
   fonts: {
     logo: 'WorkSans_400Regular',
     heading: 'Nunito_800ExtraBold',
-    text: 'Nunito_600SemiBold'
+    text: 'Nunito_600SemiBold',
+
+    textBox: 19,
+    price: 10
   }
 }

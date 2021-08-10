@@ -51,7 +51,6 @@ export default {
 
   async login(request: Request, response: Response) {
     const { cgc, password } = request.body;
-    console.log(password);
 
     const senhasRepository = getRepository(Senha);
 
@@ -230,7 +229,6 @@ export default {
       if(existSenha === undefined) {
         return response.status(404).json({ "Erro" : "Usuário não Encontrado" });
       } else {
-        console.log('H');
         await senhasRepository.remove(existSenha);
 
         return response.status(200);

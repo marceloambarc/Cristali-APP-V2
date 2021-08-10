@@ -8,6 +8,7 @@ import { theme } from '../../global';
 
 import { OrderProps } from "../../components/Order";
 import { ClientProps } from '../../components/ClientComponent';
+import { ItemProps } from '../NewSale';
 
 import { Header } from '../../components/Header';
 import { Divider } from '../../components/Divider';
@@ -33,6 +34,8 @@ export function Checkout() {
   const [totalPrice, setTotalPrice] = useState('');
   const [qt, setQt] = useState<string | undefined>('');
 
+  const [list, setList] = useState<ItemProps[]>([{id: 0, cd_codigogerado: '', vl_preco: '', nm_produto: ''}]);
+
   const navigation = useNavigation()
   const route = useRoute();
 
@@ -46,6 +49,9 @@ export function Checkout() {
       setTotalPrice(orderParams.totalPrice);
       setQt(orderParams.qt);
       handleSetNewCondition({id: orderParams.id, condition: 218});
+      if(orderParams.itens != undefined) {
+        setList(orderParams.itens);
+      }
     }
     if(clientParams) {
       setClientName(clientParams.clientName);
@@ -102,6 +108,7 @@ export function Checkout() {
           clientNotes,
           orderNotes,
           qt,
+          itens: 
           totalPrice
         });
       }

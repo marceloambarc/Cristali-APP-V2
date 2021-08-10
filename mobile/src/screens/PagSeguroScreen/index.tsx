@@ -12,6 +12,7 @@ import { theme } from '../../global';
 
 import { OrderProps } from '../../components/Order';
 import { ClientProps } from '../../components/ClientComponent';
+import { ItemProps } from '../NewSale';
 
 import { Header } from '../../components/Header';
 import { CristaliInput } from '../../components/CristaliInput';
@@ -42,6 +43,8 @@ export function PagSeguroScreen() {
   const [totalPrice, setTotalPrice] = useState('');
   const [qt, setQt] = useState<string | undefined>('');
 
+  const [list, setList] = useState<ItemProps[]>([{id: 0, cd_codigogerado: '', vl_preco: '', nm_produto: ''}]);
+
   const [cardName, setCardName] = useState('');
   const [cardNumber, setCardNumber] = useState('');
   const [expirate, setExpirate] = useState('');
@@ -65,6 +68,9 @@ export function PagSeguroScreen() {
       setOrderNotes(orderParams.orderNotes);
       setTotalPrice(orderParams.totalPrice);
       setQt(orderParams.qt);
+      if(orderParams.itens != undefined) {
+        setList(orderParams.itens);
+      }
     }
     setLoading(false);
   },[orderParams, clientParams]);
@@ -167,6 +173,7 @@ export function PagSeguroScreen() {
           reference: response.data.payment_response.reference,
           cardNumber: response.data.payment_method.card.last_digits,
           declined: response.data.status,
+          response: response.data.payment_response.message,
           orderId: orderId
       });
     }

@@ -9,6 +9,7 @@ import { api } from "../../services/api";
 
 import { ClientProps } from "../ClientComponent";
 import { CristaliInput } from "../CristaliInput";
+import { Loading } from "../Loading";
 
 
 export interface OrderProps {
@@ -29,6 +30,7 @@ interface OrderComponentProps extends TouchableOpacityProps {
 }
 
 export function Order({ data, ...rest } : OrderComponentProps ) {
+  const [loading, setLoading] = useState(true)
   const { clientToken } = useAuth();
   const [client, setClient] = useState<ClientProps>({} as ClientProps);
   const [dateFormat, setDateFormat] = useState('');
@@ -52,6 +54,7 @@ export function Order({ data, ...rest } : OrderComponentProps ) {
       headers: { 'Authorization' : 'Bearer ' +clientToken }
     }).then(res => {
       setClient(res.data);
+      setLoading(false);
     });
 
     handleFormatDate()
@@ -73,9 +76,15 @@ export function Order({ data, ...rest } : OrderComponentProps ) {
 
     <View style={styles.content}>
       <View>
-        <Text style={styles.title}>
-          { client.clientName }
-        </Text>
+        {
+          loading?
+            <Loading />
+          : 
+            <Text style={styles.title}>
+              { client.clientName }
+            </Text>
+        }
+
 
         <CristaliInput 
           style={styles.text}
