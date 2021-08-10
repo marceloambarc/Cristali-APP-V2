@@ -8,7 +8,6 @@ import { CristaliButton } from '../../components/CristaliButton';
 import { CristaliInput } from '../../components/CristaliInput';
 
 import { COLLECTION_ITEMS } from '../../config/storage';
-import { api } from '../../services/api';
 
 import { ItemProps } from '../NewSale';
 import { OrderProps } from '../../components/Order';

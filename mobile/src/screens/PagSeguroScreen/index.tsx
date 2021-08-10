@@ -5,8 +5,6 @@ import uuid from 'react-native-uuid';
 import { useAuth } from '../../hooks/auth';
 
 import { isCreditCardObfuscated } from '../../config/options';
-import { token } from '../../../credentials';
-import { api } from '../../services/api';
 import { pgapi } from '../../services/pgapi';
 
 import { styles } from './styles';

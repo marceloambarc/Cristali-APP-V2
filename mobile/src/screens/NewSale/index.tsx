@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, ScrollView, StatusBar, KeyboardAvoidingView, Platform, Dimensions, TouchableOpacity, Alert, TextInput, ActivityIndicator } from "react-native";
+import { View, Text, ScrollView, StatusBar, KeyboardAvoidingView, Platform, Dimensions, TouchableOpacity, Alert } from "react-native";
 import {  useNavigation, useRoute } from "@react-navigation/native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AntDesign } from '@expo/vector-icons';
@@ -24,7 +24,6 @@ import { CristaliButton } from "../../components/CristaliButton";
 import { Header } from "../../components/Header";
 import { SearchButton } from "../../components/SearchButton";
 import { Loading } from "../../components/Loading";
-import { AxiosResponse } from "axios";
 
 export interface ItemProps {
   id: number;

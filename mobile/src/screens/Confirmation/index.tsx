@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, Image, KeyboardAvoidingView, Platform, Alert } from 'react-native';
+import { Text, View, Image, KeyboardAvoidingView, Platform } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 import { styles } from './styles';

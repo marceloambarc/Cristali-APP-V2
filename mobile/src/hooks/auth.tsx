@@ -1,8 +1,8 @@
-import React, { createContext, useState, useEffect, useContext, ReactNode } from "react";
+import React, { createContext, useState, useContext, ReactNode } from "react";
 import { Alert } from 'react-native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { COLLECTION_USER, COLLECTION_TOKEN, COLLECTION_DEVICE_TOKEN, COLLECTION_PASSWORD } from "../config/storage";
+import { COLLECTION_USER, COLLECTION_TOKEN, COLLECTION_DEVICE_TOKEN } from "../config/storage";
 import { api } from '../services/api';
 
 export interface UserProps {

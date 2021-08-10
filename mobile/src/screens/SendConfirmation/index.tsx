@@ -7,8 +7,6 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { styles } from './styles';
 import { theme } from '../../global';
 
-import { pgapi } from '../../services/pgapi';
-
 import { PagSeguroConfirmationProps } from '../Confirmation';
 import { ClientProps } from '../../components/ClientComponent';
 

@@ -1,6 +1,5 @@
 import React from "react";
 import { FlatList } from "react-native";
-import { ClientProps } from "../ClientComponent";
 
 import { Order, OrderProps } from "../Order";
 
