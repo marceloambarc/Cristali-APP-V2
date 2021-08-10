@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, Image, KeyboardAvoidingView, Platform } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { useAuth } from '../../hooks/auth';
 
 import { styles } from './styles';
 import { theme } from '../../global';
@@ -10,24 +11,26 @@ import { pgapi } from '../../services/pgapi';
 import { InputMask } from '../../components/InputMask';
 import { CristaliButton } from '../../components/CristaliButton'
 import { Loading } from '../../components/Loading';
+import { Alert } from 'react-native';
 
 export interface PagSeguroConfirmationProps {
   id: string;
   reference: string;
   cardNumber: string;
-  declined: boolean;
+  declined: string;
+  orderId: number;
 }
 
 export function Confirmation() {
+  const { user, clientToken, sendLog, handleSetNewCondition } = useAuth();
   const [loading, setLoading] = useState(true);
-
-  const [pagSeguroDeclined,setPagSeguroDeclined] = useState(false);
-  const [vrfy, setvrfy] = useState('');
 
   const [value, setValue] = useState('');
   const [pagSeguroId, setPagSeguroId] = useState('');
+  const [orderId, setOrderId] = useState(0);
   const [pagSeguroReference, setPagSeguroReference] = useState('');
   const [pagSeguroCardNumber, setPagSeguroCardNumber] = useState('');
+  const [pagSeguroDeclined, setPagSeguroDeclined] = useState('');
 
   const navigation = useNavigation();
   const route = useRoute();
@@ -37,28 +40,25 @@ export function Confirmation() {
   useEffect(() => { 
     if(pagSeguroParams) {
       setPagSeguroId(pagSeguroParams.id);
+      setOrderId(pagSeguroParams.orderId);
       setPagSeguroReference(pagSeguroParams.reference);
       setPagSeguroCardNumber(pagSeguroParams.cardNumber);
       setPagSeguroDeclined(pagSeguroParams.declined);
 
-      if(pagSeguroDeclined === false){
-        setvrfy('false');
-      } else {
-        setvrfy('false');
-      }
       setLoading(false);
     }
 
   },[pagSeguroParams]);
 
   async function handleConfirm() {
-    const sendValue = parseInt(value.replace(/\D/g, ""))
+    const sendValue = parseInt(value.replace(/\D/g, ""));
     const response = await pgapi.post(`/charges/${pagSeguroId}/capture`,{
       "amount": {
         "value": sendValue
       }
-    }).catch(err => {
-      console.log(err);
+    }).catch(() => {
+      Alert.alert('Ops!', 'Valor não confere com a Venda.');
+      return;
     });
     if(response) {
       navigation.navigate('SendConfirmation',{
@@ -68,7 +68,24 @@ export function Confirmation() {
         value: sendValue
       })
     }
+  }
 
+  async function handleDeclined() {
+    sendLog({logText:`${user.userName} OBTEVE VENDA RECUSADA POR ${pagSeguroCardNumber}`, clientToken});
+    handleSetNewCondition({id: orderId, condition: 212});
+    navigation.navigate('Home',{
+      userCode: '',
+      totalPrice: '',
+      orderNotes: '',
+      client: {
+        clientName: '',
+        clientPhone: '',
+        clientEmail: '',
+        clientNotes: '',
+        userCode: ''
+      },
+      itens: []
+    });
   }
 
   async function handleCancel() {
@@ -93,29 +110,29 @@ export function Confirmation() {
     );
   } else {
     return (
-      pagSeguroDeclined
+      pagSeguroDeclined === "DECLINED"
       ?
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={styles.container}
-      >
-      <View style={styles.body}>
-        <View style={styles.titleContainer}>
-          <Image 
-            source={require('../../assets/pagseguro.png')}
-            style={styles.pagseguroImage}
-            resizeMode='contain'
-          />
+      <View style={styles.container}>
+        <View style={styles.bodyDeclined}>
+            <View>
+              <Image 
+                source={require('../../assets/pagseguro.png')}
+                resizeMode='contain'
+              />
+              <View style={styles.titleDeclined}>
+                <Text style={[styles.textDeclined, {color: theme.colors.Cancel}]}>Venda Recusada.</Text>
+                <Text style={[styles.textDeclined, {color: theme.colors.Config}]}>Contate a Central do seu Cartão.</Text>
+              </View>
+
+            <View />
+            <CristaliButton
+              title='Finalizar'
+              color={`${theme.colors.Config}`}
+              onPress={handleDeclined}
+            />
+            </View>
         </View>
-        <Text style={styles.text}>Venda Recusada.{"\n"}Contate a Central{"\n"} do seu Cartão.</Text>
-        <View />
-          <CristaliButton
-            title='Finalizar'
-            color={`${theme.colors.Success}`}
-            onPress={handleConfirm}
-          />
-        </View>
-      </KeyboardAvoidingView>
+      </View>
       :
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -123,7 +140,6 @@ export function Confirmation() {
       >
       <View style={styles.body}>
         <View style={styles.titleContainer}>
-          <Text>{vrfy}</Text>
           <Image 
             source={require('../../assets/pagseguro.png')}
             style={styles.pagseguroImage}
@@ -137,7 +153,6 @@ export function Confirmation() {
           onChangeText={setValue}
           textAlign='center'
         />
-        <Text>{vrfy}</Text>
         <View />
   
           <CristaliButton 

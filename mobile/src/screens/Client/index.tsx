@@ -8,6 +8,7 @@ import { Divider } from "../../components/Divider";
 import { ClientList } from "../../components/ClientList";
 import { CristaliInput } from "../../components/CristaliInput";
 import { CristaliButton } from "../../components/CristaliButton";
+import { Loading } from "../../components/Loading";
 
 import { ClientProps } from "../../components/ClientComponent";
 
@@ -15,7 +16,6 @@ import { styles } from "./styles";
 import { theme } from "../../global";
 
 import { api } from "../../services/api";
-
 
 export function Client() {
   const { user } = useAuth()
@@ -32,19 +32,17 @@ export function Client() {
 
   const navigation = useNavigation();
 
-  useFocusEffect(() => {
-    if(!loading){
-      return;
-    }else{
-      api.get(`/myClients/${user.userCode}`).then(response => {
-        setClients(response.data);
-        setLoading(false);
-      });
-    }
-  });
+  async function getClients() {
+    const response = await api.get(`/myClients/${user.userCode}`);
+    setClients(response.data);
+    setLoading(false);
+  }
 
   useEffect(() => {
-    if(searchName != '' && searchName != undefined){
+    if(!loading)
+    return;
+    getClients()
+    if(searchName != '' && searchName != undefined) {
       setAllowPress(true);
     }else{
       setAllowPress(false);
@@ -76,54 +74,60 @@ export function Client() {
     });
   }
 
-  return (
-    <>
-    <StatusBar
-      barStyle='dark-content'
-      backgroundColor={theme.colors.input}
-    />
-    <Header
-      title='Clientes'
-      haveBack
-    />
-    <View style={styles.container}>
-      <View style={styles.searchContainer}>
-        <View style={styles.titleContainer}>
-          <Text style={styles.title}>Selecione o Cliente</Text>
+  if(loading) {
+    return (
+      <Loading />
+    );
+  } else {
+    return (
+      <>
+      <StatusBar
+        barStyle='dark-content'
+        backgroundColor={theme.colors.input}
+      />
+      <Header
+        title='Clientes'
+        haveBack
+      />
+      <View style={styles.container}>
+        <View style={styles.searchContainer}>
+          <View style={styles.titleContainer}>
+            <Text style={styles.title}>Selecione o Cliente</Text>
+          </View>
         </View>
+  
+        <Divider />
+  
+        <View style={styles.clientList}>
+          <ClientList
+            data={clients}
+            handleClientSelect={handleClientSelect}
+          />
+        </View>
+  
+        <View style={styles.inputContainer}>
+          <CristaliInput 
+            value={searchName}
+            textAlign='center'
+          />
+        </View>
+  
+        {
+          allowPress?
+          <CristaliButton
+            title="Selecionar"
+            color={theme.colors.Config}
+            onPress={validate}
+          />
+          :      
+          <CristaliButton 
+            title="Selecionar"
+            color={theme.colors.ContinueDesactivated}
+            onPress={validate}
+          />
+        }
       </View>
-
-      <Divider />
-
-      <View style={styles.clientList}>
-        <ClientList
-          data={clients}
-          handleClientSelect={handleClientSelect}
-        />
-      </View>
-
-      <View style={styles.inputContainer}>
-        <CristaliInput 
-          value={searchName}
-          textAlign='center'
-        />
-      </View>
-
-      {
-        allowPress?
-        <CristaliButton
-          title="Selecionar"
-          color={theme.colors.Config}
-          onPress={validate}
-        />
-        :      
-        <CristaliButton 
-          title="Selecionar"
-          color={theme.colors.ContinueDesactivated}
-          onPress={validate}
-        />
-      }
-    </View>
-    </>
-  );
+      </>
+    );
+  }
 }

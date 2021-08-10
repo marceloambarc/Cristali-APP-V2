@@ -8,13 +8,13 @@ import { COLLECTION_USER } from '../../config/storage';
 import { Background } from '../../components/Background';
 import { Logo } from '../../components/Logo';
 import { CristaliInput } from '../../components/CristaliInput';
-import { CristaliButton } from '../../components/CristaliButton';
+import { CristaliButton } from '../../components/CristaliButton'; 
+import { InputMask } from '../../components/InputMask';
 
 import { UserProps } from '../../hooks/auth';
 
 import { styles } from './styles';
 import { theme } from '../../global';
-import { InputMask } from '../../components/InputMask';
 
 export function SignIn() {
   const { loading, signIn } = useAuth();

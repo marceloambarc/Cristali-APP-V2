@@ -37,7 +37,7 @@ export function Order({ data, ...rest } : OrderComponentProps ) {
     const dateProto = new Date(data.createdAt);
 
     const dateDay = dateProto.getDate();
-    const dateMonth = dateProto.getMonth();
+    const dateMonth = dateProto.getMonth()+1;
     const dateYear = dateProto.getFullYear();
 
     const dateHour = dateProto.getHours();

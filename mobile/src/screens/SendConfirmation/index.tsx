@@ -61,7 +61,13 @@ export function SendConfirmation() {
   }
 
   function handleSendWhatsapp() {
-    Linking.openURL(`https://api.whatsapp.com/send?phone=5551992381515&text=%F0%9F%92%8E%20Ol%C3%A1!%20Comprovante%20Cristali%20%F0%9F%92%8E%20Refer%C3%AAncia%20PagSeguro%3A%20${ pagSeguroReference }%20Pre%C3%A7o%20Total%20da%20Compra%3A%20${ value }%20%C3%9Altimos%20D%C3%ADgitos%20CC%3A%20${ pagSeguroCardNumber }`);
+    var sampleNumber = parseInt(value);
+    const res = (sampleNumber / 100).toFixed(2);
+    const replaced = res.replace('.',',');
+    const toCurrency = 'R$ ' + replaced;
+    
+    // MANIPULAR NÚMERO
+    Linking.openURL(`https://api.whatsapp.com/send?phone=5551992381616&text=%F0%9F%92%8E%20Ol%C3%A1!%20Comprovante%20Cristali%20%F0%9F%92%8E%0ARefer%C3%AAncia%20PagSeguro%3A%0A%20${ pagSeguroReference }%0A%0APre%C3%A7o%20Total%20da%20Compra%3A%20%0A${ toCurrency }%0A%0ADados%20do%20Cart%C3%A3o%3A%20%0A${ pagSeguroCardNumber }`);
     navigation.setParams({orderParams: null});
     navigation.navigate('Final');
   }
@@ -79,8 +85,6 @@ export function SendConfirmation() {
           />
         </View>
         <Text style={styles.text}>Selecione uma Opção {"\n"} para Envio de Comprovante.</Text>
-        <Text>{pagSeguroId}</Text>
-        <Text>{pagSeguroReference}</Text>
         <View />
 
           <View style={styles.buttons}>

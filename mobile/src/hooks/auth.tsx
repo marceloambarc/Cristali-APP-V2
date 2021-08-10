@@ -99,8 +99,19 @@ function AuthProvider({ children } : AuthProps) {
         deviceToken: JSON.parse(storagedToken)
       },{
         headers: {'Authorization': 'Bearer '+clientToken}
-      }).catch(() => {
-        Alert.alert('Erro de LOG');
+      }).catch(err => {
+
+        const errorString = String(err);
+        const error = errorString.replace(/\D/g,'');
+
+        if(error === '401'){
+          Alert.alert('Sessão Terminada, Faça login novamente.');
+          signOut();
+          setLoading(false);
+        }else{
+          Alert.alert('Erro de LOG');
+        }
+        
       }).then(() => {
         Alert.alert('LOG ENVIADO');
       })

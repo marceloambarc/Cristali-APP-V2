@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 import { theme } from "../../global";
 
 export const styles = StyleSheet.create({
@@ -27,4 +27,20 @@ export const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: 'center'
   },
+
+  bodyDeclined:  {
+    paddingHorizontal: 24,
+    paddingVertical: Dimensions.get('window').height * 0.24,
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+  titleDeclined: {
+    paddingTop: 50,
+    paddingBottom: 100,
+  },
+  textDeclined :{
+    fontSize: 20,
+    fontFamily: theme.fonts.heading
+  },
+
 })

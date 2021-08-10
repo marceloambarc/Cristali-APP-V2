@@ -49,8 +49,6 @@ export function PagSeguroScreen() {
   const [expirateYear, setExpirateYear] = useState('');
   const [cvv, setCvv] = useState('');
 
-  const [isDeclined, setIsDeclined] = useState(false);
-
   const value = parseInt(totalPrice);
   const codeDoc = String(uuid.v4(orderId.toString()));
 
@@ -138,9 +136,23 @@ export function PagSeguroScreen() {
     }
     ).catch(err => {
       console.warn(err);
-      Alert.alert('ERRO NO PAGSEGURO', `${err}`)
+      Alert.alert('ERRO NO PAGSEGURO', `${err}`);
+      navigation.navigate('Home',{
+        userCode: '',
+        totalPrice: '',
+        orderNotes: '',
+        client: {
+          clientName: '',
+          clientPhone: '',
+          clientEmail: '',
+          clientNotes: '',
+          userCode: ''
+        },
+        itens: []
+      });
     });
     if(response) {
+      console.log(response.data);
       setCreatedPagSeguro(true);
   
       handleSetNewCondition({id: orderId, condition: 220});
@@ -150,16 +162,13 @@ export function PagSeguroScreen() {
       Alert.alert('Enviado PagSeguro');
       setLoading(false);
 
-      if(response.data.status === "DECLINED") {
-        setIsDeclined(true);
-
-        navigation.navigate('Confirmation',{
+      navigation.navigate('Confirmation',{
           id: response.data.id,
           reference: response.data.payment_response.reference,
           cardNumber: response.data.payment_method.card.last_digits,
-          declined: isDeclined
-        });
-      }
+          declined: response.data.status,
+          orderId: orderId
+      });
     }
   }
 
@@ -265,7 +274,7 @@ export function PagSeguroScreen() {
                       <CristaliInput 
                         textAlign='center'
                         keyboardType='number-pad'
-                        maxLength={3}
+                        maxLength={4}
                         value={cvv}
                         onChangeText={setCvv}
                       />

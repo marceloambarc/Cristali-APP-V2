@@ -13,6 +13,8 @@ import { Final } from '../screens/Final';
 import { Confirmation } from '../screens/Confirmation';
 import { SendConfirmation } from '../screens/SendConfirmation';
 
+import { Test } from '../test';
+
 const AppStack = createStackNavigator();
 
 export function AppRoutes() {
@@ -20,6 +22,8 @@ export function AppRoutes() {
     <AppStack.Navigator
       headerMode="none"
     >
+      {/*}<AppStack.Screen name="Test" component={Test} />{*/}
+
       <AppStack.Screen name="Home" component={Home} />
       <AppStack.Screen name="History" component={History} />
       <AppStack.Screen name="UnfinishedSale" component={UnfinishedSale} />
