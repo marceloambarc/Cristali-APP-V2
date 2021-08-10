@@ -10,7 +10,6 @@ import ordemView from "../view/ordem_view";
 
 import Clientefinal from "../models/Clientefinal";
 import ClienteController from "./ClienteController";
-import clienteView from "../view/cliente_view";
 
 
 export default { 

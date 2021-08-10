@@ -1,5 +1,4 @@
 import OrdemPagamento from "../models/Ordempagamento";
-import ordem_view from "./ordem_view";
 
 export default {
   render(ordempay: OrdemPagamento) {

@@ -1,5 +1,4 @@
 import Senha from "../models/Senha";
-import clienteView from "./cliente_view";
 
 export default {
   render(senha: Senha) {

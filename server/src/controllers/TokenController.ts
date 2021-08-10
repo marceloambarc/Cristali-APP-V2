@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { DeepPartial, getRepository } from 'typeorm';
+import { getRepository } from 'typeorm';
 import * as Yup from 'yup';
 
 import Token from '../models/Token';

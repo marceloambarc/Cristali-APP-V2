@@ -1,6 +1,5 @@
 import Ordem from "../models/Ordem";
 import itemView from "./item_view";
-import ordempagamentoView from "./ordempagamento_view";
 
 export default {
   render(ordem: Ordem) {
