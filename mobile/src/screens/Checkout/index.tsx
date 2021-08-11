@@ -78,6 +78,7 @@ export function Checkout() {
           clientNotes,
           orderNotes,
           qt,
+          itens: list,
           totalPrice
         });
       } else if(moneyPressed) {
@@ -93,6 +94,7 @@ export function Checkout() {
           clientNotes,
           orderNotes,
           qt,
+          itens: list,
           totalPrice
         });
       } else {
@@ -108,7 +110,7 @@ export function Checkout() {
           clientNotes,
           orderNotes,
           qt,
-          itens: 
+          itens: list,
           totalPrice
         });
       }

@@ -427,16 +427,18 @@ export default {
       if(orderNotes === '')
         orderNotes = 'Observação Não Inserida';
 
-      itens.forEach(item => {
-          if(item.cd_codigogerado === '')
-            item.cd_codigogerado = 'Código Vazio';
-          if(item.nm_produto === '')
-            item.nm_produto = 'Nome Não Inserido';
-          if(item.vl_preco)
-            item.vl_preco = parseInt(item.vl_preco.replace(/\D/g, ""));
-          if(item.vl_preco === '')
-            item.vl_preco = 0;
+      itens.forEach((item, index, object) => {
+        if(item.vl_preco === '')
+          object.splice(index, 1);
+        if(item.cd_codigogerado === '')
+          item.cd_codigogerado = 'Código Vazio';
+        if(item.nm_produto === '')
+          item.nm_produto = 'Nome Não Inserido';
+        if(item.vl_preco)
+          item.vl_preco = parseInt(item.vl_preco.replace(/\D/g, ""));
       });
+
+      console.log(itens);
 
       const ordensRepository = getRepository(Ordem);
 
@@ -458,7 +460,7 @@ export default {
           tx_obs: orderNotes,
           cd_habil_tipo: 217,
           cd_clientefinal: codPessoa,
-          itens,
+          itens
         };
 
         const schema = Yup.object().shape({

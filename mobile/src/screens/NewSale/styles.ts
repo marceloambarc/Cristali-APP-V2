@@ -41,12 +41,12 @@ export const styles = StyleSheet.create({
   },
   inputBannerText: {
     fontFamily: theme.fonts.text,
-    fontSize: 15,
+    fontSize: theme.fonts.sizeC,
     color: theme.colors.text
   },
   inputLabel: {
     fontFamily: theme.fonts.text,
-    fontSize: 10,
+    fontSize: theme.fonts.sizeD,
     color: theme.colors.text,
     paddingTop: 1
   },

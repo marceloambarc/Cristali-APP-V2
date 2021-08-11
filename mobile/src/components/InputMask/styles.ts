@@ -8,7 +8,7 @@ export const styles = StyleSheet.create({
     color: theme.colors.text,
     borderRadius: 20,
     fontFamily: theme.fonts.text,
-    fontSize: theme.fonts.textBox,
+    fontSize: theme.fonts.sizeB,
     paddingHorizontal: 16
   },
   extend: {
@@ -27,9 +27,12 @@ export const styles = StyleSheet.create({
     color: theme.colors.loginText
   },
   insert: {
-
+    
   },
   inserted: {
     backgroundColor: theme.colors.Config
+  },
+  productList: {
+    fontSize: theme.fonts.sizeD
   }
 });

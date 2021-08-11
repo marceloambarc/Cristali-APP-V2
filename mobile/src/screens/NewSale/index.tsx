@@ -216,7 +216,7 @@ export function NewSale() {
           clientNotes,
           orderNotes,
           qt,
-          list: list,
+          itens: list,
           totalPrice: sellPrice.toString()
         });
       }).catch(err => {
@@ -394,13 +394,13 @@ export function NewSale() {
                     </View>
                     <View style={styles.inputTextCol}>
                       <Text style={styles.inputLabel}>
-                        Máximo de 100 caracteres
+                        Máximo de 30 caracteres
                       </Text>
                     </View>
                   </View>
                   <TextArea 
                     multiline
-                    maxLength={100}
+                    maxLength={30}
                     numberOfLines={5}
                     autoCorrect={false}
                     autoCapitalize="none"
@@ -485,6 +485,7 @@ export function NewSale() {
                             placeholder='Insira o Valor do Produto'
                             keyboardType='numeric'
                             autoCorrect={false}
+                            productList
                           />
                           
                         }
@@ -522,13 +523,13 @@ export function NewSale() {
                     </View>
                     <View style={styles.inputTextCol}>
                       <Text style={styles.inputLabel}>
-                        Máximo de 50 caracteres
+                        Máximo de 30 caracteres
                       </Text>
                     </View>
                   </View>
                   <TextArea 
                     multiline
-                    maxLength={50}
+                    maxLength={30}
                     numberOfLines={5}
                     autoCorrect={false}
                     autoCapitalize="none"

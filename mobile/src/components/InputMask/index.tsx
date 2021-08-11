@@ -7,9 +7,10 @@ interface Props extends TextInputMaskProps {
   clientInput?: boolean;
   peachpuff?: boolean;
   productInsert?: boolean;
+  productList?: boolean;
 }
 
-export function InputMask({ clientInput, peachpuff = false, productInsert = false, ...rest } : Props){
+export function InputMask({ clientInput, peachpuff = false, productInsert = false, productList = false, ...rest } : Props){
   return (
     <TextInputMask 
       style={[
@@ -28,7 +29,12 @@ export function InputMask({ clientInput, peachpuff = false, productInsert = fals
           ?
           styles.inserted
           :
-          styles.insert
+          styles.insert,
+        productList
+          ?
+          styles.productList
+          :
+          styles.insert,
         ]}
       { ...rest }
     />

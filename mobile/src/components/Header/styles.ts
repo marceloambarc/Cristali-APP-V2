@@ -27,6 +27,6 @@ export const styles = StyleSheet.create({
   title: {
     fontFamily: theme.fonts.text,
     color: theme.colors.text,
-    fontSize: 15
+    fontSize: theme.fonts.sizeC
   }
 });

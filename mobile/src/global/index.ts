@@ -46,7 +46,10 @@ export const theme = {
     heading: 'Nunito_800ExtraBold',
     text: 'Nunito_600SemiBold',
 
-    textBox: 19,
-    price: 10
+    sizeTitle: 24,
+    sizeA: 22,
+    sizeB: 19,
+    sizeC: 17,
+    sizeD: 13
   }
 }

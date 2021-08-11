@@ -13,6 +13,7 @@ export const styles = StyleSheet.create({
     width: '100%',
   },
   titleContainer: {
+    paddingLeft: 14,
     flexDirection: 'row',
     justifyContent: 'flex-start',
     marginBottom: Dimensions.get('window').height *.02,
@@ -20,7 +21,7 @@ export const styles = StyleSheet.create({
   title: {
     fontFamily: theme.fonts.heading,
     color: theme.colors.title,
-    fontSize: 24,
+    fontSize: theme.fonts.sizeTitle,
     paddingRight: 15
   },
   calendar: {
@@ -33,13 +34,14 @@ export const styles = StyleSheet.create({
   datepickedTitle: {
     fontFamily: theme.fonts.heading,
     color: theme.colors.title,
-    fontSize: 12
+    fontSize: theme.fonts.sizeD,
   },
   datepicked: {
     alignItems: 'center',
     marginRight: 20,
     fontFamily: theme.fonts.text,
     color: theme.colors.text,
+    fontSize: theme.fonts.sizeD
   },
   subtitleContainer: {
     flexDirection: 'row',
@@ -60,7 +62,7 @@ export const styles = StyleSheet.create({
   orderText: {
     fontFamily: theme.fonts.text,
     color: theme.colors.text,
-    fontSize: 15,
+    fontSize: theme.fonts.sizeC,
     marginBottom: 2
   },
   dividerLimiter: {

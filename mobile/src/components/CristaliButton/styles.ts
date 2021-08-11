@@ -13,7 +13,7 @@ export const styles = StyleSheet.create({
     flex: 1,
     color: theme.colors.input,
     fontFamily: theme.fonts.text,
-    fontSize: 15,
+    fontSize: theme.fonts.sizeC,
     textAlign: 'center'
   }
 });
