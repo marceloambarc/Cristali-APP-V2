@@ -28,7 +28,7 @@ export function SignIn() {
       const cgcProto = cgc.replace(/\D/g, "");
       await signIn({cgc: cgcProto, password});
     }catch(err){
-      Alert.alert(err);
+      return;
     }
   }
 

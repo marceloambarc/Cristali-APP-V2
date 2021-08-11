@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, Image, Linking } from 'react-native';
+import { Text, View, Image, Linking, Alert } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { RectButton } from "react-native-gesture-handler";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -11,6 +11,7 @@ import { theme } from '../../global';
 
 import { PagSeguroConfirmationProps } from '../Confirmation';
 import { ClientProps } from '../../components/ClientComponent';
+import { Loading } from '../../components/Loading';
 
 interface ValueProps {
   value: string;
@@ -107,9 +108,22 @@ export function SendConfirmation() {
           />
         </View>
         <Text style={styles.text}>Selecione uma Opção {"\n"} para Envio de Comprovante.</Text>
-        <View />
+      <View />
 
-          <View style={styles.buttons}>
+      <View style={styles.buttons}>
+            { clientEmail === ''
+              ?
+                <RectButton
+                style={[styles.button, {backgroundColor: theme.colors.ContinueDesactivated}]}
+                onPress={() => Alert.alert('Ops!', 'Email não Cadastrado.')}
+              >
+                <MaterialCommunityIcons
+                  name="email-send"
+                  size={32}
+                  color="white"
+                />
+              </RectButton>
+              :
               <RectButton
                 style={[styles.button, {backgroundColor: theme.colors.Continue}]}
                 onPress={handleSendEmail}
@@ -120,20 +134,37 @@ export function SendConfirmation() {
                   color="white"
                 />
               </RectButton>
-              <View style={styles.spaceButtons} />
-              <RectButton
-                style={[styles.button, {backgroundColor: theme.colors.Continue}]}
-                onPress={handleSendWhatsapp}
-              >
-                <MaterialCommunityIcons
-                  name="whatsapp"
-                  size={32}
-                  color="white"
-                />
-              </RectButton>
-          </View>
+            }
 
+            <View style={styles.spaceButtons} />
+              
+              { clientPhone === ''
+                ? 
+                <RectButton
+                  style={[styles.button, {backgroundColor: theme.colors.ContinueDesactivated}]}
+                  onPress={() => Alert.alert('Ops!', 'Telefone não Cadastrado.')}
+                >
+                  <MaterialCommunityIcons
+                    name="whatsapp"
+                    size={32}
+                    color="white"
+                  />
+                </RectButton>
+                :
+                <RectButton
+                  style={[styles.button, {backgroundColor: theme.colors.Continue}]}
+                  onPress={handleSendWhatsapp}
+                >
+                  <MaterialCommunityIcons
+                    name="whatsapp"
+                    size={32}
+                    color="white"
+                  />
+                </RectButton>
+              }
+              
 
+        </View>
       </View>
     </View>
   )

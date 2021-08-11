@@ -118,9 +118,9 @@ export default {
         } else {
           const schema = Yup.object().shape({
             nm_nome: Yup.string().required(),
-            tx_fone: Yup.string().required(),
-            tx_email: Yup.string().required(),
-            tx_obs: Yup.string().required(),
+            tx_fone: Yup.string().nullable(),
+            tx_email: Yup.string().nullable(),
+            tx_obs: Yup.string().nullable(),
             cd_id_ccli: Yup.string().required(),
             cd_ordem_id: Yup.number().required()
           });

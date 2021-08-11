@@ -419,6 +419,8 @@ export default {
         itens
       } = request.body;
 
+      console.log(client);
+
       if(orderNotes === '')
         orderNotes = 'Observação Não Inserida';
 
@@ -595,6 +597,9 @@ export default {
           { cd_id_ccli: searchId, cd_habil_tipo: LessThanOrEqual(219) },
         ],
         relations: ['itens'],
+        order: {
+          cd_id: "DESC"
+        }
       })
 
       if(ordens.length === 0) {
@@ -619,7 +624,10 @@ export default {
       const ordens = await ordensRepository.find({
         where: [
           { cd_id_ccli: searchId, cd_habil_tipo: MoreThan(219) },
-        ]
+        ],
+        order: {
+          cd_id: "DESC"
+        }
       });
 
       if(ordens.length === 0) {

@@ -121,6 +121,52 @@ export function NewSale() {
     }
   }
 
+  async function handleContinue() {
+    if(qt <= 0) {
+      Alert.alert(
+        'Atenção',
+        'Insira um Produto'
+      );
+      return;
+    }
+
+    if(clientName === '' || clientName.length < 5) {
+      Alert.alert(
+        'Atenção',
+        'Nome do Cliente Inválido'
+      );
+      return;
+    }
+
+    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(clientEmail)) {
+      if(clientNotes === '' || clientPhone === '' || clientEmail === '') {
+        Alert.alert(
+          'Atenção!',
+          'Deseja prosseguir sem os dados complementares do Cliente?',
+          [
+            { text: "Sim", onPress: () => handleFinish() },
+            {
+              text: "Não",
+              onPress: () => {},
+              style: "cancel"
+            }
+          ]
+        );
+      } else {
+        handleFinish();
+      }
+    } else {
+      Alert.alert("OPS!", "Email do cliente é inválido!");
+    }
+  }
+
+  function handleFinish() {
+    handleSave();
+    const logText = `${user.userName} INICIOU UMA VENDA PARA ${clientName} / VL TOTAL ${sellPrice.toString()}.`;
+    sendLog({logText, clientToken});
+    handleOrder();
+  }
+
   async function handleSave() {
     for (let index = 0; index <= list.length; index++) {
       if(list[index].vl_preco != undefined && list[index].vl_preco != '') {
@@ -143,54 +189,12 @@ export function NewSale() {
     }
   }
 
-  async function handleContinue() {
-    if(qt <= 0) {
-      Alert.alert(
-        'Atenção',
-        'Insira um Produto'
-      );
-      return;
-    }
-
-    if(clientName === '' || clientName.length < 5) {
-      Alert.alert(
-        'Atenção',
-        'Insira o Nome do Cliente'
-      );
-      return;
-    }
-
-    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(clientEmail)) {
-      if(clientNotes === '' || clientPhone === '' || clientEmail === '') {
-        Alert.alert(
-          'Atenção!',
-          'Deseja prosseguir sem os dados complementares do Cliente?',
-          [
-            { text: "Sim", onPress: () => handleFinish() },
-            {
-              text: "Não",
-              onPress: () => {},
-              style: "cancel"
-            }
-          ]
-        )
-      }
-      handleFinish();
-    } else {
-      Alert.alert("OPS!", "Email do cliente é inválido!");
-    }
-  }
-
-  function handleFinish() {
-    handleSave();
-    const logText = `${user.userName} INICIOU UMA VENDA PARA ${clientName} / VL TOTAL ${sellPrice.toString()}.`;
-    sendLog({logText, clientToken});
-    handleOrder();
-  }
-
   async function handleOrder() {
+
+    const clientPhoneProto = clientPhone.replace(/\D/g,'');
+
     if(orderId !== 0 && orderId !== undefined) {
-      const clientPhoneProto = clientPhone.replace(/\D/g,'');
+      
       api.put(`/order/${orderId}`,{
         userCode: user.userCode,
         totalPrice: sellPrice,
@@ -207,7 +211,7 @@ export function NewSale() {
       },{
         headers: {'Authorization': 'Bearer '+clientToken}
       }).then(res => {
-        const clientPhoneProto = clientPhone.replace(/\D/g,'');
+        
         navigation.navigate('Checkout', {
           id: orderId,
           clientName,
@@ -239,7 +243,7 @@ export function NewSale() {
   
       });
     } else {
-      const clientPhoneProto = clientPhone.replace(/\D/g,'');
+      
       api.post(`/order`,{
         userCode: user.userCode,
         totalPrice: sellPrice,
@@ -255,7 +259,7 @@ export function NewSale() {
       },{
         headers: {'Authorization': 'Bearer '+clientToken}
       }).then(res => {
-        const clientPhoneProto = clientPhone.replace(/\D/g,'');
+        
         navigation.navigate('Checkout', {
           id: res.data.cd_id,
           clientName,
@@ -270,7 +274,7 @@ export function NewSale() {
       }).catch(err => {
         Alert.alert(
           'Erro Criação ORDEM',
-          `${err}`
+          `${err}, ${clientNotes}`
         )
       });
     }
