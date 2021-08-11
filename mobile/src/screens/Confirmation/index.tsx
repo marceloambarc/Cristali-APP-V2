@@ -117,7 +117,7 @@ export function Confirmation() {
 
   async function handleDeclined() {
     sendLog({logText:`${user.userName} OBTEVE VENDA Nº ${pagSeguroReference} RECUSADA`, clientToken});
-    handleSetNewCondition({id: orderId, condition: 212});
+    handleSetNewCondition({id: orderId, condition: 221});
     navigation.navigate('Home',{
       userCode: '',
       totalPrice: '',
@@ -135,7 +135,7 @@ export function Confirmation() {
 
   async function handleTryAgain() {
     sendLog({logText:`${user.userName} REINICIOU VENDA RECUSADA POR ${pagSeguroCardNumber}`, clientToken});
-    handleSetNewCondition({id: orderId, condition: 212});
+    handleSetNewCondition({id: orderId, condition: 221});
     navigation.navigate('NewSale',{
       orderNotes: orderNotes,
       totalPrice: totalPrice,
@@ -163,7 +163,7 @@ export function Confirmation() {
       }
     }).then(res => {
       sendLog({logText:`${user.userName} CANCELOU VENDA PARA ${clientName}`, clientToken});
-      handleSetNewCondition({id: orderId, condition: 213});
+      handleSetNewCondition({id: orderId, condition: 222});
       navigation.navigate('Home',{
         userCode: '',
         totalPrice: '',

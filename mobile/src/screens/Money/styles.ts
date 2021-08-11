@@ -7,30 +7,34 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: theme.colors.input,
-    paddingTop: 40,
+    paddingTop: 30,
     paddingHorizontal: 24
   },
   banner: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 70
+    marginBottom: 50
   },
   title: {
     fontFamily: theme.fonts.heading,
     color: theme.colors.title,
-    fontSize: 24,
+    fontSize: theme.fonts.sizeTitle,
     lineHeight: 70
   },
   text: {
     fontFamily: theme.fonts.text,
     color: theme.colors.text,
     fontSize: theme.fonts.sizeC,
-    marginTop: Dimensions.get('window').height * 0.1
+    marginTop: Dimensions.get('window').height * 0.07
   },
   footer: {
     paddingHorizontal: 24,
-    flexDirection: 'row',
-    marginTop: Dimensions.get('window').height * 0.1
+    marginTop: Dimensions.get('window').height * 0.07,
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+  empty: {
+    paddingVertical: 7
   },
   inputContainer: {
     width: '100%'

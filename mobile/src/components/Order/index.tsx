@@ -38,8 +38,12 @@ export function Order({ data, ...rest } : OrderComponentProps ) {
   function handleFormatDate() {
     const dateProto = new Date(data.createdAt);
 
-    const dateDay = dateProto.getDate();
-    const dateMonth = dateProto.getMonth()+1;
+    const getDay = dateProto.getDate();
+    const dateDay = getDay < 10 ? '0' + getDay : '' + getDay;
+
+    const getMonth = dateProto.getMonth()+1;
+    const dateMonth = getMonth < 10 ? '0' + getMonth : '' + getMonth;
+     
     const dateYear = dateProto.getFullYear();
 
     const dateHour = dateProto.getHours();
@@ -63,11 +67,17 @@ export function Order({ data, ...rest } : OrderComponentProps ) {
   return (
     <TouchableOpacity
       style={
-        [styles.container, 
-          data.open ? 
-          {backgroundColor: theme.colors.activatedList}
-          :
-          {backgroundColor: theme.colors.unactivatedList}
+        [styles.container,
+          data.condition >= 221 &&
+            {backgroundColor: theme.colors.Cancel},
+          data.condition === 220 &&
+            {backgroundColor: theme.colors.activatedList},
+          data.condition === 217 &&
+            {backgroundColor: theme.colors.unactivatedList},
+          data.condition === 218 &&
+            {backgroundColor: theme.colors.ContinueDesactivated},
+          data.condition === 219 &&
+            {backgroundColor: theme.colors.SuccessDesactivated}
         ]}
       activeOpacity={0.7}
       {...rest}
@@ -80,21 +90,36 @@ export function Order({ data, ...rest } : OrderComponentProps ) {
           loading?
             <Loading />
           : 
-            <Text style={styles.title}>
+            <Text style={[styles.title,
+              data.condition >= 221 &&
+                {color: theme.colors.secondary},
+              data.condition === 220 &&
+                {color: theme.colors.text}
+            ]}>
               { client.clientName }
             </Text>
         }
 
 
         <CristaliInput 
-          style={styles.text}
+          style={[styles.text,
+            data.condition >= 221 &&
+              {color: theme.colors.overlay},
+            data.condition === 220 &&
+              {color: theme.colors.Config}
+          ]}
           textAlign='left'
           value={dateFormat}
           editable={false}
         />
 
         <TextInputMask 
-          style={styles.text}
+          style={[styles.text,
+            data.condition >= 221 &&
+              {color: theme.colors.overlay},
+            data.condition === 220 &&
+              {color: theme.colors.Config}
+          ]}
           type={'money'}
           textAlign='left'
           value={data.totalPrice.toString()}
@@ -104,8 +129,26 @@ export function Order({ data, ...rest } : OrderComponentProps ) {
     </View>
 
     <View>
-      <Text style={styles.number}>Número</Text>
-      <Text style={styles.text}>#{ data.id }</Text>
+      <Text 
+        style={[styles.number,
+            data.condition >= 221 &&
+              {color: theme.colors.overlay},
+            data.condition === 220 &&
+              {color: theme.colors.Config}
+          ]}
+      >Número
+      {data.condition}
+      </Text>
+      <Text 
+        style={[styles.text,
+          data.condition >= 221 &&
+            {color: theme.colors.overlay},
+          data.condition === 220 &&
+            {color: theme.colors.Config}
+          ]}
+      >
+        #{ data.id }
+      </Text>
     </View>
     
 

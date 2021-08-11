@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { FontAwesome5 } from '@expo/vector-icons'; 
 import { useAuth } from '../../hooks/auth';
+import { Placeholder, PlaceholderLine, ShineOverlay } from 'rn-placeholder';
 
 import { styles } from "./styles";
 import { theme } from "../../global";
@@ -201,7 +202,11 @@ export function History() {
                 <Text style={styles.orderText}>Total</Text>
                 {
                   loadingPrice?
-                  <Loading />
+                  <Placeholder
+                    Animation={ShineOverlay}
+                  >
+                    <PlaceholderLine width={30} />
+                  </Placeholder>
                   :
                   <InputMask
                   type={"money"}

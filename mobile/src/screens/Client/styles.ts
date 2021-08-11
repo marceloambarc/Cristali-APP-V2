@@ -16,7 +16,7 @@ export const styles = StyleSheet.create({
   title: {
     fontFamily: theme.fonts.heading,
     color: theme.colors.title,
-    fontSize: 18
+    fontSize: theme.fonts.sizeB
   },
   inputContainer: {
     paddingTop: Dimensions.get('window').height * .02,

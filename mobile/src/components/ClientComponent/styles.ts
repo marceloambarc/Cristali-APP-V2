@@ -22,17 +22,17 @@ export const styles = StyleSheet.create({
   title: {
     fontFamily: theme.fonts.heading,
     color: theme.colors.title,
-    fontSize: 15,
+    fontSize: theme.fonts.sizeC,
     marginBottom: 4
   },
   text: {
     fontFamily: theme.fonts.text,
     color: theme.colors.text,
-    fontSize: 12,
+    fontSize: theme.fonts.sizeD,
   },
   number:  {
     fontFamily: theme.fonts.text,
     color: theme.colors.title,
-    fontSize: 11,
+    fontSize: theme.fonts.sizeD,
   }
 });

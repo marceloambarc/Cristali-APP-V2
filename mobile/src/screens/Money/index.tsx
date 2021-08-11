@@ -46,6 +46,25 @@ export function Money() {
 
   const isMoney = moneyParams.isMoney;
 
+  function handleCancel() {
+    const logText = `${user.userName} CANCELOU A VENDA PARA ${paymentMethod}.`;
+    sendLog({logText, clientToken});
+    handleSetNewCondition({id: orderId,condition: 222});
+    navigation.navigate('Home',{
+      userCode: '',
+      totalPrice: '',
+      orderNotes: '',
+      client: {
+        clientName: '',
+        clientPhone: '',
+        clientEmail: '',
+        clientNotes: '',
+        userCode: ''
+      },
+      itens: []
+    });
+  }
+
   function handleFinal() {
     const notes = paymentMethod + ' ' + orderParams.orderNotes;
     if(isMoney) {
@@ -153,6 +172,12 @@ export function Money() {
                 color={`${theme.colors.Success}`}
                 title="Finalizar"
                 onPress={handleFinal}
+              />
+              <View style={styles.empty} />
+              <CristaliButton 
+                color={`${theme.colors.Cancel}`}
+                title="Cancelar"
+                onPress={handleCancel}
               />
             </View>
           }
