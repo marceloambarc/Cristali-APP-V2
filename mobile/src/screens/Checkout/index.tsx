@@ -175,9 +175,9 @@ export function Checkout() {
   
           <View style={styles.payment}>
             <View style={styles.titleContainer}>
-              <Text style={[styles.title, {fontSize: 24}]}>Instruções para Pagamento</Text>
-              <Text style={styles.text}>Selecione uma das formas de pagamento {'\n'}
-                    abaixo, e aperte Continuar para prosseguir {'\n'}
+              <Text style={[styles.title, {fontSize: theme.fonts.sizeTitle}]}>Instruções para Pagamento</Text>
+              <Text style={styles.text}>Selecione uma das formas de pagamento
+                    abaixo, e aperte Continuar para prosseguir
                     com a venda.
               </Text>
             </View>

@@ -23,7 +23,7 @@ export const styles = StyleSheet.create({
   title: {
     fontFamily: theme.fonts.heading,
     color: theme.colors.title,
-    fontSize: 14,
+    fontSize: theme.fonts.sizeC,
     paddingBottom: 20
   }
 })

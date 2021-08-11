@@ -482,7 +482,7 @@ export function NewSale() {
                             key={item.id}
                             value={item.vl_preco}
                             onChangeText={e => handleChange(e, item.id)}
-                            placeholder='Insira o Valor do Produto'
+                            placeholder='Insira o Valor'
                             keyboardType='numeric'
                             autoCorrect={false}
                             productList
@@ -536,6 +536,7 @@ export function NewSale() {
                     value={orderNotes}
                     onChangeText={setOrderNotes}
                     returnKeyType='done'
+                    scrollEnabled={false}
                   />
                 </View>
   

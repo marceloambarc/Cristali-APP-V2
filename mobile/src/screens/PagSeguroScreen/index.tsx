@@ -140,9 +140,8 @@ export function PagSeguroScreen() {
         "https://192.168.15.200/order/ex-00001/"
       ]
     }
-    ).catch(err => {
-      console.warn(err);
-      Alert.alert('ERRO NO PAGSEGURO', `${err}`);
+    ).catch(() => {
+      Alert.alert('ERRO NO PAGSEGURO');
       navigation.navigate('Home',{
         userCode: '',
         totalPrice: '',
@@ -157,13 +156,14 @@ export function PagSeguroScreen() {
         itens: []
       });
     });
+
     if(response) {
       console.log(response.data);
       setCreatedPagSeguro(true);
   
       handleSetNewCondition({id: orderId, condition: 220});
     
-      const logText = `${user.userName} FINALIZOU VENDA PELO PAGSEGURO`;
+      const logText = `${user.userName} OBTEVE VENDA Nº: ${response.data.payment_response.reference} AUTORIZADA PELO PAGSEGURO`;
       sendLog({logText, clientToken});
       Alert.alert('Enviado PagSeguro');
       setLoading(false);
@@ -174,7 +174,12 @@ export function PagSeguroScreen() {
           cardNumber: response.data.payment_method.card.last_digits,
           declined: response.data.status,
           response: response.data.payment_response.message,
-          orderId: orderId
+          orderId: orderId,
+          clientName: clientName,
+          clientPhone: clientPhone,
+          clientEmail: clientEmail,
+          clientNotes: clientNotes,
+          userCode: user.userCode,
       });
     }
   }
@@ -239,7 +244,7 @@ export function PagSeguroScreen() {
             <View style={styles.payment}>
   
               <View style={styles.titleContainer}>
-                <Text style={[styles.title, {fontSize: 18}]}>Informações no cartão de Crédito</Text>
+                <Text style={[styles.title, {fontSize: theme.fonts.sizeB}]}>Informações no cartão de Crédito</Text>
               </View>
               <View style={styles.bodyContainer}>
                 <View style={styles.inputContainer}>
@@ -277,7 +282,7 @@ export function PagSeguroScreen() {
                       />
                     </View>
                     <View style={styles.codeCol}>
-                      <Text style={styles.inputText}>Cód. de Verificação</Text>
+                      <Text style={styles.inputText}>CVV</Text>
                       <CristaliInput 
                         textAlign='center'
                         keyboardType='number-pad'

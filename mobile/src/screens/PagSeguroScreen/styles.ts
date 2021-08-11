@@ -25,6 +25,7 @@ export const styles = StyleSheet.create({
   inputText: {
     fontFamily: theme.fonts.heading,
     color: theme.colors.text,
+    fontSize: theme.fonts.sizeC,
     marginBottom: 10
   },
   banner: {

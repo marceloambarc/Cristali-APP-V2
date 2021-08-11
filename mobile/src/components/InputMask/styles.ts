@@ -33,6 +33,6 @@ export const styles = StyleSheet.create({
     backgroundColor: theme.colors.Config
   },
   productList: {
-    fontSize: theme.fonts.sizeD
+    fontSize: theme.fonts.sizeC
   }
 });

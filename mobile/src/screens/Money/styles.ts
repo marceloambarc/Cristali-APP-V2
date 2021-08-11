@@ -24,7 +24,7 @@ export const styles = StyleSheet.create({
   text: {
     fontFamily: theme.fonts.text,
     color: theme.colors.text,
-    fontSize: 15,
+    fontSize: theme.fonts.sizeC,
     marginTop: Dimensions.get('window').height * 0.1
   },
   footer: {

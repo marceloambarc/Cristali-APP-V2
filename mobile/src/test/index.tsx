@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, Linking, Text } from 'react-native';
+import { View, Linking, Text, Alert } from 'react-native';
+import * as MailComposer from 'expo-mail-composer';
 
 import { CristaliButton } from '../components/CristaliButton';
 import { InputMask } from '../components/InputMask';

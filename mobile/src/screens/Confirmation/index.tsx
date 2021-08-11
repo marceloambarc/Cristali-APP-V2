@@ -101,17 +101,22 @@ export function Confirmation() {
       return;
     });
     if(response) {
+      sendLog({logText:`${user.userName} OBTEVE VENDA Nº ${pagSeguroReference} PAGA`, clientToken});
       navigation.navigate('SendConfirmation',{
         id: pagSeguroId,
         reference: pagSeguroReference,
         cardNumber: pagSeguroCardNumber,
-        value: sendValue
+        value: sendValue,
+        clientName: clientName,
+        clientPhone: clientPhone,
+        clientEmail: clientEmail,
+        clientNotes: clientNotes,
       });
     }
   }
 
   async function handleDeclined() {
-    sendLog({logText:`${user.userName} OBTEVE VENDA RECUSADA POR ${pagSeguroCardNumber}`, clientToken});
+    sendLog({logText:`${user.userName} OBTEVE VENDA Nº ${pagSeguroReference} RECUSADA`, clientToken});
     handleSetNewCondition({id: orderId, condition: 212});
     navigation.navigate('Home',{
       userCode: '',
