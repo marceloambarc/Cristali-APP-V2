@@ -10,6 +10,7 @@ import ordemView from "../view/ordem_view";
 
 import Clientefinal from "../models/Clientefinal";
 import ClienteController from "./ClienteController";
+import clienteView from "../view/cliente_view";
 
 
 export default { 
@@ -278,22 +279,16 @@ export default {
                   
                   if(existClienteCreated != undefined) {
                     const responseClienteId = existClienteCreated.cd_pessoa;
-                    console.log(responseClienteId);
 
                     existOrdem.vl_total = totalPrice;
                     existOrdem.tx_obs = orderNotes;
                     existOrdem.cd_habil_tipo = 217;
                     existOrdem.itens = itens;
                     existOrdem.cd_clientefinal = existClienteCreated.cd_pessoa;
+                    
+                    await ordensRepository.save(existOrdem);
 
-                    console.log('Funcional')
-                    try {
-                      await ordensRepository.save(existOrdem);
-
-                      return response.status(201).json(existOrdem);
-                    } catch(err) {
-                      console.log(err);
-                    }
+                    return response.status(201).json(existOrdem);
 
                   }
                 } else {
@@ -438,8 +433,6 @@ export default {
           item.vl_preco = parseInt(item.vl_preco.replace(/\D/g, ""));
       });
 
-      console.log(itens);
-
       const ordensRepository = getRepository(Ordem);
 
       const clientesRepository = getRepository(Clientefinal);
@@ -558,7 +551,6 @@ export default {
       
 
     }catch(err){
-      console.log(err);
       return response.status(400).json({ "Erro" : err });
     }
   },
@@ -601,14 +593,14 @@ export default {
       const ordens = await ordensRepository.find({
         where: [
           { cd_id_ccli: searchId, cd_habil_tipo: LessThanOrEqual(219) },
-        ],relations: ['itens']
-      });
+        ],
+        relations: ['itens'],
+      })
 
       if(ordens.length === 0) {
         return response.status(204).json({ "Vazio" : "Nenhuma Ordem Salva" });
       } else {
         return response.json(ordemView.renderManyWithItens(ordens));
-        
       }
 
     }catch(err) {
@@ -639,9 +631,9 @@ export default {
     }catch(err) {
       return response.status(400).json({ "Erro" : err });
     }
-  },
+  }
 
-  async pSeguro(request: Request, response: Response) {
+  /*async pSeguro(request: Request, response: Response) {
     try {
 
       const { payload } = request.body;
@@ -655,5 +647,5 @@ export default {
     }catch(err) {
       return response.status(400).json({ "Erro": err });
     }
-  }
+  }*/
 }

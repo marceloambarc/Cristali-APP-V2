@@ -8,6 +8,6 @@ const routes = Router();
 
 routes.use(appRouter);
 routes.use(controllerRouter);
-routes.use(psController);
+// routes.use(psController);
 
 export default routes;
