@@ -3,6 +3,7 @@ import { Alert } from 'react-native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { COLLECTION_USER, COLLECTION_TOKEN, COLLECTION_DEVICE_TOKEN } from "../config/storage";
+import { testParams } from "../config/options";
 import { api } from '../services/api';
 
 export interface UserProps {
@@ -113,7 +114,8 @@ function AuthProvider({ children } : AuthProps) {
         }
         
       }).then(() => {
-        Alert.alert('LOG ENVIADO');
+        if(testParams)
+          Alert.alert('LOG ENVIADO');
       })
     }
   }

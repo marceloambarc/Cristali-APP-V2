@@ -144,7 +144,7 @@ export function Header({
               <Text style={[styles.title, {color: theme.colors.input}]}>Olá {user.userName}</Text>
               <Text style={[styles.title, {color: theme.colors.input}]}>Informações de Cores:</Text>
               <View style={styles.fouthColor}>
-                <Text style={[styles.title, {color: theme.colors.overlay}]}>Venda Rejeitada / Cancelada</Text>
+                <Text style={[styles.title, {color: theme.colors.secondary}]}>Venda Rejeitada / Cancelada</Text>
               </View>
               <View style={styles.thirdColor}>
                 <Text style={[styles.title, {color: theme.colors.Config}]}>Venda Paga</Text>

@@ -4,7 +4,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import uuid from 'react-native-uuid';
 import { useAuth } from '../../hooks/auth';
 
-import { isCreditCardObfuscated } from '../../config/options';
+import { isCreditCardObfuscated, testParams } from '../../config/options';
 import { pgapi } from '../../services/pgapi';
 
 import { styles } from './styles';
@@ -115,46 +115,38 @@ export function PagSeguroScreen() {
   async function handleSendPagSeguro() {
     const cardNumberProto = cardNumber.replace(/\D/g,'');
     const response = await pgapi.post('/charges',
-    {
-      "reference_id": `${codeDoc}`,
-      "description": `${orderNotes}`,
-      "amount": {
-        "value": `${value}`,
-        "currency": "BRL"
-      },
-      "payment_method": {
-        "type": "CREDIT_CARD",
-        "installments": 1,
-        "capture": false,
-        "card": {
-          "number": `${cardNumberProto}`,
-          "exp_month": `${expirateMonth}`,
-          "exp_year": `${expirateYear}`,
-          "security_code": `${cvv}`,
-          "holder": {
-            "name": `${cardName}`
-          }
-        }
-      },
-      "notification_urls": [
-        "https://192.168.15.200/order/ex-00001/"
-      ]
-    }
-    ).catch(() => {
-      Alert.alert('ERRO NO PAGSEGURO');
-      navigation.navigate('Home',{
-        userCode: '',
-        totalPrice: '',
-        orderNotes: '',
-        client: {
-          clientName: '',
-          clientPhone: '',
-          clientEmail: '',
-          clientNotes: '',
-          userCode: ''
+      {
+        "reference_id": `${codeDoc}`,
+        "description": `${orderNotes}`,
+        "amount": {
+          "value": `${value}`,
+          "currency": "BRL"
         },
-        itens: []
-      });
+        "payment_method": {
+          "type": "CREDIT_CARD",
+          "installments": 1,
+          "capture": false,
+          "card": {
+            "number": `${cardNumberProto}`,
+            "exp_month": `${expirateMonth}`,
+            "exp_year": `${expirateYear}`,
+            "security_code": `${cvv}`,
+            "holder": {
+              "name": `${cardName}`
+            }
+          }
+        },
+        "notification_urls": [
+          "https://192.168.15.200/order/ex-00001/"
+        ]
+      }
+    ).catch(err => {
+      const message = err.response.data.error_messages[0].description;
+      if(message === 'invalid_parameter') {
+        Alert.alert('Ops!', 'Dados do Cartão são inválidos. Tente novamente.');
+        setLoading(false);
+        return;
+      }
     });
 
     if(response) {
@@ -165,7 +157,8 @@ export function PagSeguroScreen() {
     
       const logText = `${user.userName} OBTEVE VENDA Nº: ${response.data.payment_response.reference} AUTORIZADA PELO PAGSEGURO`;
       sendLog({logText, clientToken});
-      Alert.alert('Enviado PagSeguro');
+      if(testParams)
+        Alert.alert('Enviado PagSeguro');
       setLoading(false);
 
       navigation.navigate('Confirmation',{

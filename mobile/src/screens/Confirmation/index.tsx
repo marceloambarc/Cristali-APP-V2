@@ -25,6 +25,7 @@ export interface PagSeguroConfirmationProps {
   declined: string;
   response: string;
   orderId: number;
+  value?: string;
 }
 
 export function Confirmation() {
@@ -37,7 +38,7 @@ export function Confirmation() {
   const [pagSeguroCardNumber, setPagSeguroCardNumber] = useState('');
   const [pagSeguroDeclined, setPagSeguroDeclined] = useState('');
   const [pagSeguroResponse, setPagSeguroResponse] = useState('');
-  const [pagSeguroValue, setPagSeguroValue] = useState(0);
+  const [pagSeguroValue, setPagSeguroValue] = useState('');
 
   const [clientName, setClientName] = useState('');
   const [clientPhone, setClientPhone] = useState('');
@@ -64,6 +65,9 @@ export function Confirmation() {
       setPagSeguroCardNumber(pagSeguroParams.cardNumber);
       setPagSeguroDeclined(pagSeguroParams.declined);
       setPagSeguroResponse(pagSeguroParams.response);
+      if(pagSeguroParams.value !== undefined) {
+        setPagSeguroValue(pagSeguroParams.value.toString())
+      }
 
       setLoading(false);
     }
@@ -104,7 +108,7 @@ export function Confirmation() {
     if(response) {
       sendLog({logText:`${user.userName} OBTEVE VENDA Nº ${pagSeguroReference} PAGA`, clientToken});
       navigation.navigate('SendConfirmation',{
-        id: pagSeguroId,
+        pagSeguroId: pagSeguroId,
         reference: pagSeguroReference,
         cardNumber: pagSeguroCardNumber,
         value: sendValue,
@@ -137,11 +141,9 @@ export function Confirmation() {
   async function handleTryAgain() {
     sendLog({logText:`${user.userName} REINICIOU VENDA RECUSADA POR ${pagSeguroCardNumber}, MOTIVO: ${pagSeguroResponse}`, clientToken});
     handleSetNewCondition({id: orderId, condition: 221});
-    const sendValue = parseInt(value.replace(/\D/g, ""));
     navigation.navigate('Checkout',{
       orderNotes: orderNotes,
       totalPrice: totalPrice,
-      condition: 217,
       itens: list,
       client: {
         clientName: clientName,
@@ -198,7 +200,7 @@ export function Confirmation() {
                 resizeMode='contain'
               />
               <View style={styles.titleDeclined}>
-                <Text style={[styles.textDeclined, {color: theme.colors.Cancel}]}>Venda Recusada.</Text>
+                <Text style={[styles.textDeclined, {color: theme.colors.Cancel}]}>Venda Recusada., {totalPrice}</Text>
                 <Text style={[styles.textDeclined, {color: theme.colors.Config}]}>{pagSeguroResponse}.</Text>
               </View>
 

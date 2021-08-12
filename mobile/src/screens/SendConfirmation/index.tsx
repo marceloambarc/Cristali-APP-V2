@@ -11,7 +11,6 @@ import { theme } from '../../global';
 
 import { PagSeguroConfirmationProps } from '../Confirmation';
 import { ClientProps } from '../../components/ClientComponent';
-import { Loading } from '../../components/Loading';
 
 interface ValueProps {
   value: string;
@@ -38,7 +37,7 @@ export function SendConfirmation() {
 
   useEffect(() => {
     if(pagSeguroParams){
-      setPagSeguroId(pagSeguroParams.id);
+      setPagSeguroId(pagSeguroParams.pagSeguroId);
       setPagSeguroReference(pagSeguroParams.reference);
       setPagSeguroCardNumber(`XXXX-XXXX-XXXX-${pagSeguroParams.cardNumber}`);
     }
