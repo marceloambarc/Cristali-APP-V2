@@ -150,7 +150,8 @@ export function PagSeguroScreen() {
     });
 
     if(response) {
-      console.log(response.data);
+      if(testParams)
+        console.log(response.data);
       setCreatedPagSeguro(true);
   
       handleSetNewCondition({id: orderId, condition: 219});

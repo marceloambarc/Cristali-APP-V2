@@ -9,6 +9,7 @@ import { useAuth } from "../../hooks/auth";
 import { styles } from "./styles";
 import { theme } from "../../global";
 
+import { testParams } from "../../config/options";
 import { COLLECTION_ITEMS } from "../../config/storage";
 
 import { OrderProps } from "../../components/Order";
@@ -75,7 +76,8 @@ export function NewSale() {
       setTotalPrice(orderParams.totalPrice);
       setCondition(orderParams.condition);
       if(orderParams.itens != undefined) {
-        console.log(orderParams.itens);
+        if(testParams)
+          console.log(orderParams.itens);
         const itens = orderParams.itens
         itens.map((item, index) => {
           handleAdd(item.id, item.vl_preco.toString());
