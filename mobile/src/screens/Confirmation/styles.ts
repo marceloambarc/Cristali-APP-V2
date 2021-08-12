@@ -29,7 +29,7 @@ export const styles = StyleSheet.create({
   },
 
   bodyDeclined:  {
-    paddingHorizontal: 24,
+    paddingHorizontal: 40,
     paddingVertical: Dimensions.get('window').height * 0.24,
     justifyContent: 'space-between',
     alignItems: 'center'
@@ -42,5 +42,7 @@ export const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: theme.fonts.heading
   },
-
+  declinedButtons: {
+    paddingVertical: 10
+  }
 })

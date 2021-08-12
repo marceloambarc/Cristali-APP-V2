@@ -169,12 +169,12 @@ export function PagSeguroScreen() {
       setLoading(false);
 
       navigation.navigate('Confirmation',{
-          id: response.data.id,
+          pagSeguroId: response.data.id,
           reference: response.data.payment_response.reference,
           cardNumber: response.data.payment_method.card.last_digits,
           declined: response.data.status,
           response: response.data.payment_response.message,
-          orderId: orderId,
+          id: orderId,
           clientName: clientName,
           clientPhone: clientPhone,
           clientEmail: clientEmail,
@@ -228,10 +228,11 @@ export function PagSeguroScreen() {
             </View>
             <View style={styles.inputContainer}>
               <Text style={styles.inputText}>Celular do(a) Cliente</Text>
-              <CristaliInput 
+              <InputMask
+                type={'cel-phone'}
                 value={clientPhone}
                 onChangeText={setClientPhone}
-                keyboardType='phone-pad'
+                textAlign='left'
               />
             </View>
   
@@ -271,6 +272,7 @@ export function PagSeguroScreen() {
                   <View style={styles.codeRow}>
                     <View style={styles.codeCol}>
                       <Text style={styles.inputText}>Validade</Text>
+                      <Text>{orderId}</Text>
                       <InputMask
                         type={'datetime'}
                         options={{

@@ -19,7 +19,7 @@ import { Alert } from 'react-native';
 
 
 export interface PagSeguroConfirmationProps {
-  id: string;
+  pagSeguroId: string;
   reference: string;
   cardNumber: string;
   declined: string;
@@ -58,8 +58,7 @@ export function Confirmation() {
 
   useEffect(() => { 
     if(pagSeguroParams) {
-      setPagSeguroId(pagSeguroParams.id);
-      setOrderId(pagSeguroParams.orderId);
+      setPagSeguroId(pagSeguroParams.pagSeguroId);
       setPagSeguroReference(pagSeguroParams.reference);
       setPagSeguroCardNumber(pagSeguroParams.cardNumber);
       setPagSeguroDeclined(pagSeguroParams.declined);
@@ -95,8 +94,8 @@ export function Confirmation() {
       "amount": {
         "value": sendValue
       }
-    }).catch(() => {
-      Alert.alert('Ops!', 'Valor não confere com a Venda.');
+    }).catch(err => {
+      Alert.alert('Ops!', `${err}`);
       setLoading(false);
       return;
     });
@@ -116,8 +115,8 @@ export function Confirmation() {
   }
 
   async function handleDeclined() {
-    sendLog({logText:`${user.userName} OBTEVE VENDA Nº ${pagSeguroReference} RECUSADA`, clientToken});
-    handleSetNewCondition({id: orderId, condition: 221});
+    sendLog({logText:`${user.userName} OBTEVE VENDA Nº ${pagSeguroReference} RECUSADA, MOTIVO: ${pagSeguroResponse}`, clientToken});
+    handleSetNewCondition({id: orderId, condition: 222});
     navigation.navigate('Home',{
       userCode: '',
       totalPrice: '',
@@ -134,9 +133,9 @@ export function Confirmation() {
   }
 
   async function handleTryAgain() {
-    sendLog({logText:`${user.userName} REINICIOU VENDA RECUSADA POR ${pagSeguroCardNumber}`, clientToken});
+    sendLog({logText:`${user.userName} REINICIOU VENDA RECUSADA POR ${pagSeguroCardNumber}, MOTIVO: ${pagSeguroResponse}`, clientToken});
     handleSetNewCondition({id: orderId, condition: 221});
-    navigation.navigate('NewSale',{
+    navigation.navigate('Checkout',{
       orderNotes: orderNotes,
       totalPrice: totalPrice,
       condition: 217,
@@ -201,16 +200,17 @@ export function Confirmation() {
               </View>
 
             <View />
-            <CristaliButton
-              title='Finalizar'
-              color={`${theme.colors.Config}`}
-              onPress={handleDeclined}
-            />
-            <CristaliButton
-              title='Outra forma de Pagamento'
-              color={`${theme.colors.Continue}`}
-              onPress={handleTryAgain}
-            />
+              <CristaliButton
+                title='Finalizar'
+                color={`${theme.colors.Config}`}
+                onPress={handleDeclined}
+              />
+              <View style={styles.declinedButtons} />
+              <CristaliButton
+                title='Outra forma de Pagamento'
+                color={`${theme.colors.Continue}`}
+                onPress={handleTryAgain}
+              />
             </View>
         </View>
       </View>

@@ -91,7 +91,8 @@ export function History() {
     const replaced = res.replace('.',',');
     const toCurrency = 'R$ ' + replaced;
 
-    Alert.alert(`Venda ${orderSelect.id}`, `Total da Venda: ${toCurrency}`);
+    Alert.alert(`Venda ${orderSelect.id}`, `Total da Venda: ${toCurrency}
+    ${orderSelect.orderNotes}`);
   }
 
   const showSecondDatePicker = () => {

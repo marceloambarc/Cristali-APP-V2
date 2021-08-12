@@ -18,6 +18,7 @@ import { theme } from "../../global";
 import { useEffect } from "react";
 
 import { api } from "../../services/api";
+import { Alert } from "react-native";
 
 export function UnfinishedSale() {
   const { user, clientToken, sendLog } = useAuth();
@@ -63,21 +64,25 @@ export function UnfinishedSale() {
 
   async function handleLoadSale(){
     setLoading(true);
-    await api.get(`/client/${clientCode}`).then(res => {
-      setLoading(false)
-      navigation.navigate('NewSale',{
-        id: searchOrderId,
-        orderNotes: searchOrderNotes,
-        totalPrice: searchTotalPrice,
-        condition: searchCondition,
-        itens,
-        clientName: res.data.clientName,
-        clientPhone: res.data.clientPhone,
-        clientEmail: res.data.clientEmail,
-        clientNotes: res.data.clientNotes,
+    if(searchOrderId === 0) {
+      Alert.alert('Não é possível Carregar esta Venda.');
+      setLoading(false);
+    } else {
+      await api.get(`/client/${clientCode}`).then(res => {
+        setLoading(false)
+        navigation.navigate('NewSale',{
+          id: searchOrderId,
+          orderNotes: searchOrderNotes,
+          totalPrice: searchTotalPrice,
+          condition: searchCondition,
+          itens,
+          clientName: res.data.clientName,
+          clientPhone: res.data.clientPhone,
+          clientEmail: res.data.clientEmail,
+          clientNotes: res.data.clientNotes,
+        });
       });
-    });
-
+    }
   }
 
   if(loading) {
@@ -92,6 +97,7 @@ export function UnfinishedSale() {
       backgroundColor={theme.colors.input}
     />
     <Header
+      helper={true}
       title='Vendas Abertas'
       haveClose
     />
@@ -122,7 +128,7 @@ export function UnfinishedSale() {
 
       <View style={styles.list}>
         <OrderList
-          isEmpty={loading}
+          isEmpty={false}
           data={unfinisedSales}
           handleOrderSelect={handleOrderSelect}
         />
