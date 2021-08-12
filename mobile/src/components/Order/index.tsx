@@ -137,7 +137,6 @@ export function Order({ data, ...rest } : OrderComponentProps ) {
               {color: theme.colors.Config}
           ]}
       >Número
-      {data.condition}
       </Text>
       <Text 
         style={[styles.text,

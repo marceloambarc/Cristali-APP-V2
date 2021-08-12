@@ -58,12 +58,17 @@ export function History() {
   }
 
   async function handleReduce() {
-    const reducedTotal = orderHistory.reduce((a,v) =>  a = a + parseFloat(v.totalPrice) , 0).toString();
-    return reducedTotal;
+    if(orderHistory.length === 0) {
+      const reducedTotal = '0';
+      return reducedTotal;
+    } else {
+      const reducedTotal = orderHistory.reduce((a,v) =>  a = a + parseFloat(v.totalPrice) , 0).toString();
+      return reducedTotal;
+    }
   }
 
   async function handleHistory() {
-    await handleGetHistory()
+    await handleGetHistory();
     await handleSetMomentum();
   }
 
@@ -81,7 +86,12 @@ export function History() {
   },[orderHistory]);
 
   function handleOrderSelect(orderSelect: OrderProps) {
-    Alert.alert(`Venda ${orderSelect.id}`, `Total da Venda: ${orderSelect.totalPrice}`);
+    var sampleNumber = parseInt(orderSelect.totalPrice);
+    const res = (sampleNumber / 100).toFixed(2);
+    const replaced = res.replace('.',',');
+    const toCurrency = 'R$ ' + replaced;
+
+    Alert.alert(`Venda ${orderSelect.id}`, `Total da Venda: ${toCurrency}`);
   }
 
   const showSecondDatePicker = () => {
@@ -143,8 +153,8 @@ export function History() {
                   headerTextIOS='Selecione a Data'
                   confirmTextIOS='Confirmar'
                   cancelTextIOS='Cancelar'
-                  textColor={'black'}
-                  isDarkModeEnabled={true}
+                  textColor={'white'}
+                  isDarkModeEnabled={false}
                   locale='pt_BR'
                 />
                 <DateTimePickerModal
@@ -159,8 +169,8 @@ export function History() {
                   headerTextIOS='Selecione a Data'
                   confirmTextIOS='Confirmar'
                   cancelTextIOS='Cancelar'
-                  textColor={'black'}
-                  isDarkModeEnabled={true}
+                  textColor={'white'}
+                  isDarkModeEnabled={false}
                   locale='pt_BR'
                 />
               <TouchableOpacity 
@@ -220,6 +230,7 @@ export function History() {
   
             <View style={styles.list}>
               <OrderList
+                isEmpty={loading}
                 data={orderHistory}
                 handleOrderSelect={handleOrderSelect}
               />

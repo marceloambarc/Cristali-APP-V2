@@ -161,8 +161,13 @@ export function NewSale() {
   }
 
   function handleFinish() {
+    var sampleNumber = parseInt(sellPrice.toString());
+    const res = (sampleNumber / 100).toFixed(2);
+    const replaced = res.replace('.',',');
+    const toCurrency = 'R$ ' + replaced;
+
     handleSave();
-    const logText = `${user.userName} INICIOU UMA VENDA PARA ${clientName} / VL TOTAL ${sellPrice.toString()}.`;
+    const logText = `${user.userName} INICIOU UMA VENDA PARA ${clientName} / VL TOTAL ${toCurrency}.`;
     sendLog({logText, clientToken});
     handleOrder();
   }

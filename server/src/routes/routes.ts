@@ -2,7 +2,7 @@ import { Router } from 'express';
 
 import appRouter from './app.routes';
 import controllerRouter from './controller.routes';
-import psController from './ps.routes';
+// import psController from './ps.routes';
 
 const routes = Router();
 

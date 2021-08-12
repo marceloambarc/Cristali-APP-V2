@@ -37,6 +37,8 @@ export function Home(){
   async function deleteHistory() {
     await api.delete(`/order`,{
       headers: { 'Authorization' : 'Bearer '+clientToken }
+    }).catch(() => {
+      return;
     });
   }
 

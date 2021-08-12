@@ -1,16 +1,12 @@
 import { Request, Response } from "express";
 import { getRepository, LessThan, LessThanOrEqual, MoreThan } from "typeorm";
-import { createHash } from 'crypto';
 import * as Yup from 'yup'
-
-import { pagSegurotoken } from "../../credentials";
 
 import Ordem from "../models/Ordem";
 import ordemView from "../view/ordem_view";
 
 import Clientefinal from "../models/Clientefinal";
 import ClienteController from "./ClienteController";
-import clienteView from "../view/cliente_view";
 
 
 export default { 

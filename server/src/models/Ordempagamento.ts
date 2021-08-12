@@ -1,5 +1,4 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import Ordem from './Ordem';
 
 @Entity()
 export default class OrdemPagamento {

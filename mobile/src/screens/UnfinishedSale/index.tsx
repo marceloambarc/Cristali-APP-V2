@@ -122,6 +122,7 @@ export function UnfinishedSale() {
 
       <View style={styles.list}>
         <OrderList
+          isEmpty={loading}
           data={unfinisedSales}
           handleOrderSelect={handleOrderSelect}
         />

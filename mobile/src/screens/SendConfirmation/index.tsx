@@ -76,7 +76,7 @@ export function SendConfirmation() {
       recipients: [`${clientEmail}`],
       body: message
     }).then(() => {
-      sendLog({logText:`${user.userName} ENVIOU COMROVANTE DA VENDA Nº ${pagSeguroReference} POR EMAIL ${clientEmail}: PREÇO DA COMPRA ${toCurrency}, DADOS DO CARTÃO: ${ pagSeguroCardNumber }`, clientToken});
+      sendLog({logText:`${user.userName} ENVIOU COMROVANTE DA VENDA Nº ${pagSeguroReference} PARA O EMAIL: ${clientEmail} PREÇO DA COMPRA: ${toCurrency}, DADOS DO CARTÃO: ${ pagSeguroCardNumber }`, clientToken});
       navigation.setParams({orderParams: null});
       navigation.navigate('Final');
     });
