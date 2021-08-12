@@ -134,6 +134,7 @@ export function History() {
           backgroundColor={theme.colors.input}
         />
         <Header
+          historyHelper={true}
           title='Histórico'
           haveClose
         />

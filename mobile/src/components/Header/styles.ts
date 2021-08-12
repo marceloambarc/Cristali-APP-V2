@@ -61,5 +61,14 @@ export const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: 'center',
     backgroundColor: theme.colors.SuccessDesactivated
+  },
+  fouthColor: {
+    marginTop: 70,
+    marginVertical: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+    backgroundColor: theme.colors.Cancel
   }
 });

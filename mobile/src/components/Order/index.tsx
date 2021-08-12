@@ -68,16 +68,18 @@ export function Order({ data, ...rest } : OrderComponentProps ) {
     <TouchableOpacity
       style={
         [styles.container,
-          data.condition >= 221 &&
-            {backgroundColor: theme.colors.Cancel},
-          data.condition === 220 &&
-            {backgroundColor: theme.colors.activatedList},
           data.condition === 217 &&
             {backgroundColor: theme.colors.unactivatedList},
           data.condition === 218 &&
             {backgroundColor: theme.colors.ContinueDesactivated},
           data.condition === 219 &&
-            {backgroundColor: theme.colors.SuccessDesactivated}
+            {backgroundColor: theme.colors.SuccessDesactivated},
+          data.condition === 220 &&
+            {backgroundColor: theme.colors.unactivatedList},
+          data.condition === 221 &&
+            {backgroundColor: theme.colors.activatedList},
+          data.condition === 222 &&
+            {backgroundColor: theme.colors.Cancel},
         ]}
       activeOpacity={0.7}
       {...rest}
@@ -91,10 +93,10 @@ export function Order({ data, ...rest } : OrderComponentProps ) {
             <Loading />
           : 
             <Text style={[styles.title,
-              data.condition >= 221 &&
-                {color: theme.colors.secondary},
-              data.condition === 220 &&
-                {color: theme.colors.text}
+              data.condition <= 221 &&
+                {color: theme.colors.title},
+              data.condition > 221 &&
+                {color: theme.colors.secondary}
             ]}>
               { client.clientName }
             </Text>

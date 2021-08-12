@@ -161,7 +161,7 @@ export function PagSeguroScreen() {
       console.log(response.data);
       setCreatedPagSeguro(true);
   
-      handleSetNewCondition({id: orderId, condition: 220});
+      handleSetNewCondition({id: orderId, condition: 219});
     
       const logText = `${user.userName} OBTEVE VENDA Nº: ${response.data.payment_response.reference} AUTORIZADA PELO PAGSEGURO`;
       sendLog({logText, clientToken});
@@ -174,6 +174,7 @@ export function PagSeguroScreen() {
           cardNumber: response.data.payment_method.card.last_digits,
           declined: response.data.status,
           response: response.data.payment_response.message,
+          totalPrice: response.data.amount.value.toString(),
           id: orderId,
           clientName: clientName,
           clientPhone: clientPhone,

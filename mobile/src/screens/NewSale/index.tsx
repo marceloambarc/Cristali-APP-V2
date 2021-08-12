@@ -35,7 +35,7 @@ export interface ItemProps {
 export let itemCounter = 1;
 
 export function NewSale() {
-  const { user, clientToken, sendLog } = useAuth();
+  const { user, clientToken, sendLog, handleSetNewCondition } = useAuth();
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
   const route = useRoute();
@@ -57,7 +57,7 @@ export function NewSale() {
   const [sellPrice, setSellPrice] = useState(0);
   const [qt, setQt] = useState(0);
 
-  const [list, setList] = useState<ItemProps[]>([{id: 0, cd_codigogerado: '', vl_preco: '', nm_produto: ''}]);
+  const [list, setList] = useState<ItemProps[]>([{id: 0, cd_codigogerado: String(uuid.v4()), vl_preco: '', nm_produto: ''}]);
 
   async function removeStorage(){
     try {
@@ -75,9 +75,10 @@ export function NewSale() {
       setTotalPrice(orderParams.totalPrice);
       setCondition(orderParams.condition);
       if(orderParams.itens != undefined) {
+        console.log(orderParams.itens);
         const itens = orderParams.itens
         itens.map((item, index) => {
-          handleAdd(index, item.vl_preco.toString());
+          handleAdd(item.id, item.vl_preco.toString());
           handleChange(item.vl_preco.toString(), index);
           handleTitleChange(item.nm_produto, index);
         })       
@@ -110,7 +111,7 @@ export function NewSale() {
   }
 
   const handleAdd = (index: number, vl_preco: string) => {
-    const newItem = {id: itemCounter ++, cd_codigogerado: '', vl_preco: '', nm_produto: ''}
+    const newItem = {id: itemCounter ++, cd_codigogerado: String(uuid.v4()), vl_preco: '', nm_produto: ''}
     if(vl_preco === '') {
       alert('Insira o Preço do Produto.');
     } else {
@@ -199,7 +200,7 @@ export function NewSale() {
     const clientPhoneProto = clientPhone.replace(/\D/g,'');
 
     if(orderId !== 0 && orderId !== undefined) {
-      
+      handleSetNewCondition({id: orderId, condition: 217});
       api.put(`/order/${orderId}`,{
         userCode: user.userCode,
         totalPrice: sellPrice,
@@ -464,6 +465,11 @@ export function NewSale() {
                         {index <= qt -1 ?
                           <View style={styles.listProdutContainer}>
                             <View style={styles.sellPriceContainer}>
+                              <View style={{flexDirection: 'column'}}>
+                                <Text>{item.nm_produto}</Text>
+                                <Text>{index}</Text>
+                                <Text>{item.id}</Text>
+                              </View>
                               <InputMask
                                 type={'money'}
                                 key={item.id}

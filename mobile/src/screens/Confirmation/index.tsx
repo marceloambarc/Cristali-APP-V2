@@ -37,6 +37,7 @@ export function Confirmation() {
   const [pagSeguroCardNumber, setPagSeguroCardNumber] = useState('');
   const [pagSeguroDeclined, setPagSeguroDeclined] = useState('');
   const [pagSeguroResponse, setPagSeguroResponse] = useState('');
+  const [pagSeguroValue, setPagSeguroValue] = useState(0);
 
   const [clientName, setClientName] = useState('');
   const [clientPhone, setClientPhone] = useState('');
@@ -63,6 +64,7 @@ export function Confirmation() {
       setPagSeguroCardNumber(pagSeguroParams.cardNumber);
       setPagSeguroDeclined(pagSeguroParams.declined);
       setPagSeguroResponse(pagSeguroParams.response);
+
       setLoading(false);
     }
   },[pagSeguroParams]);
@@ -135,6 +137,7 @@ export function Confirmation() {
   async function handleTryAgain() {
     sendLog({logText:`${user.userName} REINICIOU VENDA RECUSADA POR ${pagSeguroCardNumber}, MOTIVO: ${pagSeguroResponse}`, clientToken});
     handleSetNewCondition({id: orderId, condition: 221});
+    const sendValue = parseInt(value.replace(/\D/g, ""));
     navigation.navigate('Checkout',{
       orderNotes: orderNotes,
       totalPrice: totalPrice,
