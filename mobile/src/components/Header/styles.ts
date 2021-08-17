@@ -26,7 +26,7 @@ export const styles = StyleSheet.create({
   },
   title: {
     fontFamily: theme.fonts.text,
-    fontSize: theme.fonts.sizeC
+    fontSize: theme.fonts.sizeHeader
   },
   overlay: {
     backgroundColor: theme.colors.overlay,

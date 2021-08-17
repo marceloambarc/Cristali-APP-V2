@@ -50,6 +50,7 @@ export const theme = {
     sizeA: 22,
     sizeB: 19,
     sizeC: 17,
-    sizeD: 13
+    sizeD: 13,
+    sizeHeader: 15
   }
 }

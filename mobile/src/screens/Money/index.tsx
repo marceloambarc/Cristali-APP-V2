@@ -8,6 +8,7 @@ import { CristaliButton } from '../../components/CristaliButton';
 import { CristaliInput } from '../../components/CristaliInput';
 
 import { COLLECTION_ITEMS } from '../../config/storage';
+import { testParams } from '../../config/options';
 
 import { ItemProps } from '../NewSale';
 import { OrderProps } from '../../components/Order';
@@ -83,7 +84,8 @@ export function Money() {
   }
 
   async function handleCreatePaymentOrder() {
-    Alert.alert('TODO PAYMENT ORDER');
+    if(testParams)
+      Alert.alert('TODO PAYMENT ORDER');
   }
 
   function handleNavigation() {

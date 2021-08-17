@@ -468,9 +468,6 @@ export function NewSale() {
                           <View style={styles.listProdutContainer}>
                             <View style={styles.sellPriceContainer}>
                               <View style={{flexDirection: 'column'}}>
-                                <Text>{item.nm_produto}</Text>
-                                <Text>{index}</Text>
-                                <Text>{item.id}</Text>
                               </View>
                               <InputMask
                                 type={'money'}

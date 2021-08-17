@@ -79,6 +79,7 @@ export function SignIn() {
                       <Text style={styles.cristaliInputText}>USUÁRIO</Text>
                       <InputMask
                         type={'cpf'}
+                        keyboardType={'number-pad'}
                         textAlign='center'
                         value={cgc}
                         peachpuff
