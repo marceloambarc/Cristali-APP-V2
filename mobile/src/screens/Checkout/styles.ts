@@ -10,12 +10,18 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: Dimensions.get('window').height * .04,
-    marginBottom: Dimensions.get('window').height * .01
+  },
+  totalText: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  inputmaskContainer: {
+    paddingLeft: 20,
+    width: 200
   },
   title: {
     fontFamily: theme.fonts.heading,
     color: theme.colors.title,
-    marginBottom: Dimensions.get('window').height * .02
   },
   payment: {
 
@@ -23,7 +29,7 @@ export const styles = StyleSheet.create({
   text: {
     fontFamily: theme.fonts.text,
     color: theme.colors.text,
-    fontSize: theme.fonts.sizeC
+    fontSize: 14
   },
   buttonsContainer: {
     paddingTop: 20,

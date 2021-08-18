@@ -151,18 +151,22 @@ export function Checkout() {
         <View style={styles.container}>
   
           <View style={styles.titleContainer}>
-            <Text style={[styles.title, {fontSize: 18}]}>Total Pedido</Text>
-            <InputMask
-              type={'money'}
-              textAlign='center'
-              value={totalPrice}
-              editable={false}
-            />
+            <View style={styles.totalText}>
+              <Text style={[styles.title, {fontSize: 18}]}>Total Pedido</Text>
+              <View style={styles.inputmaskContainer}>
+                <InputMask
+                  type={'money'}
+                  textAlign='center'
+                  value={totalPrice}
+                  editable={false}
+                />
+              </View>
+
+            </View>
           </View>
 
           <View style={styles.payment}>
             <View style={styles.titleContainer}>
-              <Text style={[styles.title, {fontSize: theme.fonts.sizeTitle}]}>Instruções para Pagamento</Text>
               <Text style={styles.text}>Selecione uma das formas de pagamento
                     abaixo, e aperte Continuar para prosseguir
                     com a venda.

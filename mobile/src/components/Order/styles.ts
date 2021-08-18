@@ -36,6 +36,7 @@ export const styles = StyleSheet.create({
   },
   condition: {
     fontFamily: theme.fonts.heading,
-    fontSize: theme.fonts.sizeD
+    fontSize: theme.fonts.sizeD,
+    textAlign: 'right'
   }
 });

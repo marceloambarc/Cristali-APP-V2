@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, StatusBar, Image, Alert, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, Text, ScrollView, StatusBar, Image, Alert, KeyboardAvoidingView, Platform, Modal, TouchableWithoutFeedback } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import uuid from 'react-native-uuid';
 import { useAuth } from '../../hooks/auth';
@@ -21,6 +21,7 @@ import { CristaliButton } from '../../components/CristaliButton';
 import { Banner } from '../../components/Banner';
 import { Loading } from '../../components/Loading';
 import { InputMask } from '../../components/InputMask';
+import { InstallmentModal } from '../../components/InstallmentModal';
 
 export function PagSeguroScreen() {
   const { user, clientToken, handleSetNewCondition, sendLog } = useAuth();
@@ -32,6 +33,7 @@ export function PagSeguroScreen() {
 
   const [loading, setLoading] = useState(true);
   const [createdPagSeguro, setCreatedPagSeguro] = useState(false);
+  const [openInstallmentsModal, SetOpenInstallmentsModal] = useState(false);
 
   const [clientName, setClientName] = useState('');
   const [clientPhone, setClientPhone] = useState('');
@@ -51,6 +53,8 @@ export function PagSeguroScreen() {
   const [expirateMonth, setExpirateMonth] = useState('');
   const [expirateYear, setExpirateYear] = useState('');
   const [cvv, setCvv] = useState('');
+
+  const [installment, setInstallment] = useState(6);
 
   const value = parseInt(totalPrice);
   const codeDoc = String(uuid.v4(orderId.toString()));
@@ -107,9 +111,16 @@ export function PagSeguroScreen() {
       Alert.alert('Cobrança já enviada');
       return;
     } else {
-      setLoading(true);
-      handleSendPagSeguro();
+      handleInstallments()
     }
+  }
+
+  function handleInstallments() {
+    SetOpenInstallmentsModal(true);
+  }
+
+  function closeInstallments() {
+    SetOpenInstallmentsModal(false);
   }
 
   async function handleSendPagSeguro() {
@@ -161,22 +172,46 @@ export function PagSeguroScreen() {
       sendLog({logText, clientToken});
       if(testParams)
         Alert.alert('Enviado PagSeguro');
-      setLoading(false);
 
-      navigation.navigate('Confirmation',{
+      await pgapi.post(`/charges/${response.data.id}/capture`,{
+        amount: {
+          value: value
+        }
+      }).then(() => {
+        sendLog({logText:`${user.userName} OBTEVE VENDA Nº ${response.data.payment_response.reference} PAGA`, clientToken});
+        handleSetNewCondition({id: orderId, condition: 220});
+        navigation.navigate('SendConfirmation',{
           pagSeguroId: response.data.id,
           reference: response.data.payment_response.reference,
           cardNumber: response.data.payment_method.card.last_digits,
           declined: response.data.status,
           response: response.data.payment_response.message,
-          totalPrice: response.data.amount.value.toString(),
+          value: response.data.amount.value.toString(),
           id: orderId,
           clientName: clientName,
           clientPhone: clientPhone,
           clientEmail: clientEmail,
           clientNotes: clientNotes,
-          userCode: user.userCode,
+        });
+      }).catch(err => {
+        Alert.alert('Ops!', err);
+        handleSetNewCondition({id: orderId, condition: 221});
+        navigation.navigate('Home',{
+          userCode: '',
+          totalPrice: '',
+          orderNotes: '',
+          client: {
+            clientName: '',
+            clientPhone: '',
+            clientEmail: '',
+            clientNotes: '',
+            userCode: ''
+          },
+          itens: []
+        });
       });
+
+
     }
   }
 
@@ -268,7 +303,6 @@ export function PagSeguroScreen() {
                   <View style={styles.codeRow}>
                     <View style={styles.codeCol}>
                       <Text style={styles.inputText}>Validade</Text>
-                      <Text>{orderId}</Text>
                       <InputMask
                         type={'datetime'}
                         options={{
@@ -304,6 +338,14 @@ export function PagSeguroScreen() {
             </View>
           </View>
         </ScrollView>
+
+        <InstallmentModal
+          user={user}
+          installments={installment}
+          visible={openInstallmentsModal}
+          closeModal={closeInstallments}
+        />
+
       </KeyboardAvoidingView>
     );
   }

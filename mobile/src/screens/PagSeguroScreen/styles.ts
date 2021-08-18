@@ -17,7 +17,8 @@ export const styles = StyleSheet.create({
   },
   title: {
     fontFamily: theme.fonts.heading,
-    color: theme.colors.title
+    color: theme.colors.title,
+    fontSize: theme.fonts.sizeC
   },
   inputContainer: {
     paddingVertical: 10
@@ -36,7 +37,7 @@ export const styles = StyleSheet.create({
     marginTop: 20
   },
   bodyContainer: {
-    paddingVertical: 24
+    paddingBottom: 24
   },
   code: {
     paddingVertical: 24,
@@ -51,7 +52,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center'
   },
   footer: {
-    marginTop: 20,
+    marginTop: 10,
     marginBottom: 20
-  }
+  },
 });
