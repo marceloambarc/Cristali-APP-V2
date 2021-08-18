@@ -116,13 +116,13 @@ export function Header({
               <Text style={[styles.title, {color: theme.colors.input}]}>Olá {user.userName}</Text>
               <Text style={[styles.title, {color: theme.colors.input}]}>Informações de Cores:</Text>
               <View style={styles.firstColor}>
-                <Text style={[styles.title, {color: theme.colors.Config}]}>Venda Iniciada</Text>
+                <Text style={[styles.title, {color: theme.colors.title}]}>Venda Iniciada</Text>
               </View>
               <View style={styles.secondColor}>
-                <Text style={[styles.title, {color: theme.colors.overlay}]}>Dados Inseridos</Text>
+                <Text style={[styles.title, {color: theme.colors.title}]}>Dados Inseridos</Text>
               </View>
               <View style={styles.thirdColor}>
-                <Text style={[styles.title, {color: theme.colors.Config}]}>Autorizada PagSeguro</Text>
+                <Text style={[styles.title, {color: theme.colors.activatedList}]}>Pagamento Selecionado</Text>
               </View>
               <View>
                 <Text></Text>
@@ -142,15 +142,15 @@ export function Header({
           <View style={styles.overlay}>
             <View style={styles.modalContainer}>
               <Text style={[styles.title, {color: theme.colors.input}]}>Olá {user.userName}</Text>
-              <Text style={[styles.title, {color: theme.colors.input}]}>Informações de Cores:</Text>
+              <Text style={[styles.title, {color: theme.colors.input, marginBottom: 70}]}>Informações de Cores:</Text>
               <View style={styles.fouthColor}>
-                <Text style={[styles.title, {color: theme.colors.secondary}]}>Venda Rejeitada / Cancelada</Text>
+                <Text style={[styles.title, {color: theme.colors.overlay}]}>Venda Rejeitada</Text>
               </View>
-              <View style={styles.thirdColor}>
+              <View style={styles.fouthColor}>
+                <Text style={[styles.title, {color: theme.colors.secondary}]}>Venda Cancelada</Text>
+              </View>
+              <View style={styles.fifthColor}>
                 <Text style={[styles.title, {color: theme.colors.Config}]}>Venda Paga</Text>
-              </View>
-              <View>
-                <Text></Text>
               </View>
             </View>
           </View>

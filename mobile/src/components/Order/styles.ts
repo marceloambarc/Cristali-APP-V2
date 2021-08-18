@@ -27,9 +27,15 @@ export const styles = StyleSheet.create({
   text: {
     fontFamily: theme.fonts.text,
     fontSize: theme.fonts.sizeD,
+    textAlign: 'right'
   },
   number:  {
     fontFamily: theme.fonts.text,
     fontSize: theme.fonts.sizeD,
+    textAlign: 'right'
+  },
+  condition: {
+    fontFamily: theme.fonts.heading,
+    fontSize: theme.fonts.sizeD
   }
 });

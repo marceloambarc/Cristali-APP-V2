@@ -267,7 +267,7 @@ export function NewSale() {
       },{
         headers: {'Authorization': 'Bearer '+clientToken}
       }).then(res => {
-        
+        handleSetNewCondition({id: res.data.cd_id, condition: 217});
         navigation.navigate('Checkout', {
           id: res.data.cd_id,
           clientName,
@@ -478,7 +478,8 @@ export function NewSale() {
                                 autoCorrect={false}
                               />
                               <View style={styles.productTitleContainer}>
-                                <CristaliInput 
+                                <CristaliInput
+                                  keyboardType={'numbers-and-punctuation'}
                                   value={item.nm_produto}
                                   onChangeText={e => handleTitleChange(e, item.id)}
                                   placeholder="Produto..."

@@ -3,17 +3,15 @@ import { theme } from "../../global";
 
 export const styles = StyleSheet.create({
   container: {
-    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: theme.colors.input,
-    paddingTop: 30,
-    paddingHorizontal: 24
+    paddingHorizontal: 24,
+    height: '100%'
   },
   banner: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 50
   },
   title: {
     fontFamily: theme.fonts.heading,
@@ -25,11 +23,11 @@ export const styles = StyleSheet.create({
     fontFamily: theme.fonts.text,
     color: theme.colors.text,
     fontSize: theme.fonts.sizeC,
-    marginTop: Dimensions.get('window').height * 0.07
+    paddingVertical: Dimensions.get('window').height *0.03
   },
   footer: {
+    paddingTop: Dimensions.get('window').height *0.02,
     paddingHorizontal: 24,
-    marginTop: Dimensions.get('window').height * 0.07,
     justifyContent: 'space-between',
     alignItems: 'center'
   },
@@ -37,10 +35,10 @@ export const styles = StyleSheet.create({
     paddingVertical: 7
   },
   inputContainer: {
+    paddingVertical: Dimensions.get('window').height *0.03,
     width: '100%'
   },
   inputText: {
-    marginBottom: Dimensions.get('window').height * 0.01,
     fontFamily: theme.fonts.text,
     color: theme.colors.text
   },

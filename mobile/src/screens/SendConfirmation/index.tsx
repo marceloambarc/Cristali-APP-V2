@@ -59,7 +59,9 @@ export function SendConfirmation() {
     const replaced = res.replace('.',',');
     const toCurrency = 'R$ ' + replaced;
 
-    const message = `💎 Olá! Comprovante Cristali
+    const message = `💎 Olá ${clientName}!
+    Sua compra foi aprovada!
+    Comprovante Cristali:
 
     Referência PagSeguro:
     💎 ${ pagSeguroReference }
@@ -68,7 +70,9 @@ export function SendConfirmation() {
     💎 ${ toCurrency }
     
     Dados do Cartão: 
-    💎 ${ pagSeguroCardNumber }`
+    💎 ${ pagSeguroCardNumber }
+    
+    Qualquer duvida entre em contato com sua vendedora! `
 
     MailComposer.composeAsync({
       subject: `Comprovante Cristali`,
@@ -88,7 +92,7 @@ export function SendConfirmation() {
     const toCurrency = 'R$ ' + replaced;
     
     // MANIPULAR NÚMERO
-    Linking.openURL(`https://api.whatsapp.com/send?phone=5551992381616&text=%F0%9F%92%8E%20Ol%C3%A1!%20Comprovante%20Cristali%20%0A%0ARefer%C3%AAncia%20PagSeguro%3A%0A%F0%9F%92%8E%20${ pagSeguroReference }%0A%0APre%C3%A7o%20Total%20da%20Compra%3A%20%0A%F0%9F%92%8E${ toCurrency }%0A%0ADados%20do%20Cart%C3%A3o%3A%20%0A%F0%9F%92%8E${ pagSeguroCardNumber }`);
+    Linking.openURL(`https://api.whatsapp.com/send?phone=5551992381616&text=%F0%9F%92%8E%20Ol%C3%A1!%20${ clientName }%20%0A%0ASua%20compra%20foi%20aprovada!%0A%0A%20Comprovante%20Cristali%0A%0ARefer%C3%AAncia%20PagSeguro%3A%0A%F0%9F%92%8E%20${ pagSeguroReference }%0A%0APre%C3%A7o%20Total%20da%20Compra%3A%20%0A%F0%9F%92%8E${ toCurrency }%0A%0ATotal%20de%20itens%3A%20${ toCurrency }%0A%0ADados%20do%20Cart%C3%A3o%3A%20%0A%F0%9F%92%8E${ pagSeguroCardNumber }%0A%0A%0A%0AQualquer%20d%C3%BAvida%20entre%20em%20contato%20com%20sua%20vendedora!`);
     sendLog({logText:`${user.userName} ENVIOU COMROVANTE DA VENDA Nº ${pagSeguroReference} POR WHATSAPP ${clientPhone}: PREÇO DA COMPRA ${toCurrency}, DADOS DO CARTÃO: ${ pagSeguroCardNumber }`, clientToken});
     navigation.setParams({orderParams: null});
     navigation.navigate('Final');

@@ -62,8 +62,16 @@ export function History() {
       const reducedTotal = '0';
       return reducedTotal;
     } else {
-      const reducedTotal = orderHistory.reduce((a,v) =>  a = a + parseFloat(v.totalPrice) , 0).toString();
-      return reducedTotal;
+      let reducedTotal = orderHistory.reduce((a,v) => a = a + parseFloat(v.totalPrice) , 0);
+
+      orderHistory.map(order => {
+        if(order.condition >= 221) {
+          reducedTotal = reducedTotal - parseFloat(order.totalPrice);
+        } else {
+          return;
+        }
+      });
+      return reducedTotal.toString();
     }
   }
 

@@ -107,6 +107,7 @@ export function Confirmation() {
     });
     if(response) {
       sendLog({logText:`${user.userName} OBTEVE VENDA Nº ${pagSeguroReference} PAGA`, clientToken});
+      handleSetNewCondition({id: orderId, condition: 220});
       navigation.navigate('SendConfirmation',{
         pagSeguroId: pagSeguroId,
         reference: pagSeguroReference,

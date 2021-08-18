@@ -73,11 +73,11 @@ export function Order({ data, ...rest } : OrderComponentProps ) {
           data.condition === 218 &&
             {backgroundColor: theme.colors.ContinueDesactivated},
           data.condition === 219 &&
-            {backgroundColor: theme.colors.SuccessDesactivated},
+            {backgroundColor: theme.colors.Continue},
           data.condition === 220 &&
-            {backgroundColor: theme.colors.unactivatedList},
-          data.condition === 221 &&
             {backgroundColor: theme.colors.activatedList},
+          data.condition === 221 &&
+            {backgroundColor: theme.colors.Cancel},
           data.condition === 222 &&
             {backgroundColor: theme.colors.Cancel},
         ]}
@@ -93,7 +93,13 @@ export function Order({ data, ...rest } : OrderComponentProps ) {
             <Loading />
           : 
             <Text style={[styles.title,
-              data.condition <= 221 &&
+              data.condition === 217 &&
+                {color: theme.colors.activatedList},
+              data.condition === 218 &&
+                {color: theme.colors.title},
+              data.condition == 219 &&
+                {color: theme.colors.activatedList},
+              data.condition === 220 &&
                 {color: theme.colors.title},
               data.condition > 221 &&
                 {color: theme.colors.secondary}
@@ -115,7 +121,7 @@ export function Order({ data, ...rest } : OrderComponentProps ) {
           editable={false}
         />
 
-        <TextInputMask 
+        <TextInputMask
           style={[styles.text,
             data.condition >= 221 &&
               {color: theme.colors.overlay},
@@ -131,6 +137,12 @@ export function Order({ data, ...rest } : OrderComponentProps ) {
     </View>
 
     <View>
+      {data.condition === 217 && <Text style={[styles.condition,{color: theme.colors.activatedList}]}>Iniciada</Text>}
+      {data.condition === 218 && <Text style={[styles.condition,{color: theme.colors.title}]}>Dados Inseridos</Text>}
+      {data.condition === 219 && <Text style={[styles.condition,{color: theme.colors.activatedList}]}>Pgto Selec.</Text>}
+      {data.condition === 220 && <Text style={[styles.condition,{color: theme.colors.title}]}>Pago</Text>}
+      {data.condition === 221 && <Text style={[styles.condition,{color: theme.colors.overlay}]}>Recusada</Text>}
+      {data.condition === 222 && <Text style={[styles.condition,{color: theme.colors.input}]}>Cancelada</Text>}
       <Text 
         style={[styles.number,
             data.condition >= 221 &&
@@ -140,7 +152,7 @@ export function Order({ data, ...rest } : OrderComponentProps ) {
           ]}
       >Número
       </Text>
-      <Text 
+      <Text
         style={[styles.text,
           data.condition >= 221 &&
             {color: theme.colors.overlay},

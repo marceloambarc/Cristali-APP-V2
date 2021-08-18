@@ -9,7 +9,8 @@ export const styles = StyleSheet.create({
   titleContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: Dimensions.get('window').height * .06
+    marginTop: Dimensions.get('window').height * .04,
+    marginBottom: Dimensions.get('window').height * .01
   },
   title: {
     fontFamily: theme.fonts.heading,
@@ -19,15 +20,13 @@ export const styles = StyleSheet.create({
   payment: {
 
   },
-  button: {
-    paddingVertical: 10
-  },
   text: {
     fontFamily: theme.fonts.text,
     color: theme.colors.text,
     fontSize: theme.fonts.sizeC
   },
   buttonsContainer: {
+    paddingTop: 20,
     alignItems: 'center',
   },
   checkoutButtonRow: {
@@ -38,8 +37,4 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 10
   },
-  footer: {
-    marginBottom: 20,
-    marginTop: 40
-  }
 });

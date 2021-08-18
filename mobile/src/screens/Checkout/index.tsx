@@ -62,61 +62,6 @@ export function Checkout() {
     setLoading(false);
   },[orderParams, clientParams]);
 
-  function validate(){
-    if(!pagSeguroPressed && !moneyPressed && !otherPressed) {
-      Alert.alert('Selicione um modo de Pagamento.');
-    } else {
-      if(pagSeguroPressed) {
-        const logText = `${user.userName} INICIOU CHECKOUT PARA PAGSEGURO`;
-        sendLog({logText, clientToken});
-        handleSetNewCondition({id: orderParams.id, condition: 219});
-        navigation.navigate('PagSeguro',{
-          id: orderId,
-          clientName,
-          clientPhone,
-          clientEmail,
-          clientNotes,
-          orderNotes,
-          qt,
-          itens: list,
-          totalPrice
-        });
-      } else if(moneyPressed) {
-        const logText = `${user.userName} INICIOU CHECKOUT PARA DINHEIRO`;
-        sendLog({logText, clientToken});
-        handleSetNewCondition({id: orderParams.id, condition: 219});
-        navigation.navigate('Money',{
-          isMoney: true,
-          id: orderId,
-          clientName,
-          clientPhone,
-          clientEmail,
-          clientNotes,
-          orderNotes,
-          qt,
-          itens: list,
-          totalPrice
-        });
-      } else {
-        const logText = `${user.userName} INICIOU CHECKOU PARA OUTROS MÉTODOS DE PAGAMENTO`;
-        sendLog({logText, clientToken});
-        handleSetNewCondition({id: orderParams.id, condition: 219});
-        navigation.navigate('Money',{
-          isMoney: false,
-          id: orderId,
-          clientName,
-          clientPhone,
-          clientEmail,
-          clientNotes,
-          orderNotes,
-          qt,
-          itens: list,
-          totalPrice
-        });
-      }
-    }
-  }
-
   async function handlePagSeguroPressed(){
     setMoneyPressed(false);
     setOtherPressed(false);
@@ -124,6 +69,20 @@ export function Checkout() {
     if(pagSeguroPressed){
       setPagSeguroPressed(false);
     }
+    const logText = `${user.userName} INICIOU CHECKOUT PARA PAGSEGURO`;
+    sendLog({logText, clientToken});
+    handleSetNewCondition({id: orderParams.id, condition: 219});
+    navigation.navigate('PagSeguro',{
+      id: orderId,
+      clientName,
+      clientPhone,
+      clientEmail,
+      clientNotes,
+      orderNotes,
+      qt,
+      itens: list,
+      totalPrice
+    });
   }
 
   async function handleMoneyPressed(){
@@ -133,6 +92,21 @@ export function Checkout() {
     if(moneyPressed){
       setMoneyPressed(false);
     }
+    const logText = `${user.userName} INICIOU CHECKOUT PARA DINHEIRO`;
+    sendLog({logText, clientToken});
+    handleSetNewCondition({id: orderParams.id, condition: 219});
+    navigation.navigate('Money',{
+      isMoney: true,
+      id: orderId,
+      clientName,
+      clientPhone,
+      clientEmail,
+      clientNotes,
+      orderNotes,
+      qt,
+      itens: list,
+      totalPrice
+    });
   }
 
   async function handleOtherPressed(){
@@ -142,6 +116,21 @@ export function Checkout() {
     if(otherPressed){
       setOtherPressed(false);
     }
+    const logText = `${user.userName} INICIOU CHECKOU PARA OUTROS MÉTODOS DE PAGAMENTO`;
+    sendLog({logText, clientToken});
+    handleSetNewCondition({id: orderParams.id, condition: 219});
+    navigation.navigate('Money',{
+      isMoney: false,
+      id: orderId,
+      clientName,
+      clientPhone,
+      clientEmail,
+      clientNotes,
+      orderNotes,
+      qt,
+      itens: list,
+      totalPrice
+    });
   }
 
   if(loading){
@@ -170,9 +159,7 @@ export function Checkout() {
               editable={false}
             />
           </View>
-  
-          <Divider />
-  
+
           <View style={styles.payment}>
             <View style={styles.titleContainer}>
               <Text style={[styles.title, {fontSize: theme.fonts.sizeTitle}]}>Instruções para Pagamento</Text>
@@ -210,24 +197,16 @@ export function Checkout() {
             </View>
             <View style={styles.checkoutButtonRow}>
               <View style={styles.checkoutButtonCol}>
-                <CheckOutButton
-                  bcolor={`${theme.colors.Success}`}
-                  tcolor={`${theme.colors.credit}`}
-                  title="Outra forma de Pagamento"
-                  onPress={handleOtherPressed}
-                  path={require('../../assets/payment.png')}
-                  pressed={otherPressed}
-                  />
+                  <CheckOutButton
+                    bcolor={`${theme.colors.Success}`}
+                    tcolor={`${theme.colors.credit}`}
+                    title="Outra forma de Pagamento"
+                    onPress={handleOtherPressed}
+                    path={require('../../assets/payment.png')}
+                    pressed={otherPressed}
+                    />
               </View>
             </View>
-          </View>
-  
-          <View style={styles.footer}>
-            <CristaliButton 
-              color={`${theme.colors.Success}`}
-              title="Continuar"
-              onPress={validate}
-            />
           </View>
   
         </View>

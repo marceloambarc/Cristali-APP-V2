@@ -78,7 +78,7 @@ function AuthProvider({ children } : AuthProps) {
         signOut();
         setLoading(false);
       }else{
-        Alert.alert('Problema na Conexão.');
+        Alert.alert('Problema na Conexão.', err);
         signOut();
         setLoading(false);
       }
@@ -114,8 +114,7 @@ function AuthProvider({ children } : AuthProps) {
         }
         
       }).then(() => {
-        if(testParams)
-          Alert.alert('LOG ENVIADO');
+        Alert.alert('LOG ENVIADO');
       })
     }
   }

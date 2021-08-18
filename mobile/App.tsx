@@ -33,9 +33,12 @@ export default function App(){
 
   useEffect(() => {
     if(loading === false){
+      
       return;
     }else{
-      registerForPushNotificationsAsync();
+      setLoading(false)
+     // registerForPushNotificationsAsync();
+     return;
     }
   },[]);
 
@@ -91,7 +94,7 @@ export default function App(){
       } else if(err.message.includes("401")) {
         Alert.alert('Problema de Credenciais!');
       } else {
-        Alert.alert('Ops', 'Problema de Conexão, Verifique sua Rede.');
+        Alert.alert('Ops', `${err}`);
         setLoading(false);
       }
     });

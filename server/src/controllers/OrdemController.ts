@@ -415,9 +415,7 @@ export default {
         itens
       } = request.body;
 
-      console.log(client);
-
-      if(orderNotes === '')
+      if(orderNotes === undefined)
         orderNotes = 'Observação Não Inserida';
 
       itens.forEach((item, index, object) => {
@@ -430,6 +428,8 @@ export default {
         if(item.vl_preco)
           item.vl_preco = parseInt(item.vl_preco.replace(/\D/g, ""));
       });
+
+      console.log(itens);
 
       const ordensRepository = getRepository(Ordem);
 
@@ -590,7 +590,7 @@ export default {
 
       const ordens = await ordensRepository.find({
         where: [
-          { cd_id_ccli: searchId, cd_habil_tipo: LessThanOrEqual(220) },
+          { cd_id_ccli: searchId, cd_habil_tipo: LessThanOrEqual(219) },
         ],
         relations: ['itens'],
         order: {
@@ -619,7 +619,7 @@ export default {
 
       const ordens = await ordensRepository.find({
         where: [
-          { cd_id_ccli: searchId, cd_habil_tipo: MoreThan(220) },
+          { cd_id_ccli: searchId, cd_habil_tipo: MoreThan(219) },
         ],
         order: {
           cd_id: "DESC"

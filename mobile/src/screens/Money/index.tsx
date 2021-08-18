@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Text, View, KeyboardAvoidingView, Platform, ActivityIndicator, Alert } from 'react-native';
+import { Text, View, KeyboardAvoidingView, Platform, ActivityIndicator, Alert, Keyboard } from 'react-native';
 import { useNavigation, useRoute, useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAuth } from '../../hooks/auth';
@@ -17,6 +17,7 @@ import { Loading } from '../../components/Loading';
 
 import { styles } from './styles';
 import { theme } from '../../global';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 interface MoneyProps {
   isMoney?: boolean
@@ -47,37 +48,18 @@ export function Money() {
 
   const isMoney = moneyParams.isMoney;
 
-  function handleCancel() {
-    const logText = `${user.userName} CANCELOU A VENDA PARA ${paymentMethod}.`;
-    sendLog({logText, clientToken});
-    handleSetNewCondition({id: orderId,condition: 222});
-    navigation.navigate('Home',{
-      userCode: '',
-      totalPrice: '',
-      orderNotes: '',
-      client: {
-        clientName: '',
-        clientPhone: '',
-        clientEmail: '',
-        clientNotes: '',
-        userCode: ''
-      },
-      itens: []
-    });
-  }
-
   function handleFinal() {
     const notes = paymentMethod + ' ' + orderParams.orderNotes;
     if(isMoney) {
       const logText = `${user.userName} FINALIZOU UMA VENDA PARA ${paymentMethod}.`;
       sendLog({logText, clientToken});
-      handleSetNewCondition({id: orderId,condition: 221});
+      handleSetNewCondition({id: orderId,condition: 220});
       handleCreatePaymentOrder();
       handleNavigation();
     } else {
       const logText = `${user.userName} FINALIZOU UMA VENDA EM DINHEIRO.`;
       sendLog({logText, clientToken});
-      handleSetNewCondition({id: orderId,condition: 221});
+      handleSetNewCondition({id: orderId,condition: 220});
       handleCreatePaymentOrder();
       handleNavigation();
     }
@@ -127,12 +109,16 @@ export function Money() {
     );
   } else {
     return (
+
       <KeyboardAvoidingView
         style={{flexGrow: 1}}
         keyboardVerticalOffset={(Platform.OS === 'ios')? 0 : 0}
         contentContainerStyle={{backgroundColor: 'transparent'}}
         behavior={ Platform.OS === 'ios'? 'padding' : undefined }
       >
+          <TouchableWithoutFeedback
+            onPress={() => Keyboard.dismiss()}
+          >
         <View style={styles.container}>
   
           <View style={styles.banner}>
@@ -175,17 +161,12 @@ export function Money() {
                 title="Finalizar"
                 onPress={handleFinal}
               />
-              <View style={styles.empty} />
-              <CristaliButton 
-                color={`${theme.colors.Cancel}`}
-                title="Cancelar"
-                onPress={handleCancel}
-              />
             </View>
           }
-        
         </View>
+        </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
+      
     );
   }
 }
