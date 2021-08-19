@@ -32,10 +32,12 @@ interface ConditionProps {
 interface AuthContextData {
   signed: boolean;
   user: UserProps;
+  changePassword: boolean;
   clientToken: string;
   loading: boolean;
   isSignInLogSended: boolean;
   signIn({cgc, password} : UserProps): Promise<void>;
+  enterApp: () => Promise<void>;
   signOut: () => Promise<void>;
   sendLog({logText, clientToken} : LogProps): Promise<void>;
   sendLoginLog(clientToken : string): Promise<void>;
@@ -46,43 +48,53 @@ export const AuthContext = createContext<AuthContextData>({} as AuthContextData)
 
 function AuthProvider({ children } : AuthProps) {
   const [user, setUser] = useState<UserProps>({} as UserProps);
+  const [changePassword, setChangePassword] = useState(false);
   const [clientToken, setClientToken] = useState('');
   const [loading, setLoading] = useState(false);
   const [isSignInLogSended, setIsSignInLogSended] = useState(false);
   
   async function signIn({ cgc, password } : UserProps) {
-    setLoading(true);
-    api.post('/login',{
-      cgc, password
-    }).then(res => {
-      AsyncStorage.setItem(COLLECTION_USER, JSON.stringify(res.data.user));
-      AsyncStorage.setItem(COLLECTION_TOKEN, JSON.stringify(res.data.token));
-      setClientToken(res.data.token);
-      setUser(res.data.user);
-      setLoading(false);
-    }).catch(err => {
+      setLoading(true);
+      api.post('/login',{
+        cgc, password
+      }).then(res => {
+        AsyncStorage.setItem(COLLECTION_USER, JSON.stringify(res.data.user));
+        AsyncStorage.setItem(COLLECTION_TOKEN, JSON.stringify(res.data.token));
+        setClientToken(res.data.token);
+        setUser(res.data.user);
+        if(cgc === password) {
 
-      const errorString = String(err);
-      const res = errorString.replace(/\D/g,'');
+          setChangePassword(true);
+    
+        }
+        setLoading(false);
+      }).catch(err => {
+  
+        const errorString = String(err);
+        const res = errorString.replace(/\D/g,'');
+  
+        if(res === '403'){
+          Alert.alert('Usuário não Cadastrado!');
+          signOut();
+          setLoading(false);
+        }else if(res === '401'){
+          Alert.alert('Sessão Terminada, Faça login novamente.');
+          signOut();
+          setLoading(false);
+        }else if(res === '419'){
+          Alert.alert('Senha Incorreta.');
+          signOut();
+          setLoading(false);
+        }else{
+          Alert.alert('Problema na Conexão.', err);
+          signOut();
+          setLoading(false);
+        }
+      });
+  }
 
-      if(res === '403'){
-        Alert.alert('Usuário não Cadastrado!');
-        signOut();
-        setLoading(false);
-      }else if(res === '401'){
-        Alert.alert('Sessão Terminada, Faça login novamente.');
-        signOut();
-        setLoading(false);
-      }else if(res === '419'){
-        Alert.alert('Senha Incorreta.');
-        signOut();
-        setLoading(false);
-      }else{
-        Alert.alert('Problema na Conexão.', err);
-        signOut();
-        setLoading(false);
-      }
-    });
+  async function enterApp() {
+    setChangePassword(false);
   }
 
   async function signOut() {
@@ -150,11 +162,13 @@ function AuthProvider({ children } : AuthProps) {
 
   return (
     <AuthContext.Provider value={{ 
-      signed: !!user, 
-      user, 
+      signed: !!user,
+      user,
+      changePassword,
       clientToken, 
       signIn, 
-      signOut, 
+      signOut,
+      enterApp,
       sendLog,
       sendLoginLog,
       handleSetNewCondition,

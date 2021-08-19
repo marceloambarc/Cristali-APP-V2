@@ -229,6 +229,7 @@ export default {
               existOrdem.cd_habil_tipo = 217;
               existOrdem.itens = itens;
 
+              existCliente.tx_cgc = client.clientCgc;
               existCliente.tx_email = client.clientEmail;
               existCliente.tx_fone = client.clientPhone;
               existCliente.tx_obs = client.clientNotes;
@@ -252,6 +253,7 @@ export default {
               // CRIAR NOVO CLIENTE E SALVAR ORDEM
               const clienteData : any = {
                 nm_nome: client.clientName,
+                tx_cgc: client.clientCgc,
                 tx_fone: client.clientPhone,
                 tx_email: client.clientEmail,
                 tx_obs: client.clientNotes,
@@ -267,6 +269,7 @@ export default {
                   const existClienteCreated = await clientesRepository.findOne({
                     where: {
                       nm_nome: client.clientName,
+                      tx_cgc: client.clientCgc,
                       tx_fone: client.clientPhone,
                       tx_email: client.clientEmail,
                       tx_obs: client.clientNotes
@@ -485,6 +488,7 @@ export default {
         // CRIAR NOVO CLIENTE E SALVAR ORDEM
         const clienteData : any = {
           nm_nome: client.clientName,
+          tx_cgc: client.clientCgc,
           tx_fone: client.clientPhone,
           tx_email: client.clientEmail,
           tx_obs: client.clientNotes,
@@ -634,6 +638,62 @@ export default {
 
     }catch(err) {
       return response.status(400).json({ "Erro" : err });
+    }
+  },
+
+  async historyPaid(request: Request, response: Response) {
+    try {
+
+      const { id } = request.params;
+      const searchId = parseInt(id);
+
+      const ordensRepository = getRepository(Ordem);
+
+      const ordens = await ordensRepository.find({
+        where: [
+          { cd_id_ccli: searchId, cd_habil_tipo: 220 },
+        ],
+        order: {
+          cd_id: "DESC"
+        }
+      });
+
+      if(ordens.length === 0) {
+        return response.status(204).json({ "Vazio" : "Histórico Vazio" });
+      } else {
+        return response.json(ordemView.renderMany(ordens));
+      }
+
+    }catch(err) {
+      return response.status(400).json({ "Erro": err });
+    }
+  },
+
+  async historyNotPaid(request: Request, response: Response) {
+    try {
+
+      const { id } = request.params;
+      const searchId = parseInt(id);
+
+      const ordensRepository = getRepository(Ordem);
+
+      const ordens = await ordensRepository.find({
+        where: [
+          { cd_id_ccli: searchId, cd_habil_tipo: MoreThan(221) },
+        ],
+        order: {
+          cd_id: "DESC"
+        }
+      });
+
+      if(ordens.length === 0) {
+        return response.status(204).json({ "Vazio" : "Histórico Vazio" });
+      } else {
+        return response.json(ordemView.renderMany(ordens));
+      }
+
+    }catch(err) {
+      return response.status(400).json({ "Erro": err });
     }
   }
 

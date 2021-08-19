@@ -144,7 +144,7 @@ export function NewSale() {
     }
 
     if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(clientEmail)) {
-      if(clientNotes === '' || clientPhone === '' || clientEmail === '') {
+      if(clientNotes === '' || clientPhone === '' ) {
         Alert.alert(
           'Atenção!',
           'Deseja prosseguir sem os dados complementares do Cliente?',
@@ -162,6 +162,7 @@ export function NewSale() {
       }
     } else {
       Alert.alert("OPS!", "Email do cliente é inválido!");
+      return;
     }
   }
 
@@ -336,9 +337,15 @@ export function NewSale() {
                 <View style={styles.clientInput}>
                   <View style={styles.inputTextRow}>
                     <View style={styles.inputTextCol}>
-                      <Text style={styles.inputBannerText}>
-                        Nome
-                      </Text>
+                      <View style={styles.inputRequired}>
+                        <Text style={styles.inputBannerText}>
+                          Nome 
+                        </Text>
+                        <Text style={styles.requiredText}>
+                          *
+                        </Text>
+                      </View>
+
                     </View>
                     <View style={styles.inputTextCol}>
                       <Text style={styles.inputLabel}>
@@ -353,6 +360,35 @@ export function NewSale() {
                     autoCorrect={false}
                     returnKeyType='done'
                     autoCapitalize='words'
+                  />
+                </View>
+
+                <View style={styles.clientInput}>
+                  <View style={styles.inputTextRow}>
+                    <View style={styles.inputTextCol}>
+                      <View style={styles.inputRequired}>
+                        <Text style={styles.inputBannerText}>
+                          Email
+                        </Text>
+                        <Text style={styles.requiredText}>
+                          *
+                        </Text>
+                      </View>
+                    </View>
+                    <View style={styles.inputTextCol}>
+                      <Text style={styles.inputLabel}>
+                        Máximo de 50 caracteres
+                      </Text>
+                    </View>
+                  </View>
+                  <CristaliInput 
+                    clientInput
+                    value={clientEmail}
+                    onChangeText={setClientEmail}
+                    autoCorrect={false}
+                    keyboardType='email-address'
+                    returnKeyType='done'
+                    autoCapitalize='none'
                   />
                 </View>
 
@@ -403,31 +439,7 @@ export function NewSale() {
                     returnKeyType='done'
                   />
                 </View>
-  
-                <View style={styles.clientInput}>
-                  <View style={styles.inputTextRow}>
-                    <View style={styles.inputTextCol}>
-                      <Text style={styles.inputBannerText}>
-                        Email
-                      </Text>
-                    </View>
-                    <View style={styles.inputTextCol}>
-                      <Text style={styles.inputLabel}>
-                        Máximo de 50 caracteres
-                      </Text>
-                    </View>
-                  </View>
-                  <CristaliInput 
-                    clientInput
-                    value={clientEmail}
-                    onChangeText={setClientEmail}
-                    autoCorrect={false}
-                    keyboardType='email-address'
-                    returnKeyType='done'
-                    autoCapitalize='none'
-                  />
-                </View>
-                
+
                 <View style={styles.clientInput}>
                   <View style={styles.inputTextRow}>
                     <View style={styles.inputTextCol}>

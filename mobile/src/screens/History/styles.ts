@@ -16,13 +16,20 @@ export const styles = StyleSheet.create({
     paddingLeft: 14,
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    marginBottom: Dimensions.get('window').height *.02,
+    alignItems: 'center',
   },
   title: {
     fontFamily: theme.fonts.heading,
     color: theme.colors.title,
     fontSize: theme.fonts.sizeTitle,
     paddingRight: 15
+  },
+  datePicker: {
+    flexDirection: 'column'
+  },
+  datePickerRow: {
+    flexDirection: 'row',
+    paddingVertical: 4
   },
   calendar: {
     marginRight: 10
@@ -51,6 +58,7 @@ export const styles = StyleSheet.create({
   },
   orderRow: {
     flexDirection: 'row',
+    marginTop: Dimensions.get('window').height *.02,
     marginBottom: Dimensions.get('window').height * .01
   },
   orderCol: {

@@ -35,7 +35,9 @@ appRouter.get('/myOrders/saved/:id', OrdemController.userSavedOrders);
 appRouter.post('/paymentOrder', OrdemPayController.create);
 
 // - HISTÓRICO
-appRouter.get('/myOrders/history/:id', OrdemController.userHystory);
+appRouter.get('/myOrders/history/all/:id', OrdemController.userHystory);
+appRouter.get('/myOrders/history/paid/:id', OrdemController.historyPaid);
+appRouter.get('/myOrders/history/notPaid/:id', OrdemController.historyNotPaid);
 appRouter.delete('/order', OrdemController.delete);
 
 export default appRouter;

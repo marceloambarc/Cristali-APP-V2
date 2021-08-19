@@ -11,6 +11,10 @@ export const styles = StyleSheet.create({
     marginTop: 30,
     paddingHorizontal: 24
   },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
   title: {
     fontFamily: theme.fonts.heading,
     color: theme.colors.title,
@@ -36,7 +40,4 @@ export const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 20
   },
-  modalHeader: {
-    
-  }
 });

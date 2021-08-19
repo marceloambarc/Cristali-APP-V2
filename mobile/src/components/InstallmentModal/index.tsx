@@ -6,6 +6,12 @@ import { UserProps } from '../../hooks/auth';
 import { styles } from './styles';
 import { theme } from '../../global';
 
+import { twoInstallment, 
+  threeInstallment, 
+  fourInstallment, 
+  fiveInstallment, 
+  sixInstallment } from '../../../credentials';
+
 import { CristaliButton } from '../CristaliButton'
 
 interface Props extends ModalProps {
@@ -27,11 +33,6 @@ export function InstallmentModal({
   value,
   user, 
   ...rest } : Props) {
-  const twoInstallment = 0.51495;
-  const threeInstallment = 0.34670;
-  const fourInstallment = 0.26255;
-  const fiveInstallment = 0.21210;
-  const sixInstallment = 0.17847;
 
 
   return (
@@ -49,7 +50,7 @@ export function InstallmentModal({
               <TouchableWithoutFeedback
                 onPress={closeModal}
               >
-                <AntDesign name="close" size={24} color={`${theme.colors.close}`} />
+                <AntDesign name="close" size={24} color={`${theme.colors.Cancel}`} />
               </TouchableWithoutFeedback>
             </View>
             <Text style={[styles.title, {color: theme.colors.input}]}>Selecione o Parcelamento:</Text>

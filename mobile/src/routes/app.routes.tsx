@@ -1,5 +1,8 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
+import { useAuth } from '../hooks/auth';
+
+import { ChangePassword } from '../screens/ChangePassword';
 
 import { Home } from '../screens/Home';
 import { History } from '../screens/History';
@@ -17,22 +20,29 @@ import { Test } from '../test';
 const AppStack = createStackNavigator();
 
 export function AppRoutes() {
+  const { changePassword } = useAuth();
   return (
     <AppStack.Navigator
       headerMode="none"
     >
      {/*}<AppStack.Screen name="Test" component={Test} />{*/}
- 
-      <AppStack.Screen name="Home" component={Home} />
-      <AppStack.Screen name="History" component={History} />
-      <AppStack.Screen name="UnfinishedSale" component={UnfinishedSale} />
-      <AppStack.Screen name="NewSale" component={NewSale} />
-      <AppStack.Screen name="Client" component={Client} />
-      <AppStack.Screen name="Checkout" component={Checkout} />
-      <AppStack.Screen name="Money" component={Money} />
-      <AppStack.Screen name="PagSeguro" component={PagSeguroScreen} />
-      <AppStack.Screen name="SendConfirmation" component={SendConfirmation} />
-      <AppStack.Screen name="Final" component={Final} />
+      {
+        changePassword?
+        <AppStack.Screen name="ChangePassword" component={ChangePassword} />
+        :
+        <>
+        <AppStack.Screen name="Home" component={Home} />
+        <AppStack.Screen name="History" component={History} />
+        <AppStack.Screen name="UnfinishedSale" component={UnfinishedSale} />
+        <AppStack.Screen name="NewSale" component={NewSale} />
+        <AppStack.Screen name="Client" component={Client} />
+        <AppStack.Screen name="Checkout" component={Checkout} />
+        <AppStack.Screen name="Money" component={Money} />
+        <AppStack.Screen name="PagSeguro" component={PagSeguroScreen} />
+        <AppStack.Screen name="SendConfirmation" component={SendConfirmation} />
+        <AppStack.Screen name="Final" component={Final} />
+        </>
+      }
       
     </AppStack.Navigator>
   );

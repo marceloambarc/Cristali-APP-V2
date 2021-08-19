@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StatusBar, Alert } from "react-native";
-import { useNavigation, useFocusEffect } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../../hooks/auth";
 
 import { Header } from "../../components/Header";
@@ -24,6 +24,7 @@ export function Client() {
 
   const [searchId, setSearchId] = useState(0);
   const [searchName, setSearchName] = useState('');
+  const [searchCgc, setSearchCgc] = useState('');
   const [searchTelephone, setSearchTelephone] = useState('');
   const [searchEmail, setSearchEmail] = useState('');
   const [searchNotes, setSearchNotes] = useState('');
@@ -52,6 +53,7 @@ export function Client() {
   function handleClientSelect(clientSelect: ClientProps){
     setSearchId(clientSelect.id);
     setSearchName(clientSelect.clientName);
+    setSearchCgc(clientSelect.clientCgc);
     setSearchTelephone(clientSelect.clientPhone);
     setSearchEmail(clientSelect.clientEmail);
     setSearchNotes(clientSelect.clientNotes);
@@ -68,6 +70,7 @@ export function Client() {
   function handleSelect(){
     navigation.navigate('NewSale',{
       clientName: searchName,
+      clientCgc: searchCgc,
       clientPhone: searchTelephone,
       clientEmail: searchEmail,
       clientNotes: searchNotes

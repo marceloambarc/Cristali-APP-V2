@@ -36,6 +36,14 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: 10
   },
+  inputRequired: {
+    flexDirection: 'row'
+  },
+  requiredText: {
+    color: theme.colors.Cancel,
+    fontFamily: theme.fonts.text,
+    fontSize: theme.fonts.sizeC
+  },
   inputTextCol: {
 
   },

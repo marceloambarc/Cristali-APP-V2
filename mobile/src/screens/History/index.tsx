@@ -14,6 +14,7 @@ import { CristaliInput } from "../../components/CristaliInput";
 import { OrderList } from "../../components/OrderList";
 import { Header } from "../../components/Header";
 import { Loading } from "../../components/Loading";
+import { CristaliButton } from "../../components/CristaliButton";
 
 import { OrderProps } from "../../components/Order";
 
@@ -35,17 +36,20 @@ export function History() {
   const [firstDate, setFirstDate] = useState<Date>(momentum);
   const [secondDate, setSecondDate] = useState<Date>(new Date());
 
+  const [activePressed, setActivePressed] = useState(false);
+  const [inactivePressed, setInactivePressed] = useState(false);
+
   const logText = `${user.userName} Consultou Histórico de ${firstDate} até ${secondDate}`;
 
   const navigation = useNavigation();
 
-  async function handleGetHistory() {
-    await api.get(`/myOrders/history/${user.userCode}`).then(res => {
+  async function handleGetHistory(historyParam: string) {
+    await api.get(`/myOrders/history/${historyParam}/${user.userCode}`).then(res => {
       setOrderHistory(res.data);
       setHistoryCount(res.data.length);
       setLoading(false);
     }).catch(err => {
-      Alert.alert('Ops!',`${err}`);
+      Alert.alert('Ops!',`Erro ao Carregar o seu Histórico.`);
       navigation.navigate('Home');
     });
   }
@@ -76,7 +80,7 @@ export function History() {
   }
 
   async function handleHistory() {
-    await handleGetHistory();
+    await handleGetHistory('all');
     await handleSetMomentum();
   }
 
@@ -130,6 +134,25 @@ export function History() {
     sendLog({logText, clientToken});
   }
 
+  async function handleActivePressed(){
+    setLoading(true);
+    setActivePressed(true);
+    setInactivePressed(false);
+    setOrderHistory([]);
+
+    handleGetHistory('paid');
+    
+  }
+
+  async function handleInactivePressed(){
+    setLoading(true);
+    setActivePressed(false);
+    setInactivePressed(true);
+    setOrderHistory([]);
+
+    handleGetHistory('notPaid');
+  }
+
   if(loading){
     return(
       <Loading />
@@ -148,65 +171,92 @@ export function History() {
         />
         <View style={styles.container}>
           <View style={styles.historyArea}>
-  
-            <View style={styles.titleContainer}>
-              <Text style={styles.title}>Filtro</Text>
-                <DateTimePickerModal
-                  isVisible={isDatePickerVisible}
-                  mode="date"
-                  display={Platform.OS === 'android'? 'default':'inline'}
-                  maximumDate={new Date()}
-                  date={momentum}
-                  onConfirm={handleConfirm}
-                  onCancel={hideDatePicker}
-                  is24Hour={true}
-                  headerTextIOS='Selecione a Data'
-                  confirmTextIOS='Confirmar'
-                  cancelTextIOS='Cancelar'
-                  textColor={'white'}
-                  isDarkModeEnabled={false}
-                  locale='pt_BR'
-                />
-                <DateTimePickerModal
-                  isVisible={isSecondDatePickerVisible}
-                  mode="date"
-                  display={Platform.OS === 'android'? 'default':'inline'}
-                  maximumDate={new Date()}
-                  date={new Date()}
-                  onConfirm={handleSecondConfirm}
-                  onCancel={hideSecondDatePicker}
-                  is24Hour={true}
-                  headerTextIOS='Selecione a Data'
-                  confirmTextIOS='Confirmar'
-                  cancelTextIOS='Cancelar'
-                  textColor={'white'}
-                  isDarkModeEnabled={false}
-                  locale='pt_BR'
-                />
-              <TouchableOpacity 
-                style={styles.calendar}
-                onPress={showDatePicker}
-              >
-                <FontAwesome5 name="calendar-alt" size={Dimensions.get('window').height * .04} color="black" />
-              </TouchableOpacity>
-                <View style={styles.datepickedContainer}>
-                  <Text style={styles.datepickedTitle}>Data Inicial</Text>
-                  <Text style={styles.datepicked}>
-                    { `${firstDate.getDate()}/${firstDate.getMonth()+1}/${firstDate.getFullYear()}` }
-                  </Text>
+            <DateTimePickerModal
+                    isVisible={isDatePickerVisible}
+                    mode="date"
+                    display={Platform.OS === 'android'? 'default':'inline'}
+                    maximumDate={new Date()}
+                    date={momentum}
+                    onConfirm={handleConfirm}
+                    onCancel={hideDatePicker}
+                    is24Hour={true}
+                    headerTextIOS='Selecione a Data'
+                    confirmTextIOS='Confirmar'
+                    cancelTextIOS='Cancelar'
+                    textColor={'white'}
+                    isDarkModeEnabled={false}
+                    locale='pt_BR'
+                  />
+              <DateTimePickerModal
+                    isVisible={isSecondDatePickerVisible}
+                    mode="date"
+                    display={Platform.OS === 'android'? 'default':'inline'}
+                    maximumDate={new Date()}
+                    date={new Date()}
+                    onConfirm={handleSecondConfirm}
+                    onCancel={hideSecondDatePicker}
+                    is24Hour={true}
+                    headerTextIOS='Selecione a Data'
+                    confirmTextIOS='Confirmar'
+                    cancelTextIOS='Cancelar'
+                    textColor={'white'}
+                    isDarkModeEnabled={false}
+                    locale='pt_BR'
+              />
+
+              <View style={styles.titleContainer}>
+                <Text style={styles.title}>Filtro</Text>
+                <View style={styles.datePicker}>
+                  <View style={styles.datePickerRow}>
+                    <TouchableOpacity 
+                      style={styles.calendar}
+                      onPress={showDatePicker}
+                    >
+                      <FontAwesome5 name="calendar-alt" size={Dimensions.get('window').height * .04} color="black" />
+                    </TouchableOpacity>
+                    <View style={styles.datepickedContainer}>
+                      <Text style={styles.datepickedTitle}>Data Inicial</Text>
+                      <Text style={styles.datepicked}>
+                        { `${firstDate.getDate()}/${firstDate.getMonth()+1}/${firstDate.getFullYear()}` }
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={styles.datePickerRow}>
+                    <TouchableOpacity 
+                      style={styles.calendar}
+                      onPress={showSecondDatePicker}
+                    >
+                      <FontAwesome5 name="calendar-alt" size={Dimensions.get('window').height * .04} color="black" />
+                    </TouchableOpacity>
+                    <View style={styles.datepickedContainer}>
+                      <Text style={styles.datepickedTitle}>Data Final</Text>
+                      <Text style={styles.datepicked}>
+                        { `${secondDate.getDate()}/${secondDate.getMonth()+1}/${secondDate.getFullYear()}` }
+                      </Text>
+                    </View>
+                  </View>
                 </View>
-              <TouchableOpacity 
-                style={styles.calendar}
-                onPress={showSecondDatePicker}
-              >
-                <FontAwesome5 name="calendar-alt" size={Dimensions.get('window').height * .04} color="black" />
-              </TouchableOpacity>
-                <View style={styles.datepickedContainer}>
-                  <Text style={styles.datepickedTitle}>Data Final</Text>
-                  <Text style={styles.datepicked}>
-                    { `${secondDate.getDate()}/${secondDate.getMonth()+1}/${secondDate.getFullYear()}` }
-                  </Text>
+
+              <View style={{flexDirection: 'row'}}>
+
+                <View style={{width: 60,  paddingHorizontal: 5}}>
+                  <CristaliButton 
+                    title='✓'
+                    color={`${theme.colors.Success}`}
+                    onPress={handleActivePressed}
+                    switchPressed={activePressed}
+                  />
                 </View>
+                <View style={{width: 60,  paddingHorizontal: 5}}>
+                  <CristaliButton 
+                    title='x'
+                    color={`${theme.colors.Cancel}`}
+                    onPress={handleInactivePressed}
+                    switchPressed={inactivePressed}
+                  />
+                </View>
+              </View>
+
             </View>
   
             <View style={styles.orderRow}>
