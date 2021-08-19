@@ -8,6 +8,7 @@ import { theme } from "../../global";
 export interface ClientProps {
   id: number;
   clientName: string;
+  clientCgc: string;
   clientPhone: string;
   clientEmail: string;
   clientNotes: string;

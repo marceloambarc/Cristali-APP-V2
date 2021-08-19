@@ -6,15 +6,15 @@ export const styles = StyleSheet.create({
     backgroundColor: theme.colors.overlay,
     flex: 1
   },
+  modalContainer: {
+    flex: 1,
+    marginTop: 30,
+    paddingHorizontal: 24
+  },
   title: {
     fontFamily: theme.fonts.heading,
     color: theme.colors.title,
-    fontSize: theme.fonts.sizeC
-  },
-  modalContainer: {
-    flex: 1,
-    marginTop: 100,
-    paddingHorizontal: 24
+    fontSize: theme.fonts.sizeB
   },
   firstColor: {
     marginVertical: 10,
@@ -23,5 +23,20 @@ export const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: 'center',
     backgroundColor: theme.colors.activatedList
+  },
+  installmentChoosed: {
+    marginTop: 30,
+    paddingVertical: 10,
+    paddingHorizontal: 40,
+    borderRadius: 10,
+    alignItems: 'center',
+    backgroundColor: theme.colors.input
+  },
+  footer: {
+    marginTop: 20,
+    marginBottom: 20
+  },
+  modalHeader: {
+    
   }
 });

@@ -46,6 +46,7 @@ export function NewSale() {
 
   const [clientId, setClientId] = useState(0);
   const [clientName, setClientName] = useState('');
+  const [clientCgc, setClientCgc] = useState('');
   const [clientPhone, setClientPhone] = useState('');
   const [clientEmail, setClientEmail] = useState('');
   const [clientNotes, setClientNotes] = useState('');
@@ -89,6 +90,7 @@ export function NewSale() {
 
     if(clientParams) {
       setClientName(clientParams.clientName);
+      setClientCgc(clientParams.clientCgc);
       setClientPhone(clientParams.clientPhone);
       setClientEmail(clientParams.clientEmail);
       setClientNotes(clientParams.clientNotes);
@@ -200,6 +202,7 @@ export function NewSale() {
   async function handleOrder() {
 
     const clientPhoneProto = clientPhone.replace(/\D/g,'');
+    const clientCgcProto = clientCgc.replace(/\D/g,'');
 
     if(orderId !== 0 && orderId !== undefined) {
       handleSetNewCondition({id: orderId, condition: 217});
@@ -210,6 +213,7 @@ export function NewSale() {
         clientId,
         client: {
           clientName,
+          clientCgc: clientCgcProto,
           clientPhone: clientPhoneProto,
           clientEmail,
           clientNotes,
@@ -223,6 +227,7 @@ export function NewSale() {
         navigation.navigate('Checkout', {
           id: orderId,
           clientName,
+          clientCgc: clientCgcProto,
           clientPhone: clientPhoneProto,
           clientEmail,
           clientNotes,
@@ -258,6 +263,7 @@ export function NewSale() {
         orderNotes,
         client: {
           clientName,
+          clientCgc: clientCgcProto,
           clientPhone: clientPhoneProto,
           clientEmail,
           clientNotes,
@@ -271,6 +277,7 @@ export function NewSale() {
         navigation.navigate('Checkout', {
           id: res.data.cd_id,
           clientName,
+          clientCgc: clientCgcProto,
           clientPhone: clientPhoneProto,
           clientEmail,
           clientNotes,
@@ -346,6 +353,30 @@ export function NewSale() {
                     autoCorrect={false}
                     returnKeyType='done'
                     autoCapitalize='words'
+                  />
+                </View>
+
+                <View style={styles.clientInput}>
+                  <View style={styles.inputTextRow}>
+                    <View style={styles.inputTextCol}>
+                      <Text style={styles.inputBannerText}>
+                        CPF
+                      </Text>
+                    </View>
+                    <View style={styles.inputTextCol}>
+                      <Text style={styles.inputLabel}>
+                        Máximo de 14 caracteres
+                      </Text>
+                    </View>
+                  </View>
+                  <InputMask
+                    type={'cpf'}
+                    clientInput
+                    value={clientCgc}
+                    onChangeText={setClientCgc}
+                    autoCorrect={false}
+                    keyboardType='number-pad'
+                    returnKeyType='done'
                   />
                 </View>
   

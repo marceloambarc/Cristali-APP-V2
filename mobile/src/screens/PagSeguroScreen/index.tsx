@@ -36,6 +36,7 @@ export function PagSeguroScreen() {
   const [openInstallmentsModal, SetOpenInstallmentsModal] = useState(false);
 
   const [clientName, setClientName] = useState('');
+  const [clientCgc, setClientCgc] = useState('');
   const [clientPhone, setClientPhone] = useState('');
   const [clientNotes, setClientNotes] = useState('');
   const [clientEmail, setClientEmail] = useState('');
@@ -54,7 +55,8 @@ export function PagSeguroScreen() {
   const [expirateYear, setExpirateYear] = useState('');
   const [cvv, setCvv] = useState('');
 
-  const [installment, setInstallment] = useState(6);
+  const [totalInstallments, setTotalInstallments] = useState(0);
+  const [installment, setInstallment] = useState(1);
 
   const value = parseInt(totalPrice);
   const codeDoc = String(uuid.v4(orderId.toString()));
@@ -62,6 +64,7 @@ export function PagSeguroScreen() {
   useEffect(() => {
     if(clientParams){
       setClientName(clientParams.clientName);
+      setClientCgc(clientParams.clientCgc);
       setClientPhone(clientParams.clientPhone);
       setClientNotes(clientParams.clientNotes);
       setClientEmail(clientParams.clientEmail);
@@ -115,7 +118,24 @@ export function PagSeguroScreen() {
     }
   }
 
+  function handleInstallmentFinish() {
+    SetOpenInstallmentsModal(false);
+    setLoading(true);
+    handleSendPagSeguro()
+  }
+
+  function handleInstallmentSelect(installmentSelect: number) {
+    setInstallment(installmentSelect);
+  }
+
+  function handleSetInstallments() {
+    const rounded = Math.round(parseInt(totalPrice) /100);
+    const installmentProto = Math.floor(rounded / 25);
+    setTotalInstallments(installmentProto);
+  }
+
   function handleInstallments() {
+    handleSetInstallments();
     SetOpenInstallmentsModal(true);
   }
 
@@ -135,8 +155,8 @@ export function PagSeguroScreen() {
         },
         "payment_method": {
           "type": "CREDIT_CARD",
-          "installments": 1,
-          "capture": false,
+          "installments": `${installment}`,
+          "capture": true,
           "card": {
             "number": `${cardNumberProto}`,
             "exp_month": `${expirateMonth}`,
@@ -156,28 +176,48 @@ export function PagSeguroScreen() {
       const message = err.response.data.error_messages[0].description;
       if(message === 'invalid_parameter') {
         Alert.alert('Ops!', 'Dados do Cartão são inválidos. Tente novamente.');
-        setLoading(false);
+        navigation.navigate('Home',{
+          userCode: '',
+          totalPrice: '',
+          orderNotes: '',
+          client: {
+            clientName: '',
+            clientCgc: '',
+            clientPhone: '',
+            clientEmail: '',
+            clientNotes: '',
+            userCode: ''
+          },
+          itens: []
+        });
         return;
+      } else {
+        Alert.alert('Ops!', err);
+        handleSetNewCondition({id: orderId, condition: 221});
+        navigation.navigate('Home',{
+          userCode: '',
+          totalPrice: '',
+          orderNotes: '',
+          client: {
+            clientName: '',
+            clientCgc: '',
+            clientPhone: '',
+            clientEmail: '',
+            clientNotes: '',
+            userCode: ''
+          },
+          itens: []
+        });
       }
+
     });
 
     if(response) {
       if(testParams)
         console.log(response.data);
       setCreatedPagSeguro(true);
-  
-      handleSetNewCondition({id: orderId, condition: 219});
-    
-      const logText = `${user.userName} OBTEVE VENDA Nº: ${response.data.payment_response.reference} AUTORIZADA PELO PAGSEGURO`;
-      sendLog({logText, clientToken});
       if(testParams)
         Alert.alert('Enviado PagSeguro');
-
-      await pgapi.post(`/charges/${response.data.id}/capture`,{
-        amount: {
-          value: value
-        }
-      }).then(() => {
         sendLog({logText:`${user.userName} OBTEVE VENDA Nº ${response.data.payment_response.reference} PAGA`, clientToken});
         handleSetNewCondition({id: orderId, condition: 220});
         navigation.navigate('SendConfirmation',{
@@ -189,29 +229,11 @@ export function PagSeguroScreen() {
           value: response.data.amount.value.toString(),
           id: orderId,
           clientName: clientName,
+          clientCgc: clientCgc,
           clientPhone: clientPhone,
           clientEmail: clientEmail,
           clientNotes: clientNotes,
-        });
-      }).catch(err => {
-        Alert.alert('Ops!', err);
-        handleSetNewCondition({id: orderId, condition: 221});
-        navigation.navigate('Home',{
-          userCode: '',
-          totalPrice: '',
-          orderNotes: '',
-          client: {
-            clientName: '',
-            clientPhone: '',
-            clientEmail: '',
-            clientNotes: '',
-            userCode: ''
-          },
-          itens: []
-        });
-      });
-
-
+      })
     }
   }
 
@@ -325,7 +347,6 @@ export function PagSeguroScreen() {
                     </View>
                   </View> 
                 </View>
-              
               </View>
             </View>
   
@@ -341,8 +362,12 @@ export function PagSeguroScreen() {
 
         <InstallmentModal
           user={user}
-          installments={installment}
           visible={openInstallmentsModal}
+          handleInstallmentSelect={handleInstallmentSelect}
+          handleInstallmentFinish={handleInstallmentFinish}
+          totalInstallments={totalInstallments}
+          value={value}
+          installment={installment}
           closeModal={closeInstallments}
         />
 

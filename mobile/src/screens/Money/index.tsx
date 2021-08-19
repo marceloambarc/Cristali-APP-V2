@@ -37,6 +37,7 @@ export function Money() {
   const [list, setList] = useState<ItemProps[]>([]);
 
   const [clientName, setClientName] = useState('');
+  const [clientCgc, setClientCgc] = useState('');
   const [clientPhone, setClientPhone] = useState('');
   const [clientEmail, setClientEmail] = useState('');
   const [clientNotes, setClientNotes] = useState('');
@@ -92,6 +93,7 @@ export function Money() {
 
     if(clientParams) {
       setClientName(clientParams.clientName);
+      setClientCgc(clientParams.clientCgc);
       setClientPhone(clientParams.clientPhone);
       setClientEmail(clientParams.clientEmail);
       setClientNotes(clientParams.clientNotes);

@@ -5,6 +5,7 @@ export default {
     return {
       id: cliente.cd_pessoa,
       clientName: cliente.nm_nome,
+      clientCgc: cliente.tx_cgc,
       clientPhone: cliente.tx_fone,
       clientEmail: cliente.tx_email,
       clientNotes: cliente.tx_obs,

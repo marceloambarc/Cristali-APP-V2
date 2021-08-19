@@ -25,6 +25,7 @@ export function Checkout() {
 
   const [loading, setLoading] = useState(true);
   const [clientName, setClientName] = useState('');
+  const [clientCgc, setClientCgc] = useState('');
   const [clientPhone, setClientPhone] = useState('');
   const [clientEmail, setClientEmail] = useState('');
   const [clientNotes, setClientNotes] = useState('');
@@ -55,6 +56,7 @@ export function Checkout() {
     }
     if(clientParams) {
       setClientName(clientParams.clientName);
+      setClientCgc(clientParams.clientCgc);
       setClientPhone(clientParams.clientPhone);
       setClientEmail(clientParams.clientEmail);
       setClientNotes(clientParams.clientNotes);
@@ -75,6 +77,7 @@ export function Checkout() {
     navigation.navigate('PagSeguro',{
       id: orderId,
       clientName,
+      clientCgc,
       clientPhone,
       clientEmail,
       clientNotes,
@@ -99,6 +102,7 @@ export function Checkout() {
       isMoney: true,
       id: orderId,
       clientName,
+      clientCgc,
       clientPhone,
       clientEmail,
       clientNotes,
@@ -123,6 +127,7 @@ export function Checkout() {
       isMoney: false,
       id: orderId,
       clientName,
+      clientCgc,
       clientPhone,
       clientEmail,
       clientNotes,

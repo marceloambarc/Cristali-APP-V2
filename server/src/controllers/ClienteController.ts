@@ -64,6 +64,7 @@ export default {
 
       const {
         clientName,
+        clientCgc,
         clientPhone,
         clientEmail,
         clientNotes
@@ -81,6 +82,7 @@ export default {
         return response.status(404).json({ "Erro" : "Cliente não Existe" });
       }else{
         existClienteFinal.nm_nome = clientName;
+        existClienteFinal.tx_cgc = clientCgc;
         existClienteFinal.tx_fone = clientPhone;
         existClienteFinal.tx_email = clientEmail;
         existClienteFinal.tx_obs = clientNotes;
@@ -104,6 +106,7 @@ export default {
 
       const {
         clientName,
+        clientCgc,
         clientPhone,
         clientEmail,
         clientNotes,
@@ -118,6 +121,7 @@ export default {
         } else {
           const schema = Yup.object().shape({
             nm_nome: Yup.string().required(),
+            tx_cgc: Yup.string().required(),
             tx_fone: Yup.string().nullable(),
             tx_email: Yup.string().nullable(),
             tx_obs: Yup.string().nullable(),
@@ -145,6 +149,7 @@ export default {
         if(existCliente != undefined) {
           const data: any = {
             nm_nome: clientName,
+            tx_cgc: clientCgc,
             tx_fone: clientPhone,
             tx_email: clientEmail,
             tx_obs: clientNotes,
@@ -154,6 +159,7 @@ export default {
 
           const schema = Yup.object().shape({
             nm_nome: Yup.string().required(),
+            tx_cgc: Yup.string().required(),
             tx_fone: Yup.string().required(),
             tx_email: Yup.string().required(),
             tx_obs: Yup.string().required(),
