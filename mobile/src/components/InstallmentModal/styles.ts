@@ -12,6 +12,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 24
   },
   modalHeader: {
+    paddingHorizontal: 24,
     flexDirection: 'row',
     justifyContent: 'space-between'
   },

@@ -129,8 +129,6 @@ function AuthProvider({ children } : AuthProps) {
           Alert.alert('Erro de LOG');
         }
         
-      }).then(() => {
-        Alert.alert('LOG ENVIADO');
       })
     }
   }

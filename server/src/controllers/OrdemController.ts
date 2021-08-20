@@ -432,8 +432,6 @@ export default {
           item.vl_preco = parseInt(item.vl_preco.replace(/\D/g, ""));
       });
 
-      console.log(itens);
-
       const ordensRepository = getRepository(Ordem);
 
       const clientesRepository = getRepository(Clientefinal);

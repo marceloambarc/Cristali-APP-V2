@@ -119,6 +119,7 @@ export function PagSeguroScreen() {
   }
 
   function handleInstallmentFinish() {
+    console.log('PRESSED!');
     SetOpenInstallmentsModal(false);
     setLoading(true);
     handleSendPagSeguro()

@@ -47,7 +47,7 @@ export function Order({ data, ...rest } : OrderComponentProps ) {
     const dateYear = dateProto.getFullYear();
 
     const dateHour = dateProto.getHours();
-    const dateMinutes = dateProto.getMinutes();
+    const dateMinutes = (dateProto.getMinutes()<10?'0':'') + dateProto.getMinutes();
 
 
     setDateFormat(`${dateDay}/${dateMonth}/${dateYear} - ${dateHour}:${dateMinutes}`)

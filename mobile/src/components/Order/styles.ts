@@ -7,27 +7,28 @@ export const styles = StyleSheet.create({
     height: 82,
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-around',
     borderRadius: 20,
     paddingLeft: 6,
     paddingRight: 18,
-    
     marginVertical: 5
   },
   content: {
-    flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'space-around',
+    paddingTop: 10,
+    paddingBottom: 16,
     marginLeft: 20,
     marginRight: 20,
   },
   title: {
     fontFamily: theme.fonts.heading,
     fontSize: theme.fonts.sizeC,
-    marginBottom: 2
   },
   text: {
     fontFamily: theme.fonts.text,
     fontSize: theme.fonts.sizeD,
-    textAlign: 'right'
+    textAlign: 'right',
+    maxHeight: 20
   },
   number:  {
     fontFamily: theme.fonts.text,

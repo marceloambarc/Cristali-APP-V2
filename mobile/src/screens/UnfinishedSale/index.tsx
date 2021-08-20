@@ -56,7 +56,6 @@ export function UnfinishedSale() {
     setSearchOrderNotes(orderSelect.orderNotes);
     setCondition(orderSelect.condition);
     setClientCode(orderSelect.clientCode);
-
     if(orderSelect.itens != undefined) {
       setItens(orderSelect.itens);
     }
@@ -80,6 +79,7 @@ export function UnfinishedSale() {
           clientPhone: res.data.clientPhone,
           clientEmail: res.data.clientEmail,
           clientNotes: res.data.clientNotes,
+          clientCgc: res.data.clientCgc
         });
       });
     }

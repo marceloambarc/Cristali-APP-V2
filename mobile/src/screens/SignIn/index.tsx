@@ -79,7 +79,7 @@ export function SignIn() {
                       <Text style={styles.cristaliInputText}>USUÁRIO</Text>
                       <InputMask
                         type={'cpf'}
-                        keyboardType={'number-pad'}
+                        keyboardType={'numeric'}
                         textAlign='center'
                         value={cgc}
                         peachpuff
@@ -94,6 +94,7 @@ export function SignIn() {
                         value={password}
                         onChangeText={setPassword}
                         secureTextEntry={true}
+                        autoCapitalize={'none'}
                       />
                     </View>
                   </View>

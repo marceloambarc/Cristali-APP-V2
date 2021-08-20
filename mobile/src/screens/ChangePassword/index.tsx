@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Alert, KeyboardAvoidingView } from 'react-native';
+import { View, Text, Alert, KeyboardAvoidingView, Platform } from 'react-native';
 import { useAuth } from '../../hooks/auth';
 
 import { api } from '../../services/api';
@@ -26,22 +26,22 @@ export function ChangePassword() {
         const storage = await AsyncStorage.getItem(COLLECTION_PASSWORD);
         if(storage) {
           const oldPassword = JSON.parse(storage);
-          console.log(oldPassword);
-          await api.put('/changepassword',{
-            userCode: (user.userCode)?.toString(),
-            oldPassword: (oldPassword).toString(),
-            newPassword: newPassword
-          },{
-            headers: {'Authorization': 'Bearer '+clientToken}
-          }).then(() => {
-            enterApp();
-          }).catch(err => {
-            console.log(err);
-          });
+          if(newPassword === oldPassword) {
+            Alert.alert('A Senha não pode ser igual a anterior.');
+            } else {
+            await api.put('/changepassword',{
+              userCode: (user.userCode)?.toString(),
+              oldPassword: (oldPassword).toString(),
+              newPassword: newPassword
+            },{
+              headers: {'Authorization': 'Bearer '+clientToken}
+            }).then(() => {
+              enterApp();
+            }).catch(err => {
+              console.log(err);
+            });
+          }
         }
-
-      } else if (newPassword === oldPassword){
-        Alert.alert('A Senha não pode ser igual a anterior.');
       } else {
         Alert.alert('Senhas não coincidem');
       }
@@ -55,7 +55,7 @@ export function ChangePassword() {
       style={{flexGrow: 10}}
       keyboardVerticalOffset={0}
       contentContainerStyle={{backgroundColor: 'transparent'}}
-      behavior={'padding' }
+      behavior={(Platform.OS === 'ios')? "padding" : undefined}
     >
     <View style={styles.container}>
       <Logo />

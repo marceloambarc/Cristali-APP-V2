@@ -23,6 +23,7 @@ export const styles = StyleSheet.create({
     fontFamily: theme.fonts.logo,
     color: 'black',
     fontSize: 24,
+    maxWidth: Dimensions.get('window').width *0.8
   },
   title: {
     fontFamily: theme.fonts.logo,
