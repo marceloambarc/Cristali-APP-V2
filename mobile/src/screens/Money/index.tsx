@@ -54,13 +54,13 @@ export function Money() {
     if(isMoney) {
       const logText = `${user.userName} FINALIZOU UMA VENDA PARA ${paymentMethod}.`;
       sendLog({logText, clientToken});
-      handleSetNewCondition({id: orderId,condition: 220});
+      handleSetNewCondition({id: orderId,condition: 224});
       handleCreatePaymentOrder();
       handleNavigation();
     } else {
       const logText = `${user.userName} FINALIZOU UMA VENDA EM DINHEIRO.`;
       sendLog({logText, clientToken});
-      handleSetNewCondition({id: orderId,condition: 220});
+      handleSetNewCondition({id: orderId,condition: 223});
       handleCreatePaymentOrder();
       handleNavigation();
     }

@@ -80,6 +80,8 @@ export function Order({ data, ...rest } : OrderComponentProps ) {
             {backgroundColor: theme.colors.Cancel},
           data.condition === 222 &&
             {backgroundColor: theme.colors.Cancel},
+          data.condition >= 223 &&
+            {backgroundColor: theme.colors.activatedList},
         ]}
       activeOpacity={0.7}
       {...rest}
@@ -101,8 +103,12 @@ export function Order({ data, ...rest } : OrderComponentProps ) {
                 {color: theme.colors.activatedList},
               data.condition === 220 &&
                 {color: theme.colors.title},
-              data.condition > 221 &&
-                {color: theme.colors.secondary}
+              data.condition === 221 &&
+                {color: theme.colors.secondary},
+              data.condition === 222 &&
+                {color: theme.colors.secondary},
+              data.condition >= 223 &&
+                {color: theme.colors.title},
             ]}>
               { client.clientName }
             </Text>
@@ -140,9 +146,11 @@ export function Order({ data, ...rest } : OrderComponentProps ) {
       {data.condition === 217 && <Text style={[styles.condition,{color: theme.colors.activatedList}]}>Iniciada</Text>}
       {data.condition === 218 && <Text style={[styles.condition,{color: theme.colors.title}]}>Dados Inseridos</Text>}
       {data.condition === 219 && <Text style={[styles.condition,{color: theme.colors.activatedList}]}>Pgto Selec.</Text>}
-      {data.condition === 220 && <Text style={[styles.condition,{color: theme.colors.title}]}>Pago</Text>}
+      {data.condition === 220 && <Text style={[styles.condition,{color: theme.colors.title}]}>Pago CC</Text>}
       {data.condition === 221 && <Text style={[styles.condition,{color: theme.colors.overlay}]}>Recusada</Text>}
       {data.condition === 222 && <Text style={[styles.condition,{color: theme.colors.input}]}>Cancelada</Text>}
+      {data.condition === 223 && <Text style={[styles.condition,{color: theme.colors.title}]}>Dinheiro</Text>}
+      {data.condition === 224 && <Text style={[styles.condition,{color: theme.colors.title}]}>Outro Método</Text>}
       <Text 
         style={[styles.number,
             data.condition >= 221 &&

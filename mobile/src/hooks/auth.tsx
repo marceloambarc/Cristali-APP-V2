@@ -97,6 +97,7 @@ function AuthProvider({ children } : AuthProps) {
   }
 
   async function enterApp() {
+    await AsyncStorage.removeItem(COLLECTION_PASSWORD);
     setChangePassword(false);
   }
 
