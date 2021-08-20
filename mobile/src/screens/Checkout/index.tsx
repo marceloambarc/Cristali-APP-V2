@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, StatusBar, Alert } from 'react-native';
+import { View, Text, ScrollView, StatusBar } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useAuth } from '../../hooks/auth';
 
@@ -11,8 +11,6 @@ import { ClientProps } from '../../components/ClientComponent';
 import { ItemProps } from '../NewSale';
 
 import { Header } from '../../components/Header';
-import { Divider } from '../../components/Divider';
-import { CristaliButton } from '../../components/CristaliButton';
 import { CheckOutButton } from '../../components/CheckOutButton';
 import { InputMask } from '../../components/InputMask';
 import { Loading } from '../../components/Loading';

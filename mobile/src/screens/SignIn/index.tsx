@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, StatusBar, ActivityIndicator, KeyboardAvoidingView, Platform, Alert, ScrollView } from 'react-native';
+import { Text, View, StatusBar, ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAuth } from '../../hooks/auth';
 

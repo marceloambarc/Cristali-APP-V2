@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, StatusBar, Image, Alert, KeyboardAvoidingView, Platform, Modal, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, ScrollView, StatusBar, Image, Alert, KeyboardAvoidingView, Platform } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import uuid from 'react-native-uuid';
 import { useAuth } from '../../hooks/auth';

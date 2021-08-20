@@ -112,6 +112,7 @@ export default {
         oldPassword,
         newPassword
       } = request.body;
+      console.log(request.body);
       const searchUserCode = String(userCode);
 
       const senhasRepository = getRepository(Senha);
@@ -123,7 +124,9 @@ export default {
       });
 
       if(existSenha === undefined) {
+        console.log('HERE')
         return response.status(404).json({ "Erro" : "Usuário não existe" });
+        
       } else {
         const isPasswordRight = await bcrypt.compare(oldPassword, existSenha.tx_senha);
         if(!isPasswordRight) {

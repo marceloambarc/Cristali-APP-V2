@@ -2,8 +2,7 @@ import React, { createContext, useState, useContext, ReactNode } from "react";
 import { Alert } from 'react-native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { COLLECTION_USER, COLLECTION_TOKEN, COLLECTION_DEVICE_TOKEN } from "../config/storage";
-import { testParams } from "../config/options";
+import { COLLECTION_USER, COLLECTION_TOKEN, COLLECTION_DEVICE_TOKEN, COLLECTION_PASSWORD } from "../config/storage";
 import { api } from '../services/api';
 
 export interface UserProps {
@@ -33,6 +32,7 @@ interface AuthContextData {
   signed: boolean;
   user: UserProps;
   changePassword: boolean;
+  oldPassword: string;
   clientToken: string;
   loading: boolean;
   isSignInLogSended: boolean;
@@ -49,21 +49,24 @@ export const AuthContext = createContext<AuthContextData>({} as AuthContextData)
 function AuthProvider({ children } : AuthProps) {
   const [user, setUser] = useState<UserProps>({} as UserProps);
   const [changePassword, setChangePassword] = useState(false);
+  const [oldPassword, setOldPassword] = useState('');
   const [clientToken, setClientToken] = useState('');
   const [loading, setLoading] = useState(false);
   const [isSignInLogSended, setIsSignInLogSended] = useState(false);
   
   async function signIn({ cgc, password } : UserProps) {
       setLoading(true);
+      setOldPassword(password);
       api.post('/login',{
         cgc, password
       }).then(res => {
+        
         AsyncStorage.setItem(COLLECTION_USER, JSON.stringify(res.data.user));
         AsyncStorage.setItem(COLLECTION_TOKEN, JSON.stringify(res.data.token));
         setClientToken(res.data.token);
         setUser(res.data.user);
         if(cgc === password) {
-
+          AsyncStorage.setItem(COLLECTION_PASSWORD, JSON.stringify(password));
           setChangePassword(true);
     
         }
@@ -165,7 +168,8 @@ function AuthProvider({ children } : AuthProps) {
       signed: !!user,
       user,
       changePassword,
-      clientToken, 
+      clientToken,
+      oldPassword,
       signIn, 
       signOut,
       enterApp,

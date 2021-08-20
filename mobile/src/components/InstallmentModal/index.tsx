@@ -10,7 +10,7 @@ import { twoInstallment,
   threeInstallment, 
   fourInstallment, 
   fiveInstallment, 
-  sixInstallment } from '../../../credentials';
+  sixInstallment } from '../../config/options';
 
 import { CristaliButton } from '../CristaliButton'
 
