@@ -81,12 +81,11 @@ export function Order({ data, ...rest } : OrderComponentProps ) {
           data.condition === 222 &&
             {backgroundColor: theme.colors.Cancel},
           data.condition >= 223 &&
-            {backgroundColor: theme.colors.activatedList},
+            {backgroundColor: theme.colors.activatedList}
         ]}
       activeOpacity={0.7}
       {...rest}
     >
-    <View />
 
     <View style={styles.content}>
       <View>
@@ -117,10 +116,17 @@ export function Order({ data, ...rest } : OrderComponentProps ) {
 
         <CristaliInput 
           style={[styles.text,
-            data.condition >= 221 &&
-              {color: theme.colors.overlay},
             data.condition === 220 &&
-              {color: theme.colors.Config}
+              {color: theme.colors.Config},
+            data.condition === 221 &&
+              {color: theme.colors.overlay},
+            data.condition === 222 &&
+              {color: theme.colors.overlay},
+            data.condition === 223 &&
+              {color: theme.colors.Config},
+            data.condition === 224 &&
+              {color: theme.colors.Config},
+
           ]}
           textAlign='left'
           value={dateFormat}
@@ -129,10 +135,16 @@ export function Order({ data, ...rest } : OrderComponentProps ) {
 
         <TextInputMask
           style={[styles.text,
-            data.condition >= 221 &&
-              {color: theme.colors.overlay},
             data.condition === 220 &&
-              {color: theme.colors.Config}
+              {color: theme.colors.Config},
+            data.condition === 221 &&
+              {color: theme.colors.overlay},
+            data.condition === 222 &&
+              {color: theme.colors.overlay},
+            data.condition === 223 &&
+              {color: theme.colors.Config},
+            data.condition === 224 &&
+              {color: theme.colors.Config},
           ]}
           type={'money'}
           textAlign='left'

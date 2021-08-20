@@ -38,7 +38,18 @@ export const styles = StyleSheet.create({
     backgroundColor: theme.colors.input
   },
   footer: {
+    justifyContent: 'center',
+    alignItems: 'center',
     marginTop: 20,
     marginBottom: 20
   },
+  buttonContainer: {
+    width: '100%',
+    height: 60,
+    borderRadius: 20,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: theme.colors.Success
+  }
 });

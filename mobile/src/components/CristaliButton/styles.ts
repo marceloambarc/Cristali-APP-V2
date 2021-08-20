@@ -14,6 +14,6 @@ export const styles = StyleSheet.create({
     color: theme.colors.input,
     fontFamily: theme.fonts.text,
     fontSize: theme.fonts.sizeC,
-    textAlign: 'center'
+    textAlign: 'center',
   }
 });

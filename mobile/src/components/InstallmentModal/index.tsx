@@ -13,9 +13,6 @@ import { twoInstallment,
   fiveInstallment, 
   sixInstallment } from '../../config/options';
 
-import { CristaliButton } from '../CristaliButton'
-import { InputMask } from '../InputMask';
-
 interface Props extends ModalProps {
   user: UserProps;
   totalInstallments: number;
@@ -151,11 +148,12 @@ export function InstallmentModal({
 
 
             <View style={styles.footer}>
-              <CristaliButton
-                title="Continuar"
-                color={`${theme.colors.Success}`}
-                onPress={() => handleInstallmentFinish()}
-              />
+              <TouchableOpacity
+                style={styles.buttonContainer}
+                onPress={handleInstallmentFinish}
+              >
+                  <AntDesign name="checkcircleo" size={24} color={`${theme.colors.input}`} />
+              </TouchableOpacity>
             </View>
           </View>
         </View>

@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 import { theme } from "../../global";
 
 export const styles = StyleSheet.create({
@@ -6,23 +6,20 @@ export const styles = StyleSheet.create({
     width: '100%',
     height: 82,
     flexDirection: 'row',
+    paddingHorizontal: 25,
+    justifyContent: 'space-between',
     alignItems: 'center',
-    justifyContent: 'space-around',
     borderRadius: 20,
-    paddingLeft: 6,
-    paddingRight: 18,
-    marginVertical: 5
+    marginVertical: 5,
   },
   content: {
-    justifyContent: 'space-around',
     paddingTop: 10,
     paddingBottom: 16,
-    marginLeft: 20,
-    marginRight: 20,
   },
   title: {
     fontFamily: theme.fonts.heading,
     fontSize: theme.fonts.sizeC,
+    textAlign: 'left',
   },
   text: {
     fontFamily: theme.fonts.text,
@@ -38,6 +35,7 @@ export const styles = StyleSheet.create({
   condition: {
     fontFamily: theme.fonts.heading,
     fontSize: theme.fonts.sizeD,
+    justifyContent: 'flex-end',
     textAlign: 'right'
   }
 });
