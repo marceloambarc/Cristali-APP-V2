@@ -64,31 +64,34 @@ export function ChangePassword() {
       </Text>
       <Text style={styles.text}>Para iniciar a Aplicação altere sua senha, qualquer dúvida entre em contato com sua supervisora.</Text>
 
-        <View style={styles.falseDivider}/>
+      <View style={styles.falseDivider}/>
         <Text style={styles.cristaliInputText}>NOVA SENHA</Text>
-          <CristaliInput 
-            textAlign='center'
-            peachpuff
-            value={newPassword}
-            onChangeText={setNewPassword}
-            secureTextEntry={true}
-          />
-          <View style={styles.falseDivider2}/>
-          <Text style={styles.cristaliInputText}>CONFIRME NOVA SENHA</Text>
-          <CristaliInput 
-            textAlign='center'
-            peachpuff
-            value={confirmNewPassword}
-            onChangeText={setConfirmNewPassword}
-            secureTextEntry={true}
-          />
-        <View style={styles.falseDivider}/>
+        <CristaliInput 
+          textAlign='center'
+          peachpuff
+          value={newPassword}
+          onChangeText={setNewPassword}
+          secureTextEntry={true}
+        />
+        <View style={styles.falseDivider2}/>
+        <Text style={styles.cristaliInputText}>CONFIRME NOVA SENHA</Text>
+        <CristaliInput 
+          textAlign='center'
+          peachpuff
+          value={confirmNewPassword}
+          onChangeText={setConfirmNewPassword}
+          secureTextEntry={true}
+        />
+      <View style={styles.falseDivider}/>
 
-      <CristaliButton 
-        title='Entrar'
-        color={`${theme.colors.return}`}
-        onPress={handleChangePassword}
-      />
+      <View style={styles.footer}>
+        <CristaliButton
+          title='Entrar'
+          color={`${theme.colors.return}`}
+          onPress={handleChangePassword}
+        />
+      </View>
+
     </View>
     </KeyboardAvoidingView>
   );

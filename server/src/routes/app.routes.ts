@@ -5,7 +5,6 @@ import { clientAuth } from '../middleware/auth';
 import ClienteController from '../controllers/ClienteController';
 import OrdemController from '../controllers/OrdemController';
 import SenhaController from '../controllers/SenhaController';
-import OrdemPayController from '../controllers/OrdemPayController';
 
 const appRouter = Router();
 
@@ -30,9 +29,6 @@ appRouter.put('/order/condition/:id', OrdemController.editCondition);
 
 // - ORDENS SALVAS
 appRouter.get('/myOrders/saved/:id', OrdemController.userSavedOrders);
-
-// - ORDEM DE PAGAMENTO
-appRouter.post('/paymentOrder', OrdemPayController.create);
 
 // - HISTÓRICO
 appRouter.get('/myOrders/history/all/:id', OrdemController.userHystory);

@@ -7,7 +7,6 @@ import EventoController from '../controllers/EventoController';
 import OrdemController from '../controllers/OrdemController';
 import SenhaController from '../controllers/SenhaController';
 import TokenController from '../controllers/TokenController';
-import OrdemPayController from '../controllers/OrdemPayController';
 
 const controllerRouter = Router();
 
@@ -36,6 +35,7 @@ controllerRouter.post('/senha', clientAuth, SenhaController.create);
 controllerRouter.put('/acesso/:id', clientAuth, SenhaController.switch);
 controllerRouter.put('/senha/:cgc', clientAuth, SenhaController.edit);
 controllerRouter.delete('/senha/:cgc', clientAuth, SenhaController.delete);
+controllerRouter.post('/resetpassword', SenhaController.resetPassword);
 
 // -- TOKEN DE DISPOSITIVOS
 
@@ -58,9 +58,5 @@ controllerRouter.get('/order/:id', clientAuth, OrdemController.show);
 controllerRouter.post('/opensales', clientAuth, OrdemController.showOpenSales);
 controllerRouter.post('/insertedsales', clientAuth, OrdemController.showInsertedSales);
 controllerRouter.post('/selectedpaymentsales', clientAuth, OrdemController.showSelectedPaymentSales);
-
-// -- Ordens De Pagamento
-
-controllerRouter.get('/paymentOrder/:id', clientAuth, OrdemPayController.show);
 
 export default controllerRouter;

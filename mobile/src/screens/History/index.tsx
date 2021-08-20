@@ -69,7 +69,7 @@ export function History() {
       let reducedTotal = orderHistory.reduce((a,v) => a = a + parseFloat(v.totalPrice) , 0);
 
       orderHistory.map(order => {
-        if(order.condition >= 221) {
+        if(order.condition === 221 || order.condition === 222) {
           reducedTotal = reducedTotal - parseFloat(order.totalPrice);
         } else {
           return;

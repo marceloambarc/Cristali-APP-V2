@@ -7,7 +7,6 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 24,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: Dimensions.get('window').height *.15,
     paddingBottom: Dimensions.get('window').height * 0.1
   },
   title: {
@@ -21,16 +20,19 @@ export const styles = StyleSheet.create({
     fontSize: theme.fonts.sizeC
   },
   falseDivider: {
-    paddingTop: 32
+    paddingTop: Dimensions.get('window').height *0.05
   },
   falseDivider2: {
-    paddingTop: 14
+    paddingTop: Dimensions.get('window').height *0.04
   },
   cristaliInputText: {
     fontFamily: theme.fonts.text,
     fontSize: 15,
     lineHeight: 20.46,
     color: theme.colors.loginText,
-    marginBottom: 10
+    marginBottom: 7
   },
+  footer: {
+    marginTop: Dimensions.get('window').height *0.02
+  }
 });

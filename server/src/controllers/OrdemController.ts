@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getRepository, LessThan, LessThanOrEqual, MoreThan } from "typeorm";
+import { Between, getRepository, LessThan, LessThanOrEqual, MoreThan, In } from "typeorm";
 import * as Yup from 'yup'
 
 import Ordem from "../models/Ordem";
@@ -651,7 +651,7 @@ export default {
 
       const ordens = await ordensRepository.find({
         where: [
-          { cd_id_ccli: searchId, cd_habil_tipo: 220 },
+          { cd_id_ccli: searchId, cd_habil_tipo: In([220,223,224]) },
         ],
         order: {
           cd_id: "DESC"
@@ -679,7 +679,7 @@ export default {
 
       const ordens = await ordensRepository.find({
         where: [
-          { cd_id_ccli: searchId, cd_habil_tipo: MoreThan(221) },
+          { cd_id_ccli: searchId, cd_habil_tipo: Between(221, 222) },
         ],
         order: {
           cd_id: "DESC"

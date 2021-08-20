@@ -104,6 +104,42 @@ export default {
     }
   },
 
+  async resetPassword(request: Request, response: Response) {
+    try {
+
+      const {
+        userCgc
+      } = request.body;
+
+      const searchUserCgc = String(userCgc);
+
+      const senhasRepository = getRepository(Senha);
+
+      const existSenha = await senhasRepository.findOne({
+        where: {
+          tx_cgc: searchUserCgc
+        }
+      });
+
+      if(existSenha === undefined) {
+        return response.status(404).json({ "Erro" : "Usuário não existe" });
+        
+      } else {
+        const newPassword = userCgc;
+        let generatedSalt = await bcrypt.genSalt(salt);
+        let hash = await bcrypt.hash(newPassword, generatedSalt);
+
+        existSenha.tx_senha = hash;
+        await senhasRepository.save(existSenha);
+
+        return response.status(202).json(senhaView.render(existSenha));
+      }
+
+    }catch(err) {
+      return response.status(400).json({ "Erro" : err });
+    }
+  },
+
   async changePassword(request: Request, response: Response) {
     try {
 
@@ -112,7 +148,7 @@ export default {
         oldPassword,
         newPassword
       } = request.body;
-      console.log(request.body);
+
       const searchUserCode = String(userCode);
 
       const senhasRepository = getRepository(Senha);
@@ -124,7 +160,6 @@ export default {
       });
 
       if(existSenha === undefined) {
-        console.log('HERE')
         return response.status(404).json({ "Erro" : "Usuário não existe" });
         
       } else {
