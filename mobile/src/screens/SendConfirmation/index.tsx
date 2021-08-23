@@ -9,8 +9,13 @@ import * as MailComposer from 'expo-mail-composer';
 import { styles } from './styles';
 import { theme } from '../../global';
 
-import { PagSeguroConfirmationProps } from '../Confirmation';
 import { ClientProps } from '../../components/ClientComponent';
+
+interface PagSeguroConfirmationProps {
+  pagSeguroId: string;
+  reference: string;
+  cardNumber: string;
+}
 
 interface ValueProps {
   value: string;

@@ -14,6 +14,7 @@ import { Money } from '../screens/Money';
 import { PagSeguroScreen } from '../screens/PagSeguroScreen';
 import { Final } from '../screens/Final';
 import { SendConfirmation } from '../screens/SendConfirmation';
+import { Rejected } from '../screens/Rejected';
 
 import { Test } from '../test';
 
@@ -39,6 +40,7 @@ export function AppRoutes() {
         <AppStack.Screen name="Checkout" component={Checkout} />
         <AppStack.Screen name="Money" component={Money} />
         <AppStack.Screen name="PagSeguro" component={PagSeguroScreen} />
+        <AppStack.Screen name="Rejected" component={Rejected} />
         <AppStack.Screen name="SendConfirmation" component={SendConfirmation} />
         <AppStack.Screen name="Final" component={Final} />
         </>

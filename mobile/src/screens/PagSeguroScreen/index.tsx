@@ -213,14 +213,29 @@ export function PagSeguroScreen() {
     });
 
     if(response) {
-      if(testParams)
-        console.log(response.data);
       setCreatedPagSeguro(true);
-      if(testParams)
+      if(response.data.stauts === 'PAID'){
         Alert.alert('Enviado PagSeguro');
         sendLog({logText:`${user.userName} OBTEVE VENDA Nº ${response.data.payment_response.reference} PAGA`, clientToken});
         handleSetNewCondition({id: orderId, condition: 220});
         navigation.navigate('SendConfirmation',{
+          pagSeguroId: response.data.id,
+          reference: response.data.payment_response.reference,
+          cardNumber: response.data.payment_method.card.last_digits,
+          declined: response.data.status,
+          message: response.data.payment_response.message,
+          value: response.data.amount.value.toString(),
+          id: orderId,
+          clientName: clientName,
+          clientCgc: clientCgc,
+          clientPhone: clientPhone,
+          clientEmail: clientEmail,
+          clientNotes: clientNotes,
+        })
+      } else {
+        sendLog({logText:`${user.userName} OBTEVE VENDA Nº ${response.data.payment_response.reference} REJEITADA`, clientToken});
+        handleSetNewCondition({id: orderId, condition: 221});
+        navigation.navigate('Rejected',{
           pagSeguroId: response.data.id,
           reference: response.data.payment_response.reference,
           cardNumber: response.data.payment_method.card.last_digits,
@@ -233,7 +248,8 @@ export function PagSeguroScreen() {
           clientPhone: clientPhone,
           clientEmail: clientEmail,
           clientNotes: clientNotes,
-      })
+        })
+      }
     }
   }
 

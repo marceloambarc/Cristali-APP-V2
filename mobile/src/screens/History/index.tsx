@@ -15,6 +15,8 @@ import { OrderList } from "../../components/OrderList";
 import { Header } from "../../components/Header";
 import { Loading } from "../../components/Loading";
 import { CristaliButton } from "../../components/CristaliButton";
+import { HistoryModal } from "../../components/HistoryModal";
+import { OrderModal } from "../../components/OrderModal";
 
 import { OrderProps } from "../../components/Order";
 
@@ -25,6 +27,17 @@ export function History() {
   const [loading, setLoading] = useState(true);
   const [loadingPrice, setLoadingPrice] = useState(true);
   const [orderHistory, setOrderHistory] = useState<OrderProps[]>([]);
+
+  const [order, setOrder] = useState<OrderProps>({
+    open: false,
+    id: 0,
+    userCode: 0,
+    totalPrice: '0',
+    createdAt: new Date(),
+    orderNotes: '0',
+    condition: 0,
+    clientCode: 0} as OrderProps);
+
   const [historyCount, setHistoryCount] = useState(0);
   const [total, setTotal] = useState('0');
 
@@ -38,6 +51,8 @@ export function History() {
 
   const [activePressed, setActivePressed] = useState(false);
   const [inactivePressed, setInactivePressed] = useState(false);
+
+  const [openHistoryModal, setOpenHistoryModal] = useState(false);
 
   const logText = `${user.userName} Consultou Histórico de ${firstDate} até ${secondDate}`;
 
@@ -97,14 +112,23 @@ export function History() {
     });
   },[orderHistory]);
 
+  function closeHistoryModal() {
+    setOpenHistoryModal(false);
+  }
+
   function handleOrderSelect(orderSelect: OrderProps) {
-    var sampleNumber = parseInt(orderSelect.totalPrice);
+    setOrder(orderSelect);
+    setOpenHistoryModal(true);
+    //setOrderSelected(orderSelect);
+    
+
+    /*var sampleNumber = parseInt(orderSelect.totalPrice);
     const res = (sampleNumber / 100).toFixed(2);
     const replaced = res.replace('.',',');
     const toCurrency = 'R$ ' + replaced;
 
     Alert.alert(`Venda ${orderSelect.id}`, `Total da Venda: ${toCurrency}
-    ${orderSelect.orderNotes}`);
+    ${orderSelect.orderNotes}`);*/
   }
 
   const showSecondDatePicker = () => {
@@ -172,37 +196,37 @@ export function History() {
         <View style={styles.container}>
           <View style={styles.historyArea}>
             <DateTimePickerModal
-                    isVisible={isDatePickerVisible}
-                    mode="date"
-                    display={Platform.OS === 'android'? 'default':'inline'}
-                    maximumDate={new Date()}
-                    date={momentum}
-                    onConfirm={handleConfirm}
-                    onCancel={hideDatePicker}
-                    is24Hour={true}
-                    headerTextIOS='Selecione a Data'
-                    confirmTextIOS='Confirmar'
-                    cancelTextIOS='Cancelar'
-                    textColor={'white'}
-                    isDarkModeEnabled={false}
-                    locale='pt_BR'
-                  />
-              <DateTimePickerModal
-                    isVisible={isSecondDatePickerVisible}
-                    mode="date"
-                    display={Platform.OS === 'android'? 'default':'inline'}
-                    maximumDate={new Date()}
-                    date={new Date()}
-                    onConfirm={handleSecondConfirm}
-                    onCancel={hideSecondDatePicker}
-                    is24Hour={true}
-                    headerTextIOS='Selecione a Data'
-                    confirmTextIOS='Confirmar'
-                    cancelTextIOS='Cancelar'
-                    textColor={'white'}
-                    isDarkModeEnabled={false}
-                    locale='pt_BR'
-              />
+              isVisible={isDatePickerVisible}
+              mode="date"
+              display={Platform.OS === 'android'? 'default':'inline'}
+              maximumDate={new Date()}
+              date={momentum}
+              onConfirm={handleConfirm}
+              onCancel={hideDatePicker}
+              is24Hour={true}
+              headerTextIOS='Selecione a Data'
+              confirmTextIOS='Confirmar'
+              cancelTextIOS='Cancelar'
+              textColor={'white'}
+              isDarkModeEnabled={false}
+              locale='pt_BR'
+            />
+            <DateTimePickerModal
+              isVisible={isSecondDatePickerVisible}
+              mode="date"
+              display={Platform.OS === 'android'? 'default':'inline'}
+              maximumDate={new Date()}
+              date={new Date()}
+              onConfirm={handleSecondConfirm}
+              onCancel={hideSecondDatePicker}
+              is24Hour={true}
+              headerTextIOS='Selecione a Data'
+              confirmTextIOS='Confirmar'
+              cancelTextIOS='Cancelar'
+              textColor={'white'}
+              isDarkModeEnabled={false}
+              locale='pt_BR'
+            />
 
               <View style={styles.titleContainer}>
                 <Text style={styles.title}>Filtro</Text>
@@ -297,6 +321,15 @@ export function History() {
             </View>
   
           </View>
+
+          <HistoryModal
+            visible={openHistoryModal}
+            closeModal={closeHistoryModal}
+          >
+            <OrderModal
+              data={order}
+            />
+          </HistoryModal>
         </View>
       </>
     );

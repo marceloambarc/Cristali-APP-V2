@@ -1,5 +1,5 @@
 export const isCreditCardObfuscated = false;
-export const testParams = false;
+export const testParams = true;
 
 export const twoInstallment = 0.51495;
 export const threeInstallment = 0.34670;

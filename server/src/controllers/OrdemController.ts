@@ -7,6 +7,7 @@ import ordemView from "../view/ordem_view";
 
 import Clientefinal from "../models/Clientefinal";
 import ClienteController from "./ClienteController";
+import { Console } from "console";
 
 
 export default { 
@@ -422,6 +423,8 @@ export default {
         orderNotes = 'Observação Não Inserida';
 
       itens.forEach((item, index, object) => {
+        if(item.vl_preco === 0)
+          object.splice(index, 1);
         if(item.vl_preco === '')
           object.splice(index, 1);
         if(item.cd_codigogerado === '')
@@ -431,6 +434,8 @@ export default {
         if(item.vl_preco)
           item.vl_preco = parseInt(item.vl_preco.replace(/\D/g, ""));
       });
+
+      console.log(itens);
 
       const ordensRepository = getRepository(Ordem);
 
@@ -620,6 +625,7 @@ export default {
       const ordensRepository = getRepository(Ordem);
 
       const ordens = await ordensRepository.find({
+        relations: ['itens'],
         where: [
           { cd_id_ccli: searchId, cd_habil_tipo: MoreThan(219) },
         ],
@@ -631,7 +637,7 @@ export default {
       if(ordens.length === 0) {
         return response.status(204).json({ "Vazio" : "Histórico Vazio" });
       } else {
-        return response.json(ordemView.renderMany(ordens));
+        return response.json(ordemView.renderManyWithItens(ordens));
       }
 
     }catch(err) {
