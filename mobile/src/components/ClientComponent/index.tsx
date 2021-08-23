@@ -32,7 +32,7 @@ export function ClientComponent({ data, ...rest } : ClientComponentProps) {
 
     <View style={styles.content}>
       <View>
-        <Text style={styles.title}>
+        <Text numberOfLines={1} style={styles.title}>
           { data.clientName }
         </Text>
 

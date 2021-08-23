@@ -22,8 +22,6 @@ export const styles = StyleSheet.create({
     fontFamily: theme.fonts.text,
     fontSize: theme.fonts.sizeB,
     textAlign: 'left',
-    color: theme.colors.primary,
-    maxHeight: 20,
   },
   number:  {
     fontFamily: theme.fonts.text,
@@ -58,7 +56,5 @@ export const styles = StyleSheet.create({
     fontSize: theme.fonts.sizeB,
     textAlign: 'left',
     color: theme.colors.primary,
-    maxHeight: 20,
-    marginBottom: 10
   }
 });

@@ -214,7 +214,7 @@ export function PagSeguroScreen() {
 
     if(response) {
       setCreatedPagSeguro(true);
-      if(response.data.stauts === 'PAID'){
+      if(response.data.status === 'PAID'){
         Alert.alert('Enviado PagSeguro');
         sendLog({logText:`${user.userName} OBTEVE VENDA Nº ${response.data.payment_response.reference} PAGA`, clientToken});
         handleSetNewCondition({id: orderId, condition: 220});
@@ -320,9 +320,10 @@ export function PagSeguroScreen() {
                 <View style={styles.inputContainer}>
                   <Text style={styles.inputText}>Número do Cartão</Text>
                   <InputMask
-                    type={'credit-card'}
+                    type={'custom'}
                     options={{
-                      obfuscated: isCreditCardObfuscated
+                      obfuscated: isCreditCardObfuscated,
+                      mask: '9999 9999 9999 9999 999',
                     }}
                     value={cardNumber}
                     onChangeText={setCardNumber}

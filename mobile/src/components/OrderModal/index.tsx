@@ -71,7 +71,7 @@ export function OrderModal({ data } : OrderComponentProps ) {
 
 
         <CristaliInput 
-          style={styles.text}
+          style={[styles.text,{color: theme.colors.Config}]}
           textAlign='center'
           value={dateFormat}
           editable={false}
@@ -85,16 +85,13 @@ export function OrderModal({ data } : OrderComponentProps ) {
           editable={false}
         />
 
-        {data.condition === 220 && <Text style={styles.text}>Cartão de Crédito</Text>}
-        {data.condition === 221 && <Text style={styles.text}>Recusada</Text>}
-        {data.condition === 222 && <Text style={styles.text}>Cancelada</Text>}
-        {data.condition === 223 && <Text style={styles.text}>Dinheiro</Text>}
-        {data.condition === 224 && <Text style={styles.text}>Outra Forma</Text>}
+        {data.condition === 220 && <Text style={[styles.text,{color: theme.colors.Success}]}>Cartão de Crédito</Text>}
+        {data.condition === 221 && <Text style={[styles.text,{color: theme.colors.Cancel}]}>Recusada</Text>}
+        {data.condition === 222 && <Text style={[styles.text,{color: theme.colors.Cancel}]}>Cancelada</Text>}
+        {data.condition === 223 && <Text style={[styles.text,{color: theme.colors.Success}]}>Dinheiro</Text>}
+        {data.condition === 224 && <Text style={[styles.text,{color: theme.colors.Success}]}>Outra Forma</Text>}
+        <Text style={[styles.text,{color: theme.colors.primary}]}>{ data.orderNotes }</Text>
       </View>
-    </View>
-
-    <View style={{paddingHorizontal: 70}}>
-      <Text style={styles.text}>{ data.orderNotes }</Text>
     </View>
 
     <View style={styles.bar} />
@@ -102,14 +99,14 @@ export function OrderModal({ data } : OrderComponentProps ) {
       <Text style={styles.title}>Itens:</Text>
     </View>
     <View>
-      {data.itens !== undefined 
+      {data.itens !== undefined
         ?
         data.itens.map(item => {
           return(
             <View style={styles.itemContainer} key={item.cd_codigogerado}>
               <Text style={styles.itemtext}>Produto: {item.nm_produto}</Text>
               <TextInputMask
-                style={styles.text}
+                style={[styles.text,{color: theme.colors.primary}]}
                 type={'money'}
                 textAlign='left'
                 value={(parseInt(item.vl_preco)).toString()}

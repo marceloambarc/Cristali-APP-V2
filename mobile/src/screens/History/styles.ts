@@ -56,6 +56,10 @@ export const styles = StyleSheet.create({
     justifyContent: 'center', 
     alignItems: 'center'
   },
+  buttonColumn: {
+    width: 60, 
+    paddingHorizontal: 5
+  },
   orderRow: {
     flexDirection: 'row',
     marginTop: Dimensions.get('window').height *.02,

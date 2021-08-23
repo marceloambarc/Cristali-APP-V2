@@ -6,24 +6,23 @@ export const styles = StyleSheet.create({
     width: '100%',
     height: 82,
     flexDirection: 'row',
+    paddingHorizontal: 10,
+    justifyContent: 'space-between',
     alignItems: 'center',
     borderRadius: 20,
-    paddingLeft: 6,
-    paddingRight: 18,
-    
-    marginVertical: 7
+    marginVertical: 5,
   },
   content: {
     flex: 1,
     justifyContent: 'center',
-    marginLeft: 20,
-    marginRight: 20,
+    marginLeft: 16,
+    marginRight: 16,
   },
   title: {
     fontFamily: theme.fonts.heading,
     color: theme.colors.title,
     fontSize: theme.fonts.sizeC,
-    marginBottom: 4
+    marginBottom: 4,
   },
   text: {
     fontFamily: theme.fonts.text,

@@ -17,7 +17,7 @@ export const styles = StyleSheet.create({
     fontFamily: theme.fonts.heading,
     color: theme.colors.title,
     fontSize: theme.fonts.sizeTitle,
-    lineHeight: 70
+    lineHeight: 30
   },
   text: {
     fontFamily: theme.fonts.text,

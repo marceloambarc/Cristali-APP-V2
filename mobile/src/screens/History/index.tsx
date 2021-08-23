@@ -263,7 +263,7 @@ export function History() {
 
               <View style={{flexDirection: 'row'}}>
 
-                <View style={{width: 60,  paddingHorizontal: 5}}>
+                <View style={styles.buttonColumn}>
                   <CristaliButton 
                     title='✓'
                     color={`${theme.colors.Success}`}
@@ -271,7 +271,7 @@ export function History() {
                     switchPressed={activePressed}
                   />
                 </View>
-                <View style={{width: 60,  paddingHorizontal: 5}}>
+                <View style={styles.buttonColumn}>
                   <CristaliButton 
                     title='x'
                     color={`${theme.colors.Cancel}`}
