@@ -20,17 +20,22 @@ export const styles = StyleSheet.create({
     fontSize: theme.fonts.sizeC
   },
   falseDivider: {
-    paddingTop: Dimensions.get('window').height *0.05
+    paddingTop: Dimensions.get('window').height *0.03
   },
   falseDivider2: {
-    paddingTop: Dimensions.get('window').height *0.04
+    paddingTop: Dimensions.get('window').height *0.02
   },
   cristaliInputText: {
     fontFamily: theme.fonts.text,
-    fontSize: 15,
+    fontSize: theme.fonts.sizeD,
     lineHeight: 20.46,
     color: theme.colors.loginText,
     marginBottom: 7
+  },
+  errorPassword: {
+    fontFamily: theme.fonts.text,
+    color: theme.colors.Config,
+    fontSize: theme.fonts.sizeD
   },
   footer: {
     marginTop: Dimensions.get('window').height *0.02

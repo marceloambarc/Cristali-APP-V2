@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, Alert, KeyboardAvoidingView, Platform } from 'react-native';
+import validator from 'validator';
 import { useAuth } from '../../hooks/auth';
 
 import { api } from '../../services/api';
@@ -19,6 +20,9 @@ export function ChangePassword() {
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
 
+  const [errorMessage, setErrorMessage] = useState('');
+  const [isStrong, setIsStrong] = useState(false);
+
   async function handleChangePassword() {
     try {
       if(newPassword === confirmNewPassword) {
@@ -28,7 +32,11 @@ export function ChangePassword() {
           const oldPassword = JSON.parse(storage);
           if(newPassword === oldPassword) {
             Alert.alert('A Senha não pode ser igual a anterior.');
-            } else {
+            return;
+          }
+          if(!isStrong){  
+            Alert.alert('Ops!', 'Senha muito fraca, deve conter letras minúsculas, letras maiúsculas e no mínimo um número.');
+          } else {
             await api.put('/changepassword',{
               userCode: (user.userCode)?.toString(),
               oldPassword: (oldPassword).toString(),
@@ -47,6 +55,19 @@ export function ChangePassword() {
       }
     } catch(err) {
       console.log(err);
+    }
+  }
+
+  const validate = (value: string) => {
+    setNewPassword(value);
+    if (validator.isStrongPassword(value, {
+      minLength: 5, minLowercase: 1,
+      minUppercase: 1, minNumbers: 1, minSymbols: 0
+    })) {
+      setErrorMessage('Senha Autorizada');
+      setIsStrong(true);
+    } else {
+      setErrorMessage('Senha muito Fraca');
     }
   }
 
@@ -70,9 +91,10 @@ export function ChangePassword() {
           textAlign='center'
           peachpuff
           value={newPassword}
-          onChangeText={setNewPassword}
+          onChangeText={(e) => validate(e)}
           secureTextEntry={true}
         />
+        <Text style={styles.errorPassword}>{errorMessage}</Text>
         <View style={styles.falseDivider2}/>
         <Text style={styles.cristaliInputText}>CONFIRME NOVA SENHA</Text>
         <CristaliInput 

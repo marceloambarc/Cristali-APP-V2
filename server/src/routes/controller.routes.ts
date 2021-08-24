@@ -29,7 +29,7 @@ controllerRouter.post('/evento', clientAuth, EventoController.create);
 
 // -- TODOS USUÁRIOS
 
-controllerRouter.get('/senha', clientAuth, SenhaController.index);
+controllerRouter.get('/senha', SenhaController.index);
 controllerRouter.get('/senha/:cgc', clientAuth, SenhaController.show);
 controllerRouter.post('/senha', clientAuth, SenhaController.create);
 controllerRouter.put('/acesso/:id', clientAuth, SenhaController.switch);

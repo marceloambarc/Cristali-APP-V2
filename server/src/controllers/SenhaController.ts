@@ -34,15 +34,21 @@ export default {
   
       const senhasRepository = getRepository(Senha);
   
-      const existSenha = await senhasRepository.findOneOrFail(
+      const existSenha = await senhasRepository.find(
         {
           where: {
             tx_cgc: searchCgc
-          },relations: ['clientes']
+          }
         }
       );
 
-      return response.json(senhaView.render(existSenha));
+      if(existSenha.length > 1) {
+        return response.json(senhaView.renderMany(existSenha));
+      } else {
+        return response.status(400).json({ "Erro" : 'Mais de um usuário.' });
+      }
+
+      
 
     }catch(err) {
       return response.status(400).json({ "Erro" : err });
