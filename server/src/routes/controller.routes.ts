@@ -31,7 +31,7 @@ controllerRouter.post('/evento', clientAuth, EventoController.create);
 
 controllerRouter.get('/senha', SenhaController.index);
 controllerRouter.get('/senha/:cgc', clientAuth, SenhaController.show);
-controllerRouter.post('/senha', clientAuth, SenhaController.create);
+controllerRouter.post('/senha', SenhaController.create);
 controllerRouter.put('/acesso/:id', clientAuth, SenhaController.switch);
 controllerRouter.put('/senha/:cgc', clientAuth, SenhaController.edit);
 controllerRouter.delete('/senha/:cgc', clientAuth, SenhaController.delete);

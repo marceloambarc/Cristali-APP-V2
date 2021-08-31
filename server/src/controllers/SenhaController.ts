@@ -10,6 +10,7 @@ import { SegundaSenha } from '../../credentials';
 
 import Senha from '../models/Senha';
 import senhaView from '../view/senha_view';
+import { JWTSecretAdmin } from '../../credentials.exemple';
 
 export default {
   
@@ -293,56 +294,61 @@ export default {
       RESPECTIVOS AMBIENTES (REACT-NATIVE => APP  || api || SQL => BANCO DE DADOS)
       */
       const {
-        password,
+        secret,
         userCode,
         userName,
         cgc
       } = request.body;
 
-      if(password === '' || userCode === '' || userName === '' || cgc === '') {
-        return response.status(400).json({ "Erro" : "O parâmetro não pode ser vazio." });
-      } else {
-
-        const senhasRepository = getRepository(Senha);
-
-        const existSenha = await senhasRepository.findOne({
-          where: {
-            tx_cgc: cgc
-          }
-        });
-  
-        if(existSenha === undefined) {
-          
-          const saltEncriypted = await bcrypt.genSalt(salt);
-          const hash = await bcrypt.hash(password, saltEncriypted);
-  
-          const data : any = {
-            in_ativo: 0,
-            tx_senha: hash,
-            cd_ccli: userCode,
-            nm_nomecli: userName,
-            tx_cgc: cgc
-          };
-
-          const schema = Yup.object().shape({
-            in_ativo: Yup.number().required(),
-            tx_senha: Yup.string().required(),
-            cd_ccli: Yup.string().required(),
-            nm_nomecli: Yup.string().required(),
-            tx_cgc: Yup.string().required()
-          });
-    
-          await schema.validate(data, {
-            abortEarly: false,
-          });
-    
-          const senhaRepository = await senhasRepository.insert(data);
-  
-          return response.status(201).json(senhaRepository);
-
+      console.log(secret);
+      if(secret === SegundaSenha) {
+        if(userCode === '' || userName === '' || cgc === '') {
+          return response.status(400).json({ "Erro" : "O parâmetro não pode ser vazio." });
         } else {
-          return response.status(409).json({ "Ops!" : "CPF já Cadastrado." });
+  
+          const senhasRepository = getRepository(Senha);
+  
+          const existSenha = await senhasRepository.findOne({
+            where: {
+              tx_cgc: cgc
+            }
+          });
+    
+          if(existSenha === undefined) {
+            
+            const saltEncriypted = await bcrypt.genSalt(salt);
+            const hash = await bcrypt.hash(cgc, saltEncriypted);
+    
+            const data : any = {
+              in_ativo: 0,
+              tx_senha: hash,
+              cd_ccli: userCode,
+              nm_nomecli: userName,
+              tx_cgc: cgc
+            };
+  
+            const schema = Yup.object().shape({
+              in_ativo: Yup.number().required(),
+              tx_senha: Yup.string().required(),
+              cd_ccli: Yup.string().required(),
+              nm_nomecli: Yup.string().required(),
+              tx_cgc: Yup.string().required()
+            });
+      
+            await schema.validate(data, {
+              abortEarly: false,
+            });
+      
+            const senhaRepository = await senhasRepository.insert(data);
+    
+            return response.status(201).json(senhaRepository);
+  
+          } else {
+            return response.status(409).json({ "Ops!" : "CPF já Cadastrado." });
+          }
         }
+      } else {
+        return response.status(400).json({ "Erro" : "Código Errado." });
       }
     }catch(err){
       return response.status(400).json({ "Erro" : err });

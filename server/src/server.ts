@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import path from 'path';
 
 import './database/connection';
 
@@ -12,7 +13,7 @@ app.use(express.json());
 app.use(routes);
 
 app.get('/',(req,res) => {
-  res.send('<p>BEM VINDO AO APP CRISTALI DEVELOPER CONTROLER CENTER</p>');
+  res.sendFile(path.resolve('src/page/welcome.html'));
 });
 
 app.listen(3333,() => {
