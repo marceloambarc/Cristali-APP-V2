@@ -59,7 +59,9 @@ export function History() {
   const navigation = useNavigation();
 
   async function handleGetHistory(historyParam: string) {
-    await api.get(`/myOrders/history/${historyParam}/${user.userCode}`).then(res => {
+    await api.get(`/myOrders/history/${historyParam}/${user.userCode}`,{
+      headers: {'Authorization': 'Bearer '+clientToken}
+    }).then(res => {
       setOrderHistory(res.data);
       setHistoryCount(res.data.length);
       setLoading(false);

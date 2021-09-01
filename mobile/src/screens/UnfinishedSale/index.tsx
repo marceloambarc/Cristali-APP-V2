@@ -38,7 +38,9 @@ export function UnfinishedSale() {
   const navigation = useNavigation();
 
   async function loadUnfinishedSales() {
-    const response = await api.get(`/myOrders/saved/${user.userCode}`);
+    const response = await api.get(`/myOrders/saved/${user.userCode}`,{
+      headers: {'Authorization': 'Bearer '+clientToken}
+    });
     setUnfinishedSales(response.data);
     setLoading(false);
   }
@@ -67,7 +69,9 @@ export function UnfinishedSale() {
       Alert.alert('Não é possível Carregar esta Venda.');
       setLoading(false);
     } else {
-      await api.get(`/client/${clientCode}`).then(res => {
+      await api.get(`/client/${clientCode}`,{
+        headers: {'Authorization': 'Bearer '+clientToken}
+      }).then(res => {
         setLoading(false)
         navigation.navigate('NewSale',{
           id: searchOrderId,

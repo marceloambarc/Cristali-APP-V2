@@ -18,7 +18,7 @@ import { theme } from "../../global";
 import { api } from "../../services/api";
 
 export function Client() {
-  const { user } = useAuth()
+  const { user, clientToken } = useAuth()
   const [loading, setLoading] = useState(true);
   const [clients, setClients] = useState<ClientProps[]>([])
 
@@ -34,7 +34,9 @@ export function Client() {
   const navigation = useNavigation();
 
   async function getClients() {
-    const response = await api.get(`/myClients/${user.userCode}`);
+    const response = await api.get(`/myClients/${user.userCode}`,{
+      headers: {'Authorization': 'Bearer '+clientToken}
+    });
     setClients(response.data);
     setLoading(false);
   }

@@ -29,7 +29,7 @@ controllerRouter.post('/evento', clientAuth, EventoController.create);
 
 // -- TODOS USUÁRIOS
 
-controllerRouter.get('/senha', SenhaController.index);
+controllerRouter.get('/senha', clientAuth, SenhaController.index);
 controllerRouter.get('/senha/:cgc', clientAuth, SenhaController.show);
 controllerRouter.post('/senha', SenhaController.create);
 controllerRouter.put('/acesso/:id', clientAuth, SenhaController.switch);
@@ -47,7 +47,7 @@ controllerRouter.post('/token', TokenController.create);
 
 controllerRouter.get('/client', clientAuth, ClienteController.index);
 controllerRouter.get('/client/orders', clientAuth, ClienteController.showWithOrders);
-controllerRouter.get('/client/:id', ClienteController.show);
+controllerRouter.get('/client/:id', clientAuth, ClienteController.show);
 controllerRouter.post('/client', clientAuth, ClienteController.create);
 controllerRouter.put('/cliente/:id', clientAuth, ClienteController.edit);
 
