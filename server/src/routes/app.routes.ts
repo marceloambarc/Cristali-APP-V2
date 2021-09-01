@@ -17,23 +17,23 @@ appRouter.put('/changepassword', clientAuth, SenhaController.changePassword);
 
 // ------------------------ CLIENTES
 
-appRouter.get('/myClients/:id', ClienteController.userClients);
+appRouter.get('/myClients/:id', clientAuth, ClienteController.userClients);
 
 // ------------------------- ORDENS
 
 // - TODAS AS ORDENS
-appRouter.get('/myOrders/:id', OrdemController.userOrders);
-appRouter.post('/order', OrdemController.create);
-appRouter.put('/order/:id', OrdemController.edit);
-appRouter.put('/order/condition/:id', OrdemController.editCondition);
+appRouter.get('/myOrders/:id', clientAuth, OrdemController.userOrders);
+appRouter.post('/order', clientAuth, OrdemController.create);
+appRouter.put('/order/:id', clientAuth, OrdemController.edit);
+appRouter.put('/order/condition/:id', clientAuth, OrdemController.editCondition);
 
 // - ORDENS SALVAS
-appRouter.get('/myOrders/saved/:id', OrdemController.userSavedOrders);
+appRouter.get('/myOrders/saved/:id', clientAuth, OrdemController.userSavedOrders);
 
 // - HISTÓRICO
-appRouter.get('/myOrders/history/all/:id', OrdemController.userHystory);
-appRouter.get('/myOrders/history/paid/:id', OrdemController.historyPaid);
-appRouter.get('/myOrders/history/notPaid/:id', OrdemController.historyNotPaid);
-appRouter.delete('/order', OrdemController.delete);
+appRouter.get('/myOrders/history/all/:id', clientAuth, OrdemController.userHystory);
+appRouter.get('/myOrders/history/paid/:id', clientAuth, OrdemController.historyPaid);
+appRouter.get('/myOrders/history/notPaid/:id', clientAuth, OrdemController.historyNotPaid);
+appRouter.delete('/order', clientAuth, OrdemController.delete);
 
 export default appRouter;
