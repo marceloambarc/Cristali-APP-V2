@@ -266,7 +266,7 @@ export function History() {
               <View style={{flexDirection: 'row'}}>
 
                 <View style={styles.buttonColumn}>
-                  <CristaliButton 
+                  <CristaliButton
                     title='✓'
                     color={`${theme.colors.Success}`}
                     onPress={handleActivePressed}
@@ -274,7 +274,7 @@ export function History() {
                   />
                 </View>
                 <View style={styles.buttonColumn}>
-                  <CristaliButton 
+                  <CristaliButton
                     title='x'
                     color={`${theme.colors.Cancel}`}
                     onPress={handleInactivePressed}
@@ -288,7 +288,7 @@ export function History() {
             <View style={styles.orderRow}>
               <View style={styles.orderCol}>
                 <Text style={styles.orderText}>Pedidos</Text>
-                <CristaliInput 
+                <CristaliInput
                   value={historyCount.toString()}
                   editable={false}
                   textAlign='center'

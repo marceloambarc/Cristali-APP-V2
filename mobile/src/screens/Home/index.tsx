@@ -58,7 +58,7 @@ export function Home(){
       <Background>
         <View style={styles.container}>
           <View style={styles.logoContainer}>
-            <Logo 
+            <Logo
               subtext
             />
           </View>
@@ -73,23 +73,23 @@ export function Home(){
   
               <View style={styles.painel}>
                 <View style={styles.painelButton}>
-                  <CristaliButton 
-                    color={`${theme.colors.Config}`} 
+                  <CristaliButton
+                    color={`${theme.colors.Config}`}
                     title="Histórico"
                     onPress={handleHistoryNavigation}
                   />
                 </View>
                 <View style={styles.painelButton}>
-                  <CristaliButton 
-                    color={`${theme.colors.Continue}`} 
+                  <CristaliButton
+                    color={`${theme.colors.Continue}`}
                     title="Carregar Venda"
                     onPress={handleSavedSaleNavigation}
                   />
                 </View>
                 <View style={styles.painelButton}>
                   <CristaliButton
-                    color={`${theme.colors.Continue}`} 
-                    title="Nova Venda" 
+                    color={`${theme.colors.Continue}`}
+                    title="Nova Venda"
                     onPress={handleNewSaleNavigation}
                   />
                 </View>
@@ -97,8 +97,8 @@ export function Home(){
   
               <View style={styles.footer}>
                 <View style={styles.footerRow}>
-                  <CristaliButton 
-                    color={`${theme.colors.Cancel}`} 
+                  <CristaliButton
+                    color={`${theme.colors.Cancel}`}
                     title="Sair"
                     onPress={handleSignOut}
                   />
