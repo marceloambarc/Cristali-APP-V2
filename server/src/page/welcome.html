@@ -26,7 +26,7 @@ body {font-family: "Lato", sans-serif}
 
   <!-- The Band Section -->
   <div class="w3-container w3-content w3-center w3-padding-64" style="max-width:800px" id="band">
-    <img src="https://cdn.awsli.com.br/1886/1886591/logo/d7bf3a3e74.png" alt="Lamp">
+    <img src="https://cdn.awsli.com.br/1886/1886591/logo/d7bf3a3e74.png" alt="CRISTALI">
     <h2 class="w3-wide">MOBILE API</h2>
     <p class="w3-opacity"><i>Cristali</i></p>
     <p class="w3-justify">Uma API - interface de programa de aplicativo - é usada em aplicativos móveis assim como em aplicativos da web. Ele permite que os desenvolvedores acessem outro aplicativo ou plataforma.
@@ -36,7 +36,7 @@ body {font-family: "Lato", sans-serif}
         APIs são o elemento fundamental de uma estratégia de aplicativo móvel. Usar APIs móveis é necessário para realmente obter grandes quantidades de dados de uma empresa em uma estrutura utilizável em um dispositivo móvel. Embora as APIs sejam amplamente utilizadas, ainda há tanto que elas podem oferecer que a maioria das empresas ainda não aproveitaram.</p>
   </div>
 
-  <!-- The Tour Section -->
+  <!-- The Version Section -->
   <div class="w3-black" id="tour">
     <div class="w3-container w3-content w3-padding-64" style="max-width:800px">
       <h2 class="w3-wide w3-center">Versões</h2>
@@ -50,6 +50,41 @@ body {font-family: "Lato", sans-serif}
       </ul>
     </div>
   </div>
+
+    <!-- The Documentation Section -->
+    <div class="w3-sand" id="tour">
+      <div class="w3-container w3-content w3-padding-64" style="max-width:800px">
+        <h2 class="w3-wide w3-center">Documentação</h2>
+        <p class="w3-opacity w3-center">http://201.21.198.76:54000</p><br>
+  
+        <span class="w3-margin-left">Novo usuário:</span>
+        <ul class="w3-ul w3-border w3-white w3-text-grey">
+          <li><code class="w3-padding"><span class="w3-tag w3-green w3-margin-left">POST</span> /senha <br> 
+            <p class="w3-padding">            
+              {<br>
+                "password": "senha interna",<br>
+                "userCode": "código do usuário",<br>
+                "userName": "nome do usuário",<br>
+                "cgc": "cpf/cnpj"<br>
+              }
+            </p>
+           </code></li>
+        </ul>
+        <br>
+        
+        <span class="w3-margin-left">Reiniciar Senha:</span>
+        <ul class="w3-ul w3-border w3-white w3-text-grey">
+          <li><code class="w3-padding"><span class="w3-tag w3-green w3-margin-left">POST</span> /resetpassword <br> 
+            <p class="w3-padding">            
+              {<br>
+                "password": "senha interna",<br>
+                "userCgc": "cpf/cnpj",<br>
+              }
+            </p>
+           </code></li>
+        </ul>
+      </div>
+    </div>
 
   <!-- The Contact Section -->
   <div class="w3-container w3-content w3-padding-64" style="max-width:800px" id="contact">
