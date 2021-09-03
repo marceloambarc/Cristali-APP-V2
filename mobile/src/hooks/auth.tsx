@@ -68,7 +68,6 @@ function AuthProvider({ children } : AuthProps) {
         if(cgc === password) {
           AsyncStorage.setItem(COLLECTION_PASSWORD, JSON.stringify(password));
           setChangePassword(true);
-    
         }
         setLoading(false);
       }).catch(err => {
@@ -82,6 +81,10 @@ function AuthProvider({ children } : AuthProps) {
           setLoading(false);
         }else if(res === '401'){
           Alert.alert('Sessão Terminada, Faça login novamente.');
+          signOut();
+          setLoading(false);
+        }else if(res === '406'){
+          Alert.alert('Usuário Inativo.');
           signOut();
           setLoading(false);
         }else if(res === '419'){

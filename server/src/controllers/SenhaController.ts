@@ -72,7 +72,7 @@ export default {
         return response.status(419).json({ "Erro": "Senha Incorreta" });
       }else{
         if(senha.in_ativo === 0){
-          return response.status(403).json({ "Erro": "Usuário não ativo." });
+          return response.status(406).json({ "Erro": "Usuário não ativo." });
         } else {
           jwt.sign({ cgc, id: senha.id, isActive: senha.in_ativo, userName: senha.nm_nomecli }, JWTSecretUser, { expiresIn: '1h' }, (err, token) => {
             if(err){
@@ -160,6 +160,8 @@ export default {
         newPassword
       } = request.body;
 
+      console.log(request.body);
+
       const searchUserCode = String(userCode);
 
       const senhasRepository = getRepository(Senha);
@@ -175,6 +177,7 @@ export default {
         
       } else {
         const isPasswordRight = await bcrypt.compare(oldPassword, existSenha.tx_senha);
+
         if(!isPasswordRight) {
           return response.status(419).json({ "Erro": `Senha Atual Incorreta ${existSenha.nm_nomecli}` });
         } else {
@@ -212,10 +215,10 @@ export default {
         const editedSenha = await senhasRepository.update(existSenha, { "in_ativo": setIsActive  });
         if(editedSenha){
           return response.status(202).json(senhaView.render(existSenha));
-        }else{
+        }else {
           return response.status(400).json({ "Erro": "Não foi possível editar Usuário." });
         }
-      }else{
+      }else {
         return response.status(404).json({ "Erro": "Usuário não Encontrado." });
       }
     }catch(err){

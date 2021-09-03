@@ -15,7 +15,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { COLLECTION_PASSWORD } from '../../config/storage';
 
 export function ChangePassword() {
-  const { user, clientToken, oldPassword, enterApp } = useAuth();
+  const { user, clientToken, enterApp } = useAuth();
 
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
@@ -30,6 +30,7 @@ export function ChangePassword() {
         const storage = await AsyncStorage.getItem(COLLECTION_PASSWORD);
         if(storage) {
           const oldPassword = JSON.parse(storage);
+          console.log(oldPassword);
           if(newPassword === oldPassword) {
             Alert.alert('A Senha não pode ser igual a anterior.');
             return;
