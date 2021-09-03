@@ -209,13 +209,11 @@ export function PagSeguroScreen() {
           itens: []
         });
       }
-
     });
 
     if(response) {
       setCreatedPagSeguro(true);
       if(response.data.status === 'PAID'){
-        Alert.alert('Enviado PagSeguro');
         sendLog({logText:`${user.userName} OBTEVE VENDA Nº ${response.data.payment_response.reference} PAGA`, clientToken});
         handleSetNewCondition({id: orderId, condition: 220});
         navigation.navigate('SendConfirmation',{
