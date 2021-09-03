@@ -15,7 +15,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { COLLECTION_PASSWORD } from '../../config/storage';
 
 export function ChangePassword() {
-  const { user, clientToken, enterApp } = useAuth();
+  const { user, clientToken, signOut, enterApp } = useAuth();
 
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
@@ -47,7 +47,8 @@ export function ChangePassword() {
             }).then(() => {
               enterApp();
             }).catch(err => {
-              console.log(err);
+              Alert.alert('Ops!', 'Tivemos um Erro, tente novamente');
+              signOut();
             });
           }
         }
@@ -55,7 +56,8 @@ export function ChangePassword() {
         Alert.alert('Senhas não coincidem');
       }
     } catch(err) {
-      console.log(err);
+      Alert.alert('Ops!', 'Verifique Sua Conexão.');
+      signOut();
     }
   }
 
