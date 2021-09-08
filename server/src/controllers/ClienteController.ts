@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { getRepository } from "typeorm";
 import * as Yup from 'yup';
 
-import Clientefinal from "../models/Clientefinal";
+import Clientefinal from "../models/ClienteFinal";
 import clienteView from "../view/cliente_view";
 
 export default {

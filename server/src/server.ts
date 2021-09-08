@@ -16,6 +16,10 @@ app.get('/',(req,res) => {
   res.sendFile(path.resolve('src/page/welcome.html'));
 });
 
+app.get('/privacy',(req,res) => {
+  res.sendFile(path.resolve('src/page/privacy.html'));
+});
+
 app.listen(3333,() => {
   console.log('Rodando.');
 });

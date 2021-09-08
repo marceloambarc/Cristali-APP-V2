@@ -5,9 +5,8 @@ import * as Yup from 'yup'
 import Ordem from "../models/Ordem";
 import ordemView from "../view/ordem_view";
 
-import Clientefinal from "../models/Clientefinal";
+import Clientefinal from "../models/ClienteFinal";
 import ClienteController from "./ClienteController";
-import { Console } from "console";
 
 
 export default { 
