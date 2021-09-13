@@ -207,6 +207,9 @@ export function NewSale() {
 
     if(orderId !== 0 && orderId !== undefined) {
       handleSetNewCondition({id: orderId, condition: 217});
+      if(orderNotes === ''){
+        alert('Anotação Não Inserida.');
+      }
       api.put(`/order/${orderId}`,{
         userCode: user.userCode,
         totalPrice: sellPrice,
@@ -257,7 +260,9 @@ export function NewSale() {
   
       });
     } else {
-      
+      if(orderNotes === ''){
+        setOrderNotes('Anotação Não Inserida');
+      }
       api.post(`/order`,{
         userCode: user.userCode,
         totalPrice: sellPrice,
@@ -549,7 +554,7 @@ export function NewSale() {
                         }
                       </View>
                       {index <= qt -1 ?
-                        <View />
+                        <></>
                         :
                         <TouchableOpacity
                           style={[styles.listButton, {backgroundColor: theme.colors.Success}]}

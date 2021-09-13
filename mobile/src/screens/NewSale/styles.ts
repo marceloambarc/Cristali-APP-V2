@@ -114,6 +114,7 @@ export const styles = StyleSheet.create({
     color: theme.colors.title
   },
   listButton: {
+    marginTop: 7,
     padding: 10,
     marginLeft: 10,
     borderRadius: 10,

@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "CristaliPOA",
+    "name": "CristaliCWB",
     "description": "Aplicativo Cristali para vendedoras externas.",
-    "slug": "CristaliPOA",
+    "slug": "CristaliCWB",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -22,7 +22,7 @@
     ],
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.cristaliPOA.app"
+      "bundleIdentifier": "com.cristaliCWB.app"
     },
     "android": {
       "adaptiveIcon": {
@@ -30,7 +30,7 @@
         "backgroundColor": "#FFFFFF"
       },
       "useNextNotificationsApi": true,
-      "package": "com.cristaliPOA.app",
+      "package": "com.cristaliCWB.app",
       "versionCode": 0
     },
     "web": {
