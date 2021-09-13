@@ -8,7 +8,6 @@ import { CristaliButton } from '../../components/CristaliButton';
 import { CristaliInput } from '../../components/CristaliInput';
 
 import { COLLECTION_ITEMS } from '../../config/storage';
-import { testParams } from '../../config/options';
 
 import { ItemProps } from '../NewSale';
 import { OrderProps } from '../../components/Order';
@@ -55,20 +54,13 @@ export function Money() {
       const logText = `${user.userName} FINALIZOU UMA VENDA PARA ${paymentMethod}.`;
       sendLog({logText, clientToken});
       handleSetNewCondition({id: orderId,condition: 223});
-      handleCreatePaymentOrder();
       handleNavigation();
     } else {
       const logText = `${user.userName} FINALIZOU UMA VENDA EM DINHEIRO.`;
       sendLog({logText, clientToken});
       handleSetNewCondition({id: orderId,condition: 224});
-      handleCreatePaymentOrder();
       handleNavigation();
     }
-  }
-
-  async function handleCreatePaymentOrder() {
-    if(testParams)
-      Alert.alert('TODO PAYMENT ORDER');
   }
 
   function handleNavigation() {

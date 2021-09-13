@@ -4,7 +4,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import uuid from 'react-native-uuid';
 import { useAuth } from '../../hooks/auth';
 
-import { isCreditCardObfuscated, testParams } from '../../config/options';
+import { isCreditCardObfuscated } from '../../config/options';
 import { pgapi } from '../../services/pgapi';
 
 import { styles } from './styles';

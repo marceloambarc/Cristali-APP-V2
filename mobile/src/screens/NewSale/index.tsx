@@ -8,8 +8,6 @@ import { useAuth } from "../../hooks/auth";
 
 import { styles } from "./styles";
 import { theme } from "../../global";
-
-import { testParams } from "../../config/options";
 import { COLLECTION_ITEMS } from "../../config/storage";
 
 import { OrderProps } from "../../components/Order";
@@ -77,8 +75,6 @@ export function NewSale() {
       setTotalPrice(orderParams.totalPrice);
       setCondition(orderParams.condition);
       if(orderParams.itens != undefined) {
-        if(testParams)
-          console.log(orderParams.itens);
         const itens = orderParams.itens
         itens.map((item, index) => {
           handleAdd(item.id, item.vl_preco.toString());
@@ -201,104 +197,116 @@ export function NewSale() {
   }
 
   async function handleOrder() {
-
-    const clientPhoneProto = clientPhone.replace(/\D/g,'');
-    const clientCgcProto = clientCgc.replace(/\D/g,'');
-
     if(orderId !== 0 && orderId !== undefined) {
       handleSetNewCondition({id: orderId, condition: 217});
       if(orderNotes === ''){
-        alert('Anotação Não Inserida.');
+        setOrderNotes('Anotação Não Inserida');
+        handleOldOrder();
+      } else {
+        handleOldOrder();
       }
-      api.put(`/order/${orderId}`,{
-        userCode: user.userCode,
-        totalPrice: sellPrice,
-        orderNotes,
-        clientId,
-        client: {
-          clientName,
-          clientCgc: clientCgcProto,
-          clientPhone: clientPhoneProto,
-          clientEmail,
-          clientNotes,
-          userCode: user.userCode
-        },
-        itens: list
-      },{
-        headers: {'Authorization': 'Bearer '+clientToken}
-      }).then(res => {
-        
-        navigation.navigate('Checkout', {
-          id: orderId,
-          clientName,
-          clientCgc: clientCgcProto,
-          clientPhone: clientPhoneProto,
-          clientEmail,
-          clientNotes,
-          orderNotes,
-          qt,
-          itens: list,
-          totalPrice: sellPrice.toString()
-        });
-      }).catch(err => {
-        const errorString = String(err);
-        const res = errorString.replace(/\D/g,'');
-  
-        if(res === '404'){
-          Alert.alert('Ops!','Esta venda não existe.');
-          
-        }else if(res === '401'){
-          Alert.alert('Sessão Terminada, Faça login novamente.');
-          setLoading(false);
-        }else if(res === '406'){
-          Alert.alert('Ops','Não é permitido Alterar o Cliente após criar a Venda');
-          setLoading(false);
-        }else{
-          Alert.alert(`${err}`);
-          setLoading(false);
-        }
-  
-      });
     } else {
       if(orderNotes === ''){
         setOrderNotes('Anotação Não Inserida');
+        handleNewOrder();
+      } else {
+        handleNewOrder();
       }
-      api.post(`/order`,{
-        userCode: user.userCode,
-        totalPrice: sellPrice,
-        orderNotes,
-        client: {
-          clientName,
-          clientCgc: clientCgcProto,
-          clientPhone: clientPhoneProto,
-          clientEmail,
-          clientNotes,
-          userCode: user.userCode
-        },
-        itens: list
-      },{
-        headers: {'Authorization': 'Bearer '+clientToken}
-      }).then(res => {
-        handleSetNewCondition({id: res.data.cd_id, condition: 217});
-        navigation.navigate('Checkout', {
-          id: res.data.cd_id,
-          clientName,
-          clientCgc: clientCgcProto,
-          clientPhone: clientPhoneProto,
-          clientEmail,
-          clientNotes,
-          orderNotes,
-          qt,
-          list: list,
-          totalPrice: sellPrice.toString()
-        });
-      }).catch(err => {
-        Alert.alert(
-          'Erro Criação ORDEM',
-          `${err}, ${clientNotes}`
-        )
-      });
+      
     }
+  }
+
+  async function handleOldOrder() {
+    const clientPhoneProto = clientPhone.replace(/\D/g,'');
+    const clientCgcProto = clientCgc.replace(/\D/g,'');
+    api.put(`/order/${orderId}`,{
+      userCode: user.userCode,
+      totalPrice: sellPrice,
+      orderNotes,
+      clientId,
+      client: {
+        clientName,
+        clientCgc: clientCgcProto,
+        clientPhone: clientPhoneProto,
+        clientEmail,
+        clientNotes,
+        userCode: user.userCode
+      },
+      itens: list
+    },{
+      headers: {'Authorization': 'Bearer '+clientToken}
+    }).then(res => {
+      
+      navigation.navigate('Checkout', {
+        id: orderId,
+        clientName,
+        clientCgc: clientCgcProto,
+        clientPhone: clientPhoneProto,
+        clientEmail,
+        clientNotes,
+        orderNotes,
+        qt,
+        itens: list,
+        totalPrice: sellPrice.toString()
+      });
+    }).catch(err => {
+      const errorString = String(err);
+      const res = errorString.replace(/\D/g,'');
+
+      if(res === '404'){
+        Alert.alert('Ops!','Esta venda não existe.');
+        
+      }else if(res === '401'){
+        Alert.alert('Sessão Terminada, Faça login novamente.');
+        setLoading(false);
+      }else if(res === '406'){
+        Alert.alert('Ops','Não é permitido Alterar o Cliente após criar a Venda');
+        setLoading(false);
+      }else{
+        Alert.alert(`${err}`);
+        setLoading(false);
+      }
+    });
+  }
+
+  async function handleNewOrder(){
+    const clientPhoneProto = clientPhone.replace(/\D/g,'');
+    const clientCgcProto = clientCgc.replace(/\D/g,'');
+    api.post(`/order`,{
+      userCode: user.userCode,
+      totalPrice: sellPrice,
+      orderNotes,
+      client: {
+        clientName,
+        clientCgc: clientCgcProto,
+        clientPhone: clientPhoneProto,
+        clientEmail,
+        clientNotes,
+        userCode: user.userCode
+      },
+      itens: list
+    },{
+      headers: {'Authorization': 'Bearer '+clientToken}
+    }).then(res => {
+      handleSetNewCondition({id: res.data.cd_id, condition: 217});
+      navigation.navigate('Checkout', {
+        id: res.data.cd_id,
+        clientName,
+        clientCgc: clientCgcProto,
+        clientPhone: clientPhoneProto,
+        clientEmail,
+        clientNotes,
+        orderNotes,
+        qt,
+        list: list,
+        totalPrice: sellPrice.toString()
+      });
+    }).catch(err => {
+      Alert.alert(
+        'Erro Criação ORDEM',
+        `${err}, ${clientNotes}`
+      )
+    });
   }
 
   if(loading) {
