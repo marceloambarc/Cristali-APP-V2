@@ -103,64 +103,64 @@ export function Money() {
     );
   } else {
     return (
-
       <KeyboardAvoidingView
         style={{flexGrow: 1}}
         keyboardVerticalOffset={(Platform.OS === 'ios')? 0 : 0}
         contentContainerStyle={{backgroundColor: 'transparent'}}
         behavior={ Platform.OS === 'ios'? 'padding' : undefined }
       >
-          <TouchableWithoutFeedback
-            onPress={() => Keyboard.dismiss()}
-          >
-        <View style={styles.container}>
+        <TouchableWithoutFeedback
+          onPress={() => Keyboard.dismiss()}
+        >
+          <View style={styles.container}>
   
-          <View style={styles.banner}>
-            <Text style={styles.title}>Atenção {user?.userName}</Text>
-            <Text style={styles.text}>
-              Você está recebendo com outra forma de 
-              pagamento sem ser pelo PAGSEGURO, ao 
-              confirmar esta transação, não significa que a
-              empresa irá receber o valor,
+            <View style={styles.banner}>
+              <Text style={styles.title}>Atenção {user?.userName}</Text>
+              <Text style={styles.text}>
+                Você está recebendo com outra forma de 
+                pagamento sem ser pelo PAGSEGURO, ao 
+                confirmar esta transação, não significa que a
+                empresa irá receber o valor,
   
-              O valor deve ser acertado posteriormente 
-              com o departamento financeiro da Cristali.
-            </Text>
+                O valor deve ser acertado posteriormente 
+                com o departamento financeiro da Cristali.
+              </Text>
   
-          </View>
+            </View>
   
-          {
-            isMoney?
+            {
+              isMoney
+              ?
               <View />
-            :
-            <View style={styles.inputContainer}>
-              <Text style={styles.inputText}>Digite a forma de pagamento.</Text>
-              <CristaliInput 
-                clientInput
-                value={paymentMethod}
-                onChangeText={setPaymentMethod}
-              />
-            </View>
-          }
+              :
+              <View style={styles.inputContainer}>
+                <Text style={styles.inputText}>Digite a forma de pagamento.</Text>
+                <CristaliInput 
+                  clientInput
+                  value={paymentMethod}
+                  onChangeText={setPaymentMethod}
+                />
+              </View>
+            }
   
   
-          {
-            loading?
-              <ActivityIndicator color={`${theme.colors.primary}`} size='large' style={{marginTop: 70}} />
-            :
+            {
+              loading
+              ?
+                <ActivityIndicator color={`${theme.colors.primary}`} size='large' style={{marginTop: 70}} />
+              :
   
-            <View style={styles.footer}>
-              <CristaliButton 
-                color={`${theme.colors.Success}`}
-                title="Finalizar"
-                onPress={handleFinal}
-              />
-            </View>
-          }
-        </View>
+                <View style={styles.footer}>
+                  <CristaliButton 
+                    color={`${theme.colors.Success}`}
+                    title="Finalizar"
+                    onPress={handleFinal}
+                  />
+                </View>
+            }
+          </View>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
-      
     );
   }
 }

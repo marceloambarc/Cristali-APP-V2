@@ -107,7 +107,6 @@ export function UnfinishedSale() {
     />
     <View style={styles.container}>
 
-
       <View style={styles.searchContainer}>
         <View style={styles.titleContainer}>
           <Text style={styles.title}>Número da Venda</Text>

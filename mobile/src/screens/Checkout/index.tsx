@@ -170,9 +170,10 @@ export function Checkout() {
 
           <View style={styles.payment}>
             <View style={styles.titleContainer}>
-              <Text style={styles.text}>Selecione uma das formas de pagamento
-                    abaixo, e aperte Continuar para prosseguir
-                    com a venda.
+              <Text style={styles.text}>
+                Selecione uma das formas de pagamento
+                abaixo, e aperte Continuar para prosseguir
+                com a venda.
               </Text>
             </View>
           </View>
@@ -188,7 +189,7 @@ export function Checkout() {
                   path={require('../../assets/pagseguro.png')}
                   pressed={pagSeguroPressed}
                 />
-              </View >
+              </View>
             </View>
             <View style={styles.checkoutButtonRow}>
               <View style={styles.checkoutButtonCol}>
@@ -199,19 +200,19 @@ export function Checkout() {
                   onPress={handleMoneyPressed}
                   path={require('../../assets/money.png')}
                   pressed={moneyPressed}
-                  />
+                />
               </View>
             </View>
             <View style={styles.checkoutButtonRow}>
               <View style={styles.checkoutButtonCol}>
-                  <CheckOutButton
-                    bcolor={`${theme.colors.Success}`}
-                    tcolor={`${theme.colors.credit}`}
-                    title="Outra forma de Pagamento"
-                    onPress={handleOtherPressed}
-                    path={require('../../assets/payment.png')}
-                    pressed={otherPressed}
-                    />
+                <CheckOutButton
+                  bcolor={`${theme.colors.Success}`}
+                  tcolor={`${theme.colors.credit}`}
+                  title="Outra forma de Pagamento"
+                  onPress={handleOtherPressed}
+                  path={require('../../assets/payment.png')}
+                  pressed={otherPressed}
+                />
               </View>
             </View>
           </View>

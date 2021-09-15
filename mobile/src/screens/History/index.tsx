@@ -122,7 +122,6 @@ export function History() {
     setOrder(orderSelect);
     setOpenHistoryModal(true);
     //setOrderSelected(orderSelect);
-    
 
     /*var sampleNumber = parseInt(orderSelect.totalPrice);
     const res = (sampleNumber / 100).toFixed(2);
@@ -167,7 +166,6 @@ export function History() {
     setOrderHistory([]);
 
     handleGetHistory('paid');
-    
   }
 
   async function handleInactivePressed(){

@@ -121,14 +121,43 @@ export function SendConfirmation() {
       <View />
 
       <View style={styles.buttons}>
-            { clientEmail === ''
-              ?
-                <RectButton
+        { 
+          clientEmail === ''
+          ?
+          <RectButton
+            style={[styles.button, {backgroundColor: theme.colors.ContinueDesactivated}]}
+            onPress={() => Alert.alert('Ops!', 'Email não Cadastrado.')}
+          >
+            <MaterialCommunityIcons
+              name="email-send"
+              size={32}
+              color="white"
+            />
+          </RectButton>
+          :
+          <RectButton
+            style={[styles.button, {backgroundColor: theme.colors.Continue}]}
+            onPress={handleSendEmail}
+          >
+            <MaterialCommunityIcons
+              name="email-send"
+              size={32}
+              color="white"
+            />
+          </RectButton>
+        }
+
+          <View style={styles.spaceButtons} />
+              
+            { 
+              clientPhone === ''
+              ? 
+              <RectButton
                 style={[styles.button, {backgroundColor: theme.colors.ContinueDesactivated}]}
-                onPress={() => Alert.alert('Ops!', 'Email não Cadastrado.')}
+                onPress={() => Alert.alert('Ops!', 'Telefone não Cadastrado.')}
               >
                 <MaterialCommunityIcons
-                  name="email-send"
+                  name="whatsapp"
                   size={32}
                   color="white"
                 />
@@ -136,44 +165,16 @@ export function SendConfirmation() {
               :
               <RectButton
                 style={[styles.button, {backgroundColor: theme.colors.Continue}]}
-                onPress={handleSendEmail}
+                onPress={handleSendWhatsapp}
               >
                 <MaterialCommunityIcons
-                  name="email-send"
+                  name="whatsapp"
                   size={32}
                   color="white"
                 />
               </RectButton>
             }
-
-            <View style={styles.spaceButtons} />
-              
-              { clientPhone === ''
-                ? 
-                <RectButton
-                  style={[styles.button, {backgroundColor: theme.colors.ContinueDesactivated}]}
-                  onPress={() => Alert.alert('Ops!', 'Telefone não Cadastrado.')}
-                >
-                  <MaterialCommunityIcons
-                    name="whatsapp"
-                    size={32}
-                    color="white"
-                  />
-                </RectButton>
-                :
-                <RectButton
-                  style={[styles.button, {backgroundColor: theme.colors.Continue}]}
-                  onPress={handleSendWhatsapp}
-                >
-                  <MaterialCommunityIcons
-                    name="whatsapp"
-                    size={32}
-                    color="white"
-                  />
-                </RectButton>
-              }
-              
-
+            
         </View>
       </View>
     </View>

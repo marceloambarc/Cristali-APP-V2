@@ -114,14 +114,14 @@ export function PagSeguroScreen() {
       Alert.alert('Cobrança já enviada');
       return;
     } else {
-      handleInstallments()
+      handleInstallments();
     }
   }
 
   function handleInstallmentFinish() {
     SetOpenInstallmentsModal(false);
     setLoading(true);
-    handleSendPagSeguro()
+    handleSendPagSeguro();
   }
 
   function handleInstallmentSelect(installmentSelect: number) {
@@ -174,6 +174,7 @@ export function PagSeguroScreen() {
     ).catch(err => {
       handleSetNewCondition({id: orderId, condition: 221});
       const message = err.response.data.error_messages[0].description;
+      
       if(message === 'invalid_parameter') {
         Alert.alert('Ops!', 'Dados do Cartão são inválidos. Tente novamente.');
         navigation.navigate('Home',{
@@ -229,7 +230,7 @@ export function PagSeguroScreen() {
           clientPhone: clientPhone,
           clientEmail: clientEmail,
           clientNotes: clientNotes,
-        })
+        });
       } else {
         sendLog({logText:`${user.userName} OBTEVE VENDA Nº ${response.data.payment_response.reference} REJEITADA`, clientToken});
         handleSetNewCondition({id: orderId, condition: 221});
@@ -246,7 +247,7 @@ export function PagSeguroScreen() {
           clientPhone: clientPhone,
           clientEmail: clientEmail,
           clientNotes: clientNotes,
-        })
+        });
       }
     }
   }

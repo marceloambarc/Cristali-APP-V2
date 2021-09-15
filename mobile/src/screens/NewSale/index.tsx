@@ -196,23 +196,26 @@ export function NewSale() {
     }
   }
 
+  async function handleChangeNote() {
+    setOrderNotes('Anotação Não Inserida');
+  }
+
   async function handleOrder() {
     if(orderId !== 0 && orderId !== undefined) {
       handleSetNewCondition({id: orderId, condition: 217});
       if(orderNotes === ''){
-        setOrderNotes('Anotação Não Inserida');
+        await handleChangeNote();
         handleOldOrder();
       } else {
         handleOldOrder();
       }
     } else {
       if(orderNotes === ''){
-        setOrderNotes('Anotação Não Inserida');
+        await handleChangeNote();
         handleNewOrder();
       } else {
         handleNewOrder();
       }
-      
     }
   }
 
@@ -236,7 +239,6 @@ export function NewSale() {
     },{
       headers: {'Authorization': 'Bearer '+clientToken}
     }).then(res => {
-      
       navigation.navigate('Checkout', {
         id: orderId,
         clientName,
@@ -288,6 +290,7 @@ export function NewSale() {
     },{
       headers: {'Authorization': 'Bearer '+clientToken}
     }).then(res => {
+      console.log(res.data);
       handleSetNewCondition({id: res.data.cd_id, condition: 217});
       navigation.navigate('Checkout', {
         id: res.data.cd_id,
@@ -304,7 +307,7 @@ export function NewSale() {
     }).catch(err => {
       Alert.alert(
         'Erro Criação ORDEM',
-        `${err}, ${clientNotes}`
+        `${err}, ${orderNotes}`
       )
     });
   }
@@ -560,7 +563,9 @@ export function NewSale() {
                           />
                           
                         }
+
                       </View>
+
                       {index <= qt -1 ?
                         <></>
                         :
@@ -571,13 +576,14 @@ export function NewSale() {
                           <AntDesign name="plus" size={24} color="white" />
                         </TouchableOpacity>
                       }
+
                       {index < list.length - 1 && (
                         <TouchableOpacity
                           style={[styles.listButton, {backgroundColor: theme.colors.Cancel}]}
                           onPress={() => handleDelete(item.id, item.vl_preco)}
                         >
                           <AntDesign name="minus" size={24} color="black" />
-                      </TouchableOpacity>
+                        </TouchableOpacity>
                       )}
                     </View>
                   ))}

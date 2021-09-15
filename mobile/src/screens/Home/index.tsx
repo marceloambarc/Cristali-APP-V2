@@ -106,7 +106,6 @@ export function Home(){
                 <View style={styles.footerRow}>
   
                 </View>
-            
               </View>
             </>
           }
