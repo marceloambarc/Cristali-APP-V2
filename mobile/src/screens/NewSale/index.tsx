@@ -404,7 +404,7 @@ export function NewSale() {
                       </Text>
                     </View>
                   </View>
-                  <CristaliInput 
+                  <CristaliInput
                     clientInput
                     value={clientEmail}
                     onChangeText={setClientEmail}
@@ -628,7 +628,7 @@ export function NewSale() {
   
                 <View style={styles.footer}>
                   <View>
-                    <CristaliButton 
+                    <CristaliButton
                       title="Continuar"
                       color={`${theme.colors.Success}`}
                       onPress={handleContinue}
