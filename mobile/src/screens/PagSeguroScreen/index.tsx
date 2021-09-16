@@ -213,6 +213,7 @@ export function PagSeguroScreen() {
     });
 
     if(response) {
+      console.log(response.data);
       setCreatedPagSeguro(true);
       if(response.data.status === 'PAID'){
         sendLog({logText:`${user.userName} OBTEVE VENDA Nº ${response.data.payment_response.reference} PAGA`, clientToken});

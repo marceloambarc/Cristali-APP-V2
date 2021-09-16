@@ -204,15 +204,17 @@ export function NewSale() {
     if(orderId !== 0 && orderId !== undefined) {
       handleSetNewCondition({id: orderId, condition: 217});
       if(orderNotes === ''){
-        await handleChangeNote();
-        handleOldOrder();
+        await handleChangeNote().then(() => {
+          handleOldOrder();
+        });
       } else {
         handleOldOrder();
       }
     } else {
       if(orderNotes === ''){
-        await handleChangeNote();
-        handleNewOrder();
+        await handleChangeNote().then(() => {
+          handleNewOrder();
+        });
       } else {
         handleNewOrder();
       }
@@ -290,7 +292,6 @@ export function NewSale() {
     },{
       headers: {'Authorization': 'Bearer '+clientToken}
     }).then(res => {
-      console.log(res.data);
       handleSetNewCondition({id: res.data.cd_id, condition: 217});
       navigation.navigate('Checkout', {
         id: res.data.cd_id,
@@ -305,10 +306,16 @@ export function NewSale() {
         totalPrice: sellPrice.toString()
       });
     }).catch(err => {
-      Alert.alert(
-        'Erro Criação ORDEM',
-        `${err}, ${orderNotes}`
-      )
+      const errorString = String(err);
+      const res = errorString.replace(/\D/g,'');
+
+      if(res === '401'){
+        Alert.alert('Ops!','Cliente já Existe.');
+        
+      }else if(res === '400'){
+        Alert.alert('Ops!', 'Erro de Anotação, possívelmente está Vazia.');
+        setLoading(false);
+      }
     });
   }
 
