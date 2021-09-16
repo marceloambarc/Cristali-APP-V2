@@ -14,7 +14,7 @@ import { theme } from '../../global';
 
 export function Home(){
   const { user, clientToken, isSignInLogSended, sendLoginLog, signOut } = useAuth();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const navigation = useNavigation();
 
@@ -43,14 +43,17 @@ export function Home(){
   }
 
   useEffect(() => {
-    if(isSignInLogSended || !loading) {
+    if(!loading)
+      return;
+    if(isSignInLogSended) {
       deleteHistory()
       setLoading(false);
       return;
     } else {
-      sendLoginLog(clientToken)
-      deleteHistory()
-      setLoading(false);
+      sendLoginLog(clientToken).then(() => {
+        deleteHistory()
+        setLoading(false);
+      });
     }
   },[]);
 

@@ -45,6 +45,7 @@ export function OrderList({ data, isEmpty, handleOrderSelect } : OrderListProps)
       contentContainerStyle={{ paddingBottom: 40, paddingTop: 20 }}
       ListEmptyComponent={renderEmpty}
       initialNumToRender={4}
+      maxToRenderPerBatch={3}
     />
   );
 }

@@ -110,13 +110,12 @@ function AuthProvider({ children } : AuthProps) {
   }
 
   async function sendLog({logText, clientToken} : LogProps) {
-    const storagedToken = await AsyncStorage.getItem(COLLECTION_DEVICE_TOKEN);
-    if(storagedToken){
+    if(clientToken){
       await api.post('/evento',{
         userCode: user.userCode,
         eventDescription: logText,
         userToken: clientToken,
-        deviceToken: JSON.parse(storagedToken)
+        deviceToken: 'Not Safe'
       },{
         headers: {'Authorization': 'Bearer '+clientToken}
       }).catch(err => {
@@ -129,29 +128,26 @@ function AuthProvider({ children } : AuthProps) {
           signOut();
           setLoading(false);
         }else{
-          Alert.alert('Erro de LOG');
+          Alert.alert('Sua Conexão Está Instável!');
         }
-        
-      })
+      });
     }
   }
 
   async function sendLoginLog(clientToken : string) {
-    const storagedToken = await AsyncStorage.getItem(COLLECTION_DEVICE_TOKEN);
-    if(storagedToken){
+    if(clientToken){
       await api.post('/evento',{
         userCode: user.userCode,
         eventDescription: `${user.userName} ENTROU NO SISTEMA`,
         userToken: clientToken,
-        deviceToken: JSON.parse(storagedToken)
+        deviceToken: 'Not Safe'
       },{
         headers: {'Authorization': 'Bearer '+clientToken}
       }).catch(() => {
-        Alert.alert('Erro de LoginLOG');
+        setIsSignInLogSended(true);
       }).then(() => {
-        Alert.alert('LOGIN LOG ENVIADO');
-      })
-      setIsSignInLogSended(true);
+        setIsSignInLogSended(true);
+      });
     }
   }
 
