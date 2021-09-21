@@ -16,7 +16,7 @@ import { Final } from '../screens/Final';
 import { SendConfirmation } from '../screens/SendConfirmation';
 import { Rejected } from '../screens/Rejected';
 
-import { Test } from '../test';
+import { Test } from '../test/index.test';
 
 const AppStack = createStackNavigator();
 

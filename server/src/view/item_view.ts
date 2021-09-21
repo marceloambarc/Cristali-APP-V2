@@ -1,4 +1,4 @@
-import OrdemItem from "../models/Ordemitem";
+import OrdemItem from "../models/OrdemItem";
 
 export default {
   render(item: OrdemItem) {

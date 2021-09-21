@@ -5,7 +5,7 @@ import * as MailComposer from 'expo-mail-composer';
 import { CristaliButton } from '../components/CristaliButton';
 import { InputMask } from '../components/InputMask';
 
-import { styles } from './styles';
+import { styles } from './styles.test';
 import { theme } from '../global';
 
 export function Test(){

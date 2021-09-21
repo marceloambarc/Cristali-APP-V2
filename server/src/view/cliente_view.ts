@@ -1,4 +1,4 @@
-import Clientefinal from "../models/Clientefinal";
+import Clientefinal from "../models/ClienteFinal";
 
 export default {
   render(cliente: Clientefinal) {
