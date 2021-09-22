@@ -1,8 +1,5 @@
 import React, { createContext, useState, useContext, ReactNode } from "react";
 import { Alert } from 'react-native';
-import AsyncStorage from "@react-native-async-storage/async-storage";
-
-import { COLLECTION_USER, COLLECTION_TOKEN, COLLECTION_DEVICE_TOKEN, COLLECTION_PASSWORD } from "../config/storage";
 import { api } from '../services/api';
 
 export interface UserProps {
@@ -61,12 +58,10 @@ function AuthProvider({ children } : AuthProps) {
         cgc, password
       }).then(res => {
         
-        AsyncStorage.setItem(COLLECTION_USER, JSON.stringify(res.data.user));
-        AsyncStorage.setItem(COLLECTION_TOKEN, JSON.stringify(res.data.token));
         setClientToken(res.data.token);
         setUser(res.data.user);
         if(cgc === password) {
-          AsyncStorage.setItem(COLLECTION_PASSWORD, JSON.stringify(password));
+          
           setChangePassword(true);
         }
         setLoading(false);
@@ -100,13 +95,11 @@ function AuthProvider({ children } : AuthProps) {
   }
 
   async function enterApp() {
-    await AsyncStorage.removeItem(COLLECTION_PASSWORD);
     setChangePassword(false);
   }
 
   async function signOut() {
     setUser({} as UserProps);
-    await AsyncStorage.removeItem(COLLECTION_USER);
   }
 
   async function sendLog({logText, clientToken} : LogProps) {

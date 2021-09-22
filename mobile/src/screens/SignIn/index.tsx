@@ -18,7 +18,7 @@ import { theme } from '../../global';
 
 export function SignIn() {
   const { loading, signIn } = useAuth();
-  const [user, setUser] = useState<UserProps>({} as UserProps);
+  //const [user, setUser] = useState<UserProps>({} as UserProps);
 
   const [cgc, setCgc] = useState('');
   const [password, setPassword] = useState('');
@@ -31,20 +31,6 @@ export function SignIn() {
       return;
     }
   }
-
-  async function loadUserData() {
-    const storageUser = await AsyncStorage.getItem(COLLECTION_USER);
-    if(storageUser){
-      setUser(JSON.parse(storageUser));
-
-      setCgc(user.cgc);
-      setPassword(user.password);
-    }
-  }
-
-  useEffect(() => {
-    loadUserData()
-  },[]);
 
   if(Platform.OS === 'ios'){
     return (
