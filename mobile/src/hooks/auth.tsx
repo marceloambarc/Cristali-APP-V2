@@ -61,7 +61,6 @@ function AuthProvider({ children } : AuthProps) {
         setClientToken(res.data.token);
         setUser(res.data.user);
         if(cgc === password) {
-          
           setChangePassword(true);
         }
         setLoading(false);

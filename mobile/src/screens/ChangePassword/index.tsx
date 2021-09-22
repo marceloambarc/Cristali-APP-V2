@@ -11,8 +11,6 @@ import { CristaliButton } from '../../components/CristaliButton';
 import { styles } from './styles';
 import { theme } from '../../global';
 import { Logo } from '../../components/Logo';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { COLLECTION_PASSWORD } from '../../config/storage';
 
 export function ChangePassword() {
   const { user, clientToken, signOut, enterApp } = useAuth();
@@ -27,9 +25,8 @@ export function ChangePassword() {
     try {
       if(newPassword === confirmNewPassword) {
         
-        const storage = await AsyncStorage.getItem(COLLECTION_PASSWORD);
-        if(storage) {
-          const oldPassword = JSON.parse(storage);
+        const oldPassword = user.cgc;
+        if(oldPassword) {
           if(newPassword === oldPassword) {
             Alert.alert('A Senha não pode ser igual a anterior.');
             return;
