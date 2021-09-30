@@ -42,14 +42,15 @@ export function UnfinishedSale() {
       headers: {'Authorization': 'Bearer '+clientToken}
     });
     setUnfinishedSales(response.data);
-    setLoading(false);
   }
 
   useEffect(() => {
     if(!loading)
       return;
-    loadUnfinishedSales();
-    sendLog({logText, clientToken});
+    loadUnfinishedSales().then(() => {
+      sendLog({logText, clientToken});
+      setLoading(false);
+    });
   },[]);
 
   async function handleOrderSelect(orderSelect: OrderProps){
@@ -72,7 +73,6 @@ export function UnfinishedSale() {
       await api.get(`/client/${clientCode}`,{
         headers: {'Authorization': 'Bearer '+clientToken}
       }).then(res => {
-        setLoading(false)
         navigation.navigate('NewSale',{
           id: searchOrderId,
           orderNotes: searchOrderNotes,
@@ -83,7 +83,8 @@ export function UnfinishedSale() {
           clientPhone: res.data.clientPhone,
           clientEmail: res.data.clientEmail,
           clientNotes: res.data.clientNotes,
-          clientCgc: res.data.clientCgc
+          clientCgc: res.data.clientCgc,
+          clientId: clientCode
         });
       });
     }

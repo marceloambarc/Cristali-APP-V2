@@ -3,7 +3,7 @@ import Clientefinal from "../models/ClienteFinal";
 export default {
   render(cliente: Clientefinal) {
     return {
-      id: cliente.cd_pessoa,
+      clientId: cliente.cd_pessoa,
       clientName: cliente.nm_nome,
       clientCgc: cliente.tx_cgc,
       clientPhone: cliente.tx_fone,

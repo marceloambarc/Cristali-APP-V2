@@ -64,7 +64,6 @@ export function History() {
     }).then(res => {
       setOrderHistory(res.data);
       setHistoryCount(res.data.length);
-      setLoading(false);
     }).catch(err => {
       Alert.alert('Ops!',`Erro ao Carregar o seu Histórico.`);
       navigation.navigate('Home');
@@ -102,7 +101,9 @@ export function History() {
   }
 
   useEffect(() => {
-    handleHistory();
+    handleHistory().then(() => {
+      setLoading(false);
+    });
   },[]);
 
   useEffect(() => {
@@ -176,6 +177,8 @@ export function History() {
 
     handleGetHistory('notPaid');
   }
+
+  
 
   if(loading){
     return(

@@ -90,7 +90,7 @@ export function NewSale() {
       setClientPhone(clientParams.clientPhone);
       setClientEmail(clientParams.clientEmail);
       setClientNotes(clientParams.clientNotes);
-      setClientId(clientParams.id);
+      setClientId(clientParams.clientId);
     }
     
   },[orderParams, clientParams]);
@@ -627,7 +627,7 @@ export function NewSale() {
                 <Divider />
   
                 <View style={styles.footer}>
-                  <View>
+                  <View> 
                     <CristaliButton
                       title="Continuar"
                       color={`${theme.colors.Success}`}

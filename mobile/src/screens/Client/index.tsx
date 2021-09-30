@@ -53,7 +53,7 @@ export function Client() {
   },[searchName]);
 
   function handleClientSelect(clientSelect: ClientProps){
-    setSearchId(clientSelect.id);
+    setSearchId(clientSelect.clientId);
     setSearchName(clientSelect.clientName);
     setSearchCgc(clientSelect.clientCgc);
     setSearchTelephone(clientSelect.clientPhone);
@@ -71,6 +71,7 @@ export function Client() {
 
   function handleSelect(){
     navigation.navigate('NewSale',{
+      clientId: searchId,
       clientName: searchName,
       clientCgc: searchCgc,
       clientPhone: searchTelephone,

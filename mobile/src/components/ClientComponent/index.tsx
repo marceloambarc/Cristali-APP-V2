@@ -6,7 +6,7 @@ import { styles } from "./styles";
 import { theme } from "../../global";
 
 export interface ClientProps {
-  id: number;
+  clientId: number;
   clientName: string;
   clientCgc: string;
   clientPhone: string;

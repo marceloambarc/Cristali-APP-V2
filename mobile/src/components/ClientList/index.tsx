@@ -12,7 +12,7 @@ export function ClientList({ data, handleClientSelect } : ClientListProps) {
   return (
     <FlatList
       data={data}
-      keyExtractor={item => String(item.id)}
+      keyExtractor={item => String(item.clientId)}
       renderItem={({ item }) => (
         <ClientComponent 
           data={item} 

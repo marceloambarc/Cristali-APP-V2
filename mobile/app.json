@@ -1,18 +1,19 @@
 {
   "expo": {
-    "name": "CristaliCWB",
+    "name": "CristaliPOA",
     "description": "Aplicativo Cristali para vendedoras externas.",
-    "slug": "CristaliCWB",
-    "version": "1.1.4",
+    "slug": "CristaliPOA",
+    "platforms": [ "ios", "android" ],
+    "version": "1.3.4",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/iconPOA.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/splashPOA.png",
       "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
     "notification": {
-      "icon": "./assets/notificationCristali.png"
+      "icon": "./assets/notificationPOA.png"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -22,19 +23,23 @@
     ],
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.cristaliCWB.app"
+      "bundleIdentifier": "com.cristaliPOA.app",
+      "buildNumber": "1.0.0",
+      "infoPlist": {
+        "NSCameraUsageDescription": "This app do not uses the camera to let user put a photo in his profile page."
+      }
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/adaptive-iconPOA.png",
         "backgroundColor": "#FFFFFF"
       },
       "useNextNotificationsApi": true,
-      "package": "com.cristaliCWB.app",
-      "versionCode": 5
+      "package": "com.cristaliPOA.app",
+      "versionCode": 7
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/faviconPOA.png"
     }
   }
 }

@@ -8,7 +8,6 @@ import ordemView from "../view/ordem_view";
 import Clientefinal from "../models/ClienteFinal";
 import ClienteController from "./ClienteController";
 
-
 export default { 
 
   async index(request: Request, response: Response) {
@@ -193,8 +192,6 @@ export default {
           if(item.vl_preco)
             item.vl_preco = parseInt(item.vl_preco.replace(/\D/g, ""));
         });
-
-      console.log(itens);
 
        const ordensRepository = getRepository(Ordem);
        const clientesRepository = getRepository(Clientefinal);
@@ -436,8 +433,6 @@ export default {
         if(item.vl_preco)
           item.vl_preco = parseInt(item.vl_preco.replace(/\D/g, ""));
       });
-
-      console.log(itens);
 
       const ordensRepository = getRepository(Ordem);
 
