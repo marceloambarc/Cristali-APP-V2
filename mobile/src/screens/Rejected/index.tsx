@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, Image } from 'react-native';
-import { useNavigation, StackActions, useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 import { CristaliButton } from '../../components/CristaliButton';
 

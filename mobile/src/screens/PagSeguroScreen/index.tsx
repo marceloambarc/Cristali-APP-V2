@@ -168,48 +168,50 @@ export function PagSeguroScreen() {
           }
         },
         "notification_urls": [
-          "https://192.168.15.200/order/ex-00001/"
+          "https://177.10.0.126:53000/order/ex-00001/"
         ]
       }
     ).catch(err => {
-      handleSetNewCondition({id: orderId, condition: 221});
-      const message = err.response.data.error_messages[0].description;
       
-      if(message === 'invalid_parameter') {
-        Alert.alert('Ops!', 'Dados do Cartão são inválidos. Tente novamente.');
-        navigation.navigate('Home',{
-          userCode: '',
-          totalPrice: '',
-          orderNotes: '',
-          client: {
-            clientName: '',
-            clientCgc: '',
-            clientPhone: '',
-            clientEmail: '',
-            clientNotes: '',
-            userCode: ''
-          },
-          itens: []
-        });
-        return;
-      } else {
-        Alert.alert('Ops!', err);
+      const errorString = String(err);
+      const res = errorString.replace(/\D/g,'');
+
+      if(res === '403'){
+
+        sendLog({logText:`CONTA CRISTALI PROIBIDA DE USAR APLICAÇÃO PAGSEGURO`, clientToken});
         handleSetNewCondition({id: orderId, condition: 221});
-        navigation.navigate('Home',{
-          userCode: '',
-          totalPrice: '',
-          orderNotes: '',
-          client: {
-            clientName: '',
-            clientCgc: '',
-            clientPhone: '',
-            clientEmail: '',
-            clientNotes: '',
-            userCode: ''
-          },
-          itens: []
-        });
+        setLoading(false);
+        handleNavigateRejected('0', '0', cardNumber, 'true', 'Conta não liberada para uso do PagSeguro', value.toString())
+
+      }else if(res === '401'){
+        
+        sendLog({logText:` PAGSEGURO BLOQUEOU ${user.userName} DE REALIZAR OPERAÇÃO`, clientToken});
+        handleSetNewCondition({id: orderId, condition: 221});
+        setLoading(false);
+        handleNavigateRejected('0', '0', cardNumber, 'true', 'PagSeguro bloqueou sua Operação', value.toString())
+
+      } else if(res === '409'){
+
+        sendLog({logText:` PAGSEGURO BLOQUEOU ${user.userName} POR DUPLICIDADE`, clientToken});
+        handleSetNewCondition({id: orderId, condition: 221});
+        setLoading(false);
+        handleNavigateRejected('0', '0', cardNumber, 'true', 'Venda já Realizada', value.toString())
+
+      } else {
+        handleSetNewCondition({id: orderId, condition: 221});
+        const message = err.response.data.error_messages[0].description;
+        
+        if(message === 'invalid_parameter') {
+          Alert.alert('Ops!', 'Dados do Cartão são inválidos. Tente novamente.');
+          handleNavigateHome();
+          return;
+        } else {
+          Alert.alert('Ops!', err);
+          handleSetNewCondition({id: orderId, condition: 221});
+          handleNavigateHome();
+        }
       }
+
     });
 
     if(response) {
@@ -235,22 +237,48 @@ export function PagSeguroScreen() {
       } else {
         sendLog({logText:`${user.userName} OBTEVE VENDA Nº ${response.data.payment_response.reference} REJEITADA`, clientToken});
         handleSetNewCondition({id: orderId, condition: 221});
-        navigation.navigate('Rejected',{
-          pagSeguroId: response.data.id,
-          reference: response.data.payment_response.reference,
-          cardNumber: response.data.payment_method.card.last_digits,
-          declined: response.data.status,
-          response: response.data.payment_response.message,
-          value: response.data.amount.value.toString(),
-          id: orderId,
-          clientName: clientName,
-          clientCgc: clientCgc,
-          clientPhone: clientPhone,
-          clientEmail: clientEmail,
-          clientNotes: clientNotes,
-        });
+        handleNavigateRejected(response.data.id, 
+          response.data.payment_response.reference, 
+          response.data.payment_method.card.last_digits,
+          response.data.status,
+          response.data.payment_response.message,
+          response.data.amount.value.toString());
       }
     }
+  }
+
+  function handleNavigateHome(){
+    navigation.navigate('Home',{
+      userCode: '',
+      totalPrice: '',
+      orderNotes: '',
+      client: {
+        clientName: '',
+        clientCgc: '',
+        clientPhone: '',
+        clientEmail: '',
+        clientNotes: '',
+        userCode: ''
+      },
+      itens: []
+    });
+  }
+
+  function handleNavigateRejected(pagSeguroId: string, reference: string, cardNumber: string, declined: string, response: string, value: string){
+    navigation.navigate('Rejected',{
+      pagSeguroId: pagSeguroId,
+      reference: reference,
+      cardNumber: cardNumber,
+      declined: declined,
+      response: response,
+      value: value,
+      id: orderId,
+      clientName: clientName,
+      clientCgc: clientCgc,
+      clientPhone: clientPhone,
+      clientEmail: clientEmail,
+      clientNotes: clientNotes,
+    });
   }
 
   if(loading){

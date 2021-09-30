@@ -10,7 +10,7 @@ import { SegundaSenha } from '../../credentials';
 
 import Senha from '../models/Senha';
 import senhaView from '../view/senha_view';
-import { JWTSecretAdmin } from '../../credentials.exemple';
+import { JWTSecretAdmin } from '../../credentials';
 
 export default {
   
