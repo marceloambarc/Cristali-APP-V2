@@ -6,14 +6,14 @@
     "platforms": [ "ios", "android" ],
     "version": "1.2.4",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/iconCWB.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/splashCWB.png",
       "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
     "notification": {
-      "icon": "./assets/notificationCristali.png"
+      "icon": "./assets/notificationCWB.png"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -31,7 +31,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/adaptive-iconCWB.png",
         "backgroundColor": "#FFFFFF"
       },
       "useNextNotificationsApi": true,
@@ -39,7 +39,7 @@
       "versionCode": 6
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/faviconCWB.png"
     }
   }
 }
