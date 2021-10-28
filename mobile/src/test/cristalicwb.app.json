@@ -4,7 +4,7 @@
     "description": "Aplicativo Cristali para vendedoras externas.",
     "slug": "CristaliCWB",
     "platforms": [ "ios", "android" ],
-    "version": "1.2.4",
+    "version": "1.4.4",
     "orientation": "portrait",
     "icon": "./assets/iconCWB.png",
     "splash": {
@@ -36,7 +36,7 @@
       },
       "useNextNotificationsApi": true,
       "package": "com.cristaliCWB.app",
-      "versionCode": 6
+      "versionCode": 8
     },
     "web": {
       "favicon": "./assets/faviconCWB.png"

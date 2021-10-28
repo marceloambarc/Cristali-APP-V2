@@ -22,6 +22,7 @@ import { Banner } from '../../components/Banner';
 import { Loading } from '../../components/Loading';
 import { InputMask } from '../../components/InputMask';
 import { InstallmentModal } from '../../components/InstallmentModal';
+import { api } from '../../services/api';
 
 export function PagSeguroScreen() {
   const { user, clientToken, handleSetNewCondition, sendLog } = useAuth();
@@ -118,10 +119,10 @@ export function PagSeguroScreen() {
     }
   }
 
-  function handleInstallmentFinish() {
+  async function handleInstallmentFinish() {
     SetOpenInstallmentsModal(false);
     setLoading(true);
-    handleSendPagSeguro();
+    await getEncrypted();
   }
 
   function handleInstallmentSelect(installmentSelect: number) {
@@ -143,8 +144,17 @@ export function PagSeguroScreen() {
     SetOpenInstallmentsModal(false);
   }
 
-  async function handleSendPagSeguro() {
+  async function getEncrypted() {
     const cardNumberProto = cardNumber.replace(/\D/g,'');
+    const carNameProto = cardName.replace(/' '/g, '-');
+    
+    const response = await api.post(`/encrypted/${carNameProto}/${cardNumberProto}/${expirateMonth}/${expirateYear}/${cvv}`,{
+      headers: { 'Authorization' : 'Bearer '+clientToken }
+    });
+    handleSendPagSeguro(response.data.encrypted);
+  }
+
+  async function handleSendPagSeguro(encryptedCard: string) {
     const response = await pgapi.post('/charges',
       {
         "reference_id": `${codeDoc}`,
@@ -158,13 +168,7 @@ export function PagSeguroScreen() {
           "installments": `${installment}`,
           "capture": true,
           "card": {
-            "number": `${cardNumberProto}`,
-            "exp_month": `${expirateMonth}`,
-            "exp_year": `${expirateYear}`,
-            "security_code": `${cvv}`,
-            "holder": {
-              "name": `${cardName}`
-            }
+            "encrypted": `${encryptedCard}`
           }
         },
         "notification_urls": [
@@ -415,8 +419,8 @@ export function PagSeguroScreen() {
           installment={installment}
           closeModal={closeInstallments}
         />
-
       </KeyboardAvoidingView>
+      
     );
   }
 }

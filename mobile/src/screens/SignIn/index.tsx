@@ -1,9 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Text, View, StatusBar, ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAuth } from '../../hooks/auth';
-
-import { COLLECTION_USER } from '../../config/storage';
 
 import { Background } from '../../components/Background';
 import { Logo } from '../../components/Logo';
