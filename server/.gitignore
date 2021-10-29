@@ -10,6 +10,10 @@ npm-debug.*
 web-build/
 ormconfig.json
 credentials.*
+repl.ts
+cryptL.ts
+cryptD.ts
+cryptoF.ts
 
 # macOS
 .DS_Store

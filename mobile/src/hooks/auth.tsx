@@ -1,8 +1,6 @@
 import React, { createContext, useState, useContext, ReactNode } from "react";
 import { Alert } from 'react-native';
-import * as AuthSession from 'expo-auth-session';
 import { api } from '../services/api';
-import { baseAPI } from '../../credentials';
 
 export interface UserProps {
   id?: number;

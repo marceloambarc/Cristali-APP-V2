@@ -5,6 +5,7 @@ import uuid from 'react-native-uuid';
 import { useAuth } from '../../hooks/auth';
 
 import { isCreditCardObfuscated } from '../../config/options';
+import { hashString, hashNumber } from '../../config/tools/cryptoF';
 import { pgapi } from '../../services/pgapi';
 
 import { styles } from './styles';
@@ -25,7 +26,7 @@ import { InstallmentModal } from '../../components/InstallmentModal';
 import { api } from '../../services/api';
 
 export function PagSeguroScreen() {
-  const { user, clientToken, handleSetNewCondition, sendLog } = useAuth();
+  const { user, clientToken, handleSetNewCondition, sendLog, signOut } = useAuth();
   const navigation = useNavigation();
   const route = useRoute();
 
@@ -145,13 +146,39 @@ export function PagSeguroScreen() {
   }
 
   async function getEncrypted() {
-    const cardNumberProto = cardNumber.replace(/\D/g,'');
-    const carNameProto = cardName.replace(/' '/g, '-');
-    
-    const response = await api.post(`/encrypted/${carNameProto}/${cardNumberProto}/${expirateMonth}/${expirateYear}/${cvv}`,{
-      headers: { 'Authorization' : 'Bearer '+clientToken }
-    });
-    handleSendPagSeguro(response.data.encrypted);
+
+    try {
+      const cardNameProto = cardName.replace(/' '/g, '-');
+      const cardNumberProto = cardNumber.replace(/\D/g,'');
+
+      const carNameHash = hashString(cardNameProto);
+      const cardNumberHash = hashNumber(cardNumberProto);
+      const expirateMonthHash = hashNumber(expirateMonth);
+      const expirateYearHash = hashNumber(expirateYear);
+      const cvvHash = hashNumber(cvv);
+
+      console.log({
+        'holder': carNameHash,
+        'number': cardNumberHash,
+        'month': expirateMonthHash,
+        'year': expirateYearHash,
+        'cvv': cvvHash
+      });
+
+      const response = await api.post('/encrypted',{
+        klskl: `${carNameHash}`,
+        dorvst: `${cardNumberHash}`,
+        sepsxa: `${expirateMonthHash}`,
+        hngd: `${expirateYearHash}`,
+        plkxz: `${cvvHash}`
+      },{
+        headers: {'Authorization': 'Bearer '+clientToken}
+      });
+      handleSendPagSeguro(response.data.encrypted);
+    } catch(err) {
+      Alert.alert('Problema de Conexão');
+      signOut();
+    }
   }
 
   async function handleSendPagSeguro(encryptedCard: string) {

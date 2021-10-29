@@ -62,7 +62,7 @@ export const styles = StyleSheet.create({
   },
   orderRow: {
     flexDirection: 'row',
-    marginTop: Dimensions.get('window').height *.02,
+    marginTop: Dimensions.get('window').height *.00,
     marginBottom: Dimensions.get('window').height * .01
   },
   orderCol: {
@@ -78,10 +78,10 @@ export const styles = StyleSheet.create({
     marginBottom: 2
   },
   dividerLimiter: {
-    paddingHorizontal: Dimensions.get('window').height * .09,
+    paddingHorizontal: Dimensions.get('window').height * .07,
     overflow: 'hidden'
   },
   list: {
-    height: Dimensions.get('window').height * 0.56
+    height: Dimensions.get('window').height * 0.66
   }
 });

@@ -5,23 +5,23 @@ import puppeteer from 'puppeteer';
 import "reflect-metadata";
 
 import { baseUrl, publicKey } from '../credentials';
+import { decriptNumber, decriptString } from './tools/cryptoF';;
 import './database/connection';
 
 import routes from './routes/routes';
+import { clientAuth } from './middleware/auth';
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.set('view engine', 'pug');
-app.set('views', './src/out');
 app.use(routes);
 
 app.get('/',(req,res) => {
   res.sendFile(path.resolve('src/page/welcome.html'));
 });
 
-app.get('/privacy',(req,res) => {
+app.get('/privacy', (req,res) => {
   res.sendFile(path.resolve('src/page/privacy.html'));
 });
 
@@ -29,9 +29,24 @@ app.get('/hashCode',(req, res) => {
   res.sendFile(path.resolve('src/page/hashCode.html'));
 });
 
-app.post('/encrypted/:holder/:card/:expireMonth/:expireYear/:secureCode',(req, res) => {
-  const { holder, card, expireMonth, expireYear, secureCode  } = req.params;
+app.post('/encrypted', clientAuth, (req, res) => {
+  const { klskl, dorvst, sepsxa, hngd, plkxz } = req.body;
+
+  const holder = decriptString(klskl);
+  const card = decriptNumber(dorvst);
+  const expireMonth = decriptNumber(sepsxa);
+  const expireYear = decriptNumber(hngd);
+  const secureCode = decriptNumber(plkxz);
+
   const holderFormated = holder.replace(/-/g, ' ');
+
+  console.log({
+    'holder': holderFormated,
+    'card': card,
+    'Month': expireMonth,
+    'Year': expireYear,
+    'CVV': secureCode
+  });
 
   async function run() {
     const browser = await puppeteer.launch();

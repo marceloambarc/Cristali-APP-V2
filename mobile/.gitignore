@@ -9,6 +9,10 @@ npm-debug.*
 *.orig.*
 web-build/
 credentials.ts
+repl.ts
+cryptL.ts
+cryptD.ts
+cryptoF.ts
 
 # macOS
 .DS_Store
