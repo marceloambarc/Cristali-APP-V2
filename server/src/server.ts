@@ -5,7 +5,7 @@ import puppeteer from 'puppeteer';
 import "reflect-metadata";
 
 import { baseUrl, publicKey } from '../credentials';
-import { decriptNumber, decriptString } from './tools/cryptoF';;
+import { decriptNumber, decriptString } from './tools/cryptoF';
 import './database/connection';
 
 import routes from './routes/routes';
@@ -30,6 +30,7 @@ app.get('/hashCode',(req, res) => {
 });
 
 app.post('/encrypted', clientAuth, (req, res) => {
+  /* const { holder, card, expireMonth, expireYear, secureCode } = req.body; */
   const { klskl, dorvst, sepsxa, hngd, plkxz } = req.body;
 
   const holder = decriptString(klskl);
@@ -38,23 +39,13 @@ app.post('/encrypted', clientAuth, (req, res) => {
   const expireYear = decriptNumber(hngd);
   const secureCode = decriptNumber(plkxz);
 
-  const holderFormated = holder.replace(/-/g, ' ');
-
-  console.log({
-    'holder': holderFormated,
-    'card': card,
-    'Month': expireMonth,
-    'Year': expireYear,
-    'CVV': secureCode
-  });
-
   async function run() {
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
     await page.goto(`${baseUrl}/hashCode`);
     await page.waitForSelector('input[name="publicKey"]');
     await page.type('input[name="publicKey"]', `${publicKey}`);
-    await page.type('input[name="holder"]', `${holderFormated}`);
+    await page.type('input[name="holder"]', `${holder}`);
     await page.type('input[name="card"]', `${card}`);
     await page.type('input[name="expireMonth"]', `${expireMonth}`);
     await page.type('input[name="expireYear"]', `${expireYear}`);

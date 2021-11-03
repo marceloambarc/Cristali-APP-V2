@@ -95,7 +95,6 @@ export function PagSeguroScreen() {
         if(expirate != '' && expirate != undefined){
           if(cvv != '' && cvv != undefined){
             handleConcludeSale();
-            //handleVerify()
           }else{
             Alert.alert('Atenção','Insira do Código de Verificação do Cartão de Crédito');
           }
@@ -156,14 +155,6 @@ export function PagSeguroScreen() {
       const expirateMonthHash = hashNumber(expirateMonth);
       const expirateYearHash = hashNumber(expirateYear);
       const cvvHash = hashNumber(cvv);
-
-      console.log({
-        'holder': carNameHash,
-        'number': cardNumberHash,
-        'month': expirateMonthHash,
-        'year': expirateYearHash,
-        'cvv': cvvHash
-      });
 
       const response = await api.post('/encrypted',{
         klskl: `${carNameHash}`,
@@ -246,7 +237,6 @@ export function PagSeguroScreen() {
     });
 
     if(response) {
-      console.log(response.data);
       setCreatedPagSeguro(true);
       if(response.data.status === 'PAID'){
         sendLog({logText:`${user.userName} OBTEVE VENDA Nº ${response.data.payment_response.reference} PAGA`, clientToken});
