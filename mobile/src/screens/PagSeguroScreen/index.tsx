@@ -94,7 +94,11 @@ export function PagSeguroScreen() {
       if(cardNumber != '' && cardNumber != undefined){
         if(expirate != '' && expirate != undefined){
           if(cvv != '' && cvv != undefined){
-            handleConcludeSale();
+            if(expirateYear.length > 3){
+              handleConcludeSale();
+            }else{
+              Alert.alert('Atenção', 'Validade deve ser no formato: MM/AAAA');
+            }
           }else{
             Alert.alert('Atenção','Insira do Código de Verificação do Cartão de Crédito');
           }

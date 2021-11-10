@@ -4,6 +4,8 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 
 import { CristaliButton } from '../../components/CristaliButton';
 
+import { ClientProps } from '../../components/ClientComponent';
+
 import { styles } from './styles';
 import { theme } from '../../global';
 
@@ -22,8 +24,10 @@ export function Rejected(){
   const [pagSeguroReference, setPagSeguroReference] = useState('');
   const [pagSeguroCardNumber, setPagSeguroCardNumber] = useState('');
   const [pagSeguroResponse, setPagSeguroResponse] = useState('');
+  const [clientPhone, setClientPhone] = useState('');
 
   const pagSeguroParams = route.params as PagSeguroConfirmationProps;
+  const clientParams = route.params as ClientProps;
 
   useEffect(() => {
     if(pagSeguroParams){
@@ -31,6 +35,9 @@ export function Rejected(){
       setPagSeguroResponse(pagSeguroParams.response);
       setPagSeguroReference(pagSeguroParams.reference);
       setPagSeguroCardNumber(`XXXX-XXXX-XXXX-${pagSeguroParams.cardNumber}`);
+    }
+    if(clientParams) {
+      setClientPhone(clientParams.clientPhone);
     }
   },[pagSeguroParams]);
 
@@ -56,6 +63,7 @@ export function Rejected(){
 
         <View style={styles.body}>
           <View style={styles.titleContainer}>
+            <Text>{clientPhone}</Text>
             <Image
               source={require('../../assets/pagseguro.png')}
               style={styles.pagseguroImage}

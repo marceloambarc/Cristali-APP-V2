@@ -4,7 +4,7 @@
     "description": "Aplicativo Cristali para vendedoras externas.",
     "slug": "CristaliPOA",
     "platforms": [ "ios", "android" ],
-    "version": "1.4.4",
+    "version": "1.4.7",
     "orientation": "portrait",
     "icon": "./assets/iconPOA.png",
     "splash": {
@@ -36,7 +36,7 @@
       },
       "useNextNotificationsApi": true,
       "package": "com.cristaliPOA.app",
-      "versionCode": 8
+      "versionCode": 10
     },
     "web": {
       "favicon": "./assets/faviconPOA.png"
