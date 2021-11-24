@@ -51,6 +51,7 @@ export function PagSeguroScreen() {
   const [list, setList] = useState<ItemProps[]>([{id: 0, cd_codigogerado: '', vl_preco: '', nm_produto: ''}]);
 
   const [cardName, setCardName] = useState('');
+  const [cardNameCapitalized, setCardNameCapitalized] = useState('');
   const [cardNumber, setCardNumber] = useState('');
   const [expirate, setExpirate] = useState('');
   const [expirateMonth, setExpirateMonth] = useState('');
@@ -95,6 +96,21 @@ export function PagSeguroScreen() {
         if(expirate != '' && expirate != undefined){
           if(cvv != '' && cvv != undefined){
             if(expirateYear.length > 3){
+              const cardNameSplitted = cardName.split(' ');
+              let cardNameCapitallized : string[] = [];
+
+              cardNameSplitted.forEach(element => {
+                const sufix = element.toLowerCase();
+                if(sufix == 'do' || sufix == 'da' || sufix == 'de' || sufix == 'das' || sufix == 'dos'){
+                  cardNameCapitallized.push(sufix);
+                } else {
+                  cardNameCapitallized.push(element.charAt(0).toUpperCase() + element.slice(1).toLowerCase());
+                }
+              });
+
+              const setName = cardNameCapitallized.join(' ');
+              setCardNameCapitalized(setName);
+              
               handleConcludeSale();
             }else{
               Alert.alert('Atenção', 'Validade deve ser no formato: MM/AAAA');
@@ -151,7 +167,7 @@ export function PagSeguroScreen() {
   async function getEncrypted() {
 
     try {
-      const cardNameProto = cardName.replace(/' '/g, '-');
+      const cardNameProto = cardNameCapitalized.replace(/' '/g, '-');
       const cardNumberProto = cardNumber.replace(/\D/g,'');
 
       const carNameHash = hashString(cardNameProto);

@@ -115,11 +115,11 @@ export default {
     try {
 
       const {
-        password,
+        secret,
         userCgc
       } = request.body;
 
-      if(password === SegundaSenha) {
+      if(secret === SegundaSenha) {
         const searchUserCgc = String(userCgc);
 
         const senhasRepository = getRepository(Senha);
@@ -198,10 +198,12 @@ export default {
 
   async switch(request: Request, response: Response) {
     try {
-      
-      const { cgc } = request.params;
-      const { isActive } = request.body;
+      const { isActive, cgc, secret } = request.body;
       const setIsActive = parseInt(isActive);
+
+      if(secret !== SegundaSenha){
+        return response.status(404).json({ "Erro": "Código Errado." });
+      }
 
       const senhasRepository = getRepository(Senha);
 
