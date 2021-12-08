@@ -63,7 +63,7 @@ body {font-family: "Lato", sans-serif}
           <li><code class="w3-padding"><span class="w3-tag w3-green w3-margin-left">POST</span> /senha <br> 
             <p class="w3-padding">            
               {<br>
-                "secret": "senha interna",<br>
+                "password": "senha interna",<br>
                 "userCode": "código do usuário",<br>
                 "userName": "nome do usuário",<br>
                 "cgc": "cpf/cnpj"<br>
@@ -78,26 +78,12 @@ body {font-family: "Lato", sans-serif}
           <li><code class="w3-padding"><span class="w3-tag w3-green w3-margin-left">POST</span> /resetpassword <br> 
             <p class="w3-padding">            
               {<br>
-                "secret": "senha interna",<br>
+                "password": "senha interna",<br>
                 "userCgc": "cpf/cnpj",<br>
               }
             </p>
            </code></li>
         </ul>
-        <br>
-
-        <span class="w3-margin-left">Ativar Usuário:</span>
-        <ul class="w3-ul w3-border w3-white w3-text-grey">
-          <li><code class="w3-padding"><span class="w3-tag w3-orange w3-margin-left">PUT</span> /acesso (Header - Bearer Token) <br> 
-            <p class="w3-padding">            
-              {<br>
-                "cgc": "cpf/cnpj",<br>
-                "isActive": 0/1,<br>
-              }
-            </p>
-           </code></li>
-        </ul>
-        <br>
       </div>
     </div>
 

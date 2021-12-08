@@ -66,6 +66,10 @@ app.post('/encrypted', clientAuth, (req, res) => {
   
 });
 
+app.get('*',(req, res) => {
+  res.sendFile(path.resolve('src/page/notFound.html'));
+});
+
 app.listen(3333,() => {
   console.log('Rodando.');
 });
