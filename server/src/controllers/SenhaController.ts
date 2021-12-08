@@ -35,7 +35,7 @@ export default {
   
       const senhasRepository = getRepository(Senha);
   
-      const existSenha = await senhasRepository.find(
+      const existSenha = await senhasRepository.findOne(
         {
           where: {
             tx_cgc: searchCgc
@@ -43,10 +43,10 @@ export default {
         }
       );
 
-      if(existSenha.length > 1) {
-        return response.json(senhaView.renderMany(existSenha));
+      if(existSenha != undefined) {
+        return response.json(senhaView.render(existSenha));
       } else {
-        return response.status(400).json({ "Erro" : 'Mais de um usuário.' });
+        return response.status(404).json({"Erro" : "Nenhum usuário cadastrado"});
       }
 
       

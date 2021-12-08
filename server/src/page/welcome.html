@@ -56,14 +56,14 @@ body {font-family: "Lato", sans-serif}
     <div class="w3-sand" id="tour">
       <div class="w3-container w3-content w3-padding-64" style="max-width:800px">
         <h2 class="w3-wide w3-center">Documentação</h2>
-        <p class="w3-opacity w3-center">http://201.21.198.76:54000</p><br>
+        <p class="w3-opacity w3-center">http://localhost:3333</p><br>
   
         <span class="w3-margin-left">Novo usuário:</span>
         <ul class="w3-ul w3-border w3-white w3-text-grey">
           <li><code class="w3-padding"><span class="w3-tag w3-green w3-margin-left">POST</span> /senha <br> 
             <p class="w3-padding">            
               {<br>
-                "password": "senha interna",<br>
+                "secret": "senha interna",<br>
                 "userCode": "código do usuário",<br>
                 "userName": "nome do usuário",<br>
                 "cgc": "cpf/cnpj"<br>
@@ -78,12 +78,26 @@ body {font-family: "Lato", sans-serif}
           <li><code class="w3-padding"><span class="w3-tag w3-green w3-margin-left">POST</span> /resetpassword <br> 
             <p class="w3-padding">            
               {<br>
-                "password": "senha interna",<br>
+                "secret": "senha interna",<br>
                 "userCgc": "cpf/cnpj",<br>
               }
             </p>
            </code></li>
         </ul>
+        <br>
+
+        <span class="w3-margin-left">Ativar Usuário:</span>
+        <ul class="w3-ul w3-border w3-white w3-text-grey">
+          <li><code class="w3-padding"><span class="w3-tag w3-orange w3-margin-left">PUT</span> /acesso (Header - Bearer Token) <br> 
+            <p class="w3-padding">            
+              {<br>
+                "cgc": "cpf/cnpj",<br>
+                "isActive": 0/1,<br>
+              }
+            </p>
+           </code></li>
+        </ul>
+        <br>
       </div>
     </div>
 
