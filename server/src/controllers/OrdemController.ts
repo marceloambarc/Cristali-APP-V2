@@ -658,7 +658,7 @@ export default {
           cd_id: "DESC"
         }
       });
-
+      
       if(ordens.length === 0) {
         return response.status(204).json({ "Vazio" : "Histórico Vazio" });
       } else {
