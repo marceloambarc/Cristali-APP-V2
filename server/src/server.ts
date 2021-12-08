@@ -30,7 +30,7 @@ app.get('/hashCode',(req, res) => {
 });
 
 app.post('/encrypted', clientAuth, (req, res) => {
-  /* const { holder, card, expireMonth, expireYear, secureCode } = req.body; */
+  // Ver tools/tokens
   const { klskl, dorvst, sepsxa, hngd, plkxz } = req.body;
 
   const holder = decriptString(klskl);
