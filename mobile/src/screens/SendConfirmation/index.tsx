@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, Image, Linking, Alert } from 'react-native';
+import { Text, View, Image, Linking, Alert, Platform } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { RectButton } from "react-native-gesture-handler";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -91,18 +91,42 @@ export function SendConfirmation() {
   }
 
   function handleSendWhatsapp() {
+    let companyPhoneSplit = clientPhone.split('(51) 9').join('5551');
+
     var sampleNumber = parseInt(value);
     const res = (sampleNumber / 100).toFixed(2);
-    const replaced = res.replace('.',',');
-    const toCurrency = 'R$ ' + replaced;
 
-    let companyPhoneSplit = clientPhone.split('(51) 9').join('5551');
-    
-    // MANIPULAR NÚMERO
-    Linking.openURL(`https://api.whatsapp.com/send?phone=${companyPhoneSplit}&text=%F0%9F%92%8E%20Ol%C3%A1!%20${ clientName }%20%0A%0ASua%20compra%20foi%20aprovada!%0A%0A%20Comprovante%20Cristali%0A%0ARefer%C3%AAncia%20PagSeguro%3A%0A%F0%9F%92%8E%20${ pagSeguroReference }%0A%0APre%C3%A7o%20Total%20da%20Compra%3A%20%0A%F0%9F%92%8E${ toCurrency }%0A%0ATotal%20de%20itens%3A%20${ toCurrency }%0A%0ADados%20do%20Cart%C3%A3o%3A%20%0A%F0%9F%92%8E${ pagSeguroCardNumber }%0A%0A%0A%0AQualquer%20d%C3%BAvida%20entre%20em%20contato%20com%20sua%20vendedora!`);
-    sendLog({logText:`${user.userName} ENVIOU COMROVANTE DA VENDA Nº ${pagSeguroReference} POR WHATSAPP ${clientPhone}: PREÇO DA COMPRA ${toCurrency}, DADOS DO CARTÃO: ${ pagSeguroCardNumber }`, clientToken});
-    navigation.setParams({orderParams: null});
-    navigation.navigate('Final');
+    if(Platform.OS != 'android'){
+      
+      const replaced = res.replace('.','%2C');
+      const toCurrency = 'R%24%20' + replaced;
+
+      // MANIPULAR NÚMERO
+      Linking.canOpenURL(`https://wa.me/${companyPhoneSplit}?text=%F0%9F%92%8E%20Ol%C3%A1!%20${ clientName }%20%0A%0ASua%20compra%20foi%20aprovada!%0A%0A%20Comprovante%20Cristali%0A%0ARefer%C3%AAncia%20PagSeguro%3A%0A%F0%9F%92%8E%20${ pagSeguroReference }%0A%0APre%C3%A7o%20Total%20da%20Compra%3A%20%0A%F0%9F%92%8E${ toCurrency }%0A%0ADados%20do%20Cart%C3%A3o%3A%20%0A%F0%9F%92%8E${ pagSeguroCardNumber }%0A%0A%0A%0AQualquer%20d%C3%BAvida%20entre%20em%20contato%20com%20sua%20vendedora!`).then(supported => {
+        if(supported){
+          Linking.openURL(`https://wa.me/${companyPhoneSplit}?text=%F0%9F%92%8E%20Ol%C3%A1!%20${ clientName }%20%0A%0ASua%20compra%20foi%20aprovada!%0A%0A%20Comprovante%20Cristali%0A%0ARefer%C3%AAncia%20PagSeguro%3A%0A%F0%9F%92%8E%20${ pagSeguroReference }%0A%0APre%C3%A7o%20Total%20da%20Compra%3A%20%0A%F0%9F%92%8E${ toCurrency }%0A%0ADados%20do%20Cart%C3%A3o%3A%20%0A%F0%9F%92%8E${ pagSeguroCardNumber }%0A%0A%0A%0AQualquer%20d%C3%BAvida%20entre%20em%20contato%20com%20sua%20vendedora!`);
+          sendLog({logText:`${user.userName} ENVIOU COMROVANTE DA VENDA Nº ${pagSeguroReference} POR WHATSAPP ${clientPhone}: PREÇO DA COMPRA ${toCurrency}, DADOS DO CARTÃO: ${ pagSeguroCardNumber }`, clientToken});
+          navigation.setParams({orderParams: null});
+          navigation.navigate('Final');
+        }else{
+          Alert.alert('Ops!', 'Comprovante não Enviado.');
+          sendLog({logText:`${user.userName} NÃO PODE ENVIAR O COMROVANTE DE VENDA Nº ${pagSeguroReference} PARA WHATSAPP ${clientPhone}: PREÇO DA COMPRA ${toCurrency}, DADOS DO CARTÃO: ${ pagSeguroCardNumber }`, clientToken});
+          navigation.setParams({orderParams: null});
+          navigation.navigate('Final');
+        }
+      });
+
+    }else{
+
+      const replaced = res.replace('.',',');
+      const toCurrency = 'R$ ' + replaced;
+
+      Linking.openURL(`https://api.whatsapp.com/send?phone=${companyPhoneSplit}&text=%F0%9F%92%8E%20Ol%C3%A1!%20${ clientName }%20%0A%0ASua%20compra%20foi%20aprovada!%0A%0A%20Comprovante%20Cristali%0A%0ARefer%C3%AAncia%20PagSeguro%3A%0A%F0%9F%92%8E%20${ pagSeguroReference }%0A%0APre%C3%A7o%20Total%20da%20Compra%3A%20%0A%F0%9F%92%8E${ toCurrency }%0A%0ATotal%20de%20itens%3A%20${ toCurrency }%0A%0ADados%20do%20Cart%C3%A3o%3A%20%0A%F0%9F%92%8E${ pagSeguroCardNumber }%0A%0A%0A%0AQualquer%20d%C3%BAvida%20entre%20em%20contato%20com%20sua%20vendedora!`);
+      sendLog({logText:`${user.userName} ENVIOU COMROVANTE DA VENDA Nº ${pagSeguroReference} POR WHATSAPP ${clientPhone}: PREÇO DA COMPRA ${toCurrency}, DADOS DO CARTÃO: ${ pagSeguroCardNumber }`, clientToken});
+      navigation.setParams({orderParams: null});
+      navigation.navigate('Final');
+
+    }
   }
 
   return (

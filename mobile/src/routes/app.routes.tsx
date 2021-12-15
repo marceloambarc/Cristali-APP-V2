@@ -16,7 +16,7 @@ import { Final } from '../screens/Final';
 import { SendConfirmation } from '../screens/SendConfirmation';
 import { Rejected } from '../screens/Rejected';
 
-import { Test } from '../test/index.test';
+//import { Test } from '../test/Test';
 
 const AppStack = createStackNavigator();
 
@@ -26,7 +26,7 @@ export function AppRoutes() {
     <AppStack.Navigator
       headerMode="none"
     >
-     {/*}<AppStack.Screen name="Test" component={Test} />{*/}
+     {/*<AppStack.Screen name="Test" component={Test} />*/}
       {
         changePassword?
         <AppStack.Screen name="ChangePassword" component={ChangePassword} />
