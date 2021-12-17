@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, ModalProps, TouchableWithoutFeedback, TouchableOpacity, View, Text, Platform } from 'react-native';
+import { Modal, ModalProps, TouchableWithoutFeedback, TouchableOpacity, View, Text, Platform, Dimensions } from 'react-native';
 import currencyFormatter  from 'currency-formatter';
 import { AntDesign } from '@expo/vector-icons';
 import { UserProps } from '../../hooks/auth';
@@ -45,14 +45,13 @@ export function InstallmentModal({
         <View style={styles.overlay}>
           <View style={styles.modalContainer}>
             <View style={styles.modalHeader}>
-              <Text style={[styles.title, {color: theme.colors.input}]}>Olá {user.userName}</Text>
               <TouchableWithoutFeedback
                 onPress={closeModal}
               >
                 <AntDesign name="close" size={24} color={`${theme.colors.Cancel}`} />
               </TouchableWithoutFeedback>
             </View>
-            <Text style={[styles.title, {color: theme.colors.input}]}>Selecione o Parcelamento:</Text>
+            <Text style={[styles.title, {color: theme.colors.input, marginTop: Dimensions.get('screen').height * 0.012}]}>Selecione o Parcelamento:</Text>
             
             {totalInstallments >= 1 && 
               <TouchableOpacity

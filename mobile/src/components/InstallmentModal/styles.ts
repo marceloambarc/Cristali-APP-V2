@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 import { theme } from "../../global";
 
 export const styles = StyleSheet.create({
@@ -8,7 +8,7 @@ export const styles = StyleSheet.create({
   },
   modalContainer: {
     flex: 1,
-    marginTop: 30,
+    marginTop: Dimensions.get('screen').height * 0.03,
     paddingHorizontal: 24
   },
   modalHeader: {
@@ -19,20 +19,20 @@ export const styles = StyleSheet.create({
   title: {
     fontFamily: theme.fonts.heading,
     color: theme.colors.title,
-    fontSize: theme.fonts.sizeB
+    fontSize: theme.fonts.sizeB,
   },
   firstColor: {
-    marginVertical: 10,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
+    marginVertical: Dimensions.get('screen').height * 0.012,
+    paddingVertical: Dimensions.get('screen').height * 0.01,
+    paddingHorizontal: Dimensions.get('screen').height * 0.02,
     borderRadius: 10,
     alignItems: 'center',
     backgroundColor: theme.colors.activatedList
   },
   installmentChoosed: {
-    marginTop: 30,
-    paddingVertical: 10,
-    paddingHorizontal: 40,
+    marginTop: Dimensions.get('screen').height * 0.02,
+    paddingVertical: Dimensions.get('screen').height * 0.01,
+    paddingHorizontal: Dimensions.get('screen').height * 0.02,
     borderRadius: 10,
     alignItems: 'center',
     backgroundColor: theme.colors.input
@@ -40,12 +40,12 @@ export const styles = StyleSheet.create({
   footer: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 20,
-    marginBottom: 20
+    marginTop: Dimensions.get('screen').height * 0.02,
+    marginBottom: Dimensions.get('screen').height * 0.02
   },
   buttonContainer: {
     width: '100%',
-    height: 60,
+    height: Dimensions.get('screen').height * 0.06,
     borderRadius: 20,
     flexDirection: 'row',
     justifyContent: 'center',
