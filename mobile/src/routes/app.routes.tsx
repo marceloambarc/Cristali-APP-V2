@@ -16,8 +16,6 @@ import { Final } from '../screens/Final';
 import { SendConfirmation } from '../screens/SendConfirmation';
 import { Rejected } from '../screens/Rejected';
 
-//import { Test } from '../test/Test';
-
 const AppStack = createStackNavigator();
 
 export function AppRoutes() {

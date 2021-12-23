@@ -101,7 +101,7 @@ export function PagSeguroScreen() {
 
               cardNameSplitted.forEach(element => {
                 const sufix = element.toLowerCase();
-                if(sufix == 'do' || sufix == 'da' || sufix == 'de' || sufix == 'das' || sufix == 'dos'){
+                if(sufix === 'do' || sufix === 'da' || sufix === 'de' || sufix === 'das' || sufix === 'dos'){
                   cardNameCapitallized.push(sufix);
                 } else {
                   cardNameCapitallized.push(element.charAt(0).toUpperCase() + element.slice(1).toLowerCase());
