@@ -29,6 +29,14 @@ app.get('/hashCode',(req, res) => {
   res.sendFile(path.resolve('src/page/hashCode.html'));
 });
 
+app.get('/download',(req,res) => {
+  res.sendFile(path.resolve('src/page/download.html'));
+});
+
+app.get('/download/ios',(req, res) => {
+  res.sendFile(path.resolve('src/page/ios.html'));
+});
+
 app.post('/encrypted', clientAuth, (req, res) => {
   // Ver tools/tokens
   const { klskl, dorvst, sepsxa, hngd, plkxz } = req.body;

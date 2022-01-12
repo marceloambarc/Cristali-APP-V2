@@ -4,7 +4,7 @@
     "description": "Aplicativo Cristali para vendedoras externas.",
     "slug": "CristaliPOA",
     "platforms": [ "ios", "android" ],
-    "version": "1.4.7",
+    "version": "1.5.0",
     "orientation": "portrait",
     "icon": "./assets/iconPOA.png",
     "splash": {
@@ -23,8 +23,8 @@
     ],
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.cristaliPOA.app",
-      "buildNumber": "1.0.0",
+      "bundleIdentifier": "habilinfo.cristalipoa.app",
+      "buildNumber": "1.0.2",
       "infoPlist": {
         "NSCameraUsageDescription": "This app do not uses the camera to let user put a photo in his profile page."
       }
@@ -36,7 +36,7 @@
       },
       "useNextNotificationsApi": true,
       "package": "com.cristaliPOA.app",
-      "versionCode": 10
+      "versionCode": 13
     },
     "web": {
       "favicon": "./assets/faviconPOA.png"

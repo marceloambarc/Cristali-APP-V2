@@ -4,7 +4,7 @@
     "description": "Aplicativo Cristali para vendedoras externas.",
     "slug": "CristaliCWB",
     "platforms": [ "ios", "android" ],
-    "version": "1.4.5",
+    "version": "1.4.9",
     "orientation": "portrait",
     "icon": "./assets/iconCWB.png",
     "splash": {
@@ -23,8 +23,8 @@
     ],
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.cristaliCWB.app",
-      "buildNumber": "1.0.0",
+      "bundleIdentifier": "habilinfo.cristalicwb.app",
+      "buildNumber": "1.0.1",
       "infoPlist": {
         "NSCameraUsageDescription": "This app do not uses the camera to let user put a photo in his profile page."
       }
@@ -36,7 +36,7 @@
       },
       "useNextNotificationsApi": true,
       "package": "com.cristaliCWB.app",
-      "versionCode": 8
+      "versionCode": 12
     },
     "web": {
       "favicon": "./assets/faviconCWB.png"
