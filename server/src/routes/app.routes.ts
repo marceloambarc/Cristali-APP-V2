@@ -34,6 +34,7 @@ appRouter.get('/myOrders/saved/:id', clientAuth, OrdemController.userSavedOrders
 appRouter.get('/myOrders/history/all/:id', clientAuth, OrdemController.userHystory);
 appRouter.get('/myOrders/history/paid/:id', clientAuth, OrdemController.historyPaid);
 appRouter.get('/myOrders/history/notPaid/:id', clientAuth, OrdemController.historyNotPaid);
+appRouter.post('/myOrders/history/paid/byDate/:id', clientAuth, OrdemController.historyByDate);
 appRouter.delete('/order', clientAuth, OrdemController.delete);
 
 export default appRouter;

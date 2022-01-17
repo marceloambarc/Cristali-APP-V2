@@ -13,7 +13,11 @@ export default {
   async index(request: Request, response: Response) {
     const ordensRepository = getRepository(Ordem);
 
-    const ordens = await ordensRepository.find();
+    const ordens = await ordensRepository.find({
+      order: {
+        cd_id_ccli: "DESC"
+      }
+    });
 
     if(ordens.length === 0){
       return response.status(204).json({ "Vazio" : "Nenhuma Ordem Cadastrada." });
@@ -696,21 +700,9 @@ export default {
     }catch(err) {
       return response.status(400).json({ "Erro": err });
     }
+  },
+
+  async historyByDate(request: Request, response: Response){
+
   }
-
-  /*async pSeguro(request: Request, response: Response) {
-    try {
-
-      const { payload } = request.body;
-      const { document } = request.params;
-      const { header } = request.headers;
-
-      const hash = createHash("sha256").update(`${payload}-${pagSegurotoken}`).digest('hex');
-
-      console.log(header, document, payload);
-
-    }catch(err) {
-      return response.status(400).json({ "Erro": err });
-    }
-  }*/
 }
