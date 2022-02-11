@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Text, View, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../../hooks/auth';
+import { versionCode } from '../../config/options';
 
 import { api } from '../../services/api';
 
@@ -63,6 +64,7 @@ export function Home(){
           <View style={styles.logoContainer}>
             <Logo
               subtext
+              versionCode={versionCode}
             />
           </View>
   

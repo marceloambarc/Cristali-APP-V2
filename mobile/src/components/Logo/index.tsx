@@ -1,13 +1,14 @@
 import React from 'react';
-import { View, Image } from 'react-native';
+import { View, Image, Text } from 'react-native';
 
 import { styles } from './styles';
 
 interface Props {
   subtext?: boolean;
+  versionCode: string;
 }
 
-export function Logo({subtext}:Props){
+export function Logo({subtext, versionCode}:Props){
   return (
     <View style={styles.container}>
       <Image 
@@ -21,6 +22,7 @@ export function Logo({subtext}:Props){
           style={styles.subtextImage}
           source={require("../../assets/cristali2.png")}
         />
+        <Text style={styles.versionText}>{versionCode}</Text>
       </View>
       :
       <View />

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Text, View, StatusBar, ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { useAuth } from '../../hooks/auth';
+import { versionCode } from '../../config/options';
 
 import { Background } from '../../components/Background';
 import { Logo } from '../../components/Logo';
@@ -51,6 +52,7 @@ export function SignIn() {
           
               <Logo 
                 subtext
+                versionCode={versionCode}
               />
           
               {
@@ -109,6 +111,7 @@ export function SignIn() {
       
           <Logo 
             subtext
+            versionCode={versionCode}
           />
       
           {

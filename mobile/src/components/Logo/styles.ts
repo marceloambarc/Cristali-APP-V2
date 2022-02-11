@@ -17,5 +17,9 @@ export const styles = StyleSheet.create({
   subtextImage: {
     width: Dimensions.get('window').height * 0.3,
     height: Dimensions.get('window').height * .1
+  },
+  versionText: {
+    fontSize: 12,
+    marginBottom: Dimensions.get('window').height * 0.02
   }
 });

@@ -25,12 +25,12 @@ interface Props extends ModalProps {
 
 export function InstallmentModal({ 
   closeModal, 
-  handleInstallmentSelect, 
-  handleInstallmentFinish, 
+  handleInstallmentSelect,
+  handleInstallmentFinish,
   totalInstallments,
   installment,
   value,
-  user, 
+  user,
   ...rest } : Props) {
 
 
@@ -135,7 +135,7 @@ export function InstallmentModal({
               <View style={styles.installmentChoosed}>
               
                 {installment === 1 && <Text style={[styles.title, {color: theme.colors.title}]}>À Vista {(value / 100).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})}</Text>}
-                {installment === 2 && <Text style={[styles.title, {color: theme.colors.title}]}>2 X {(value /100 * twoInstallment).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})}</Text>}
+                {installment === 2 && <Text style={[styles.title, {color: theme.colors.title}]}>2 X {(value / 100 * twoInstallment).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})}</Text>}
                 {installment === 3 && <Text style={[styles.title, {color: theme.colors.title}]}>3 X {(value / 100 * threeInstallment).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})}</Text>}
                 {installment === 4 && <Text style={[styles.title, {color: theme.colors.title}]}>4 X {(value / 100 * fourInstallment).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})}</Text>}
                 {installment === 5 && <Text style={[styles.title, {color: theme.colors.title}]}>5 X {(value / 100 * fiveInstallment).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})}</Text>}
@@ -143,9 +143,7 @@ export function InstallmentModal({
 
               </View>
             }
-
-
-
+            
             <View style={styles.footer}>
               <TouchableOpacity
                 style={styles.buttonContainer}
