@@ -117,7 +117,7 @@ export default {
 
       if(clientName === undefined) {
         if(clienteData === undefined) {
-          return response.status(400).json({ "Erro" : "Parâmetros não Enviados." });
+          return response.status(400)
         } else {
           const schema = Yup.object().shape({
             nm_nome: Yup.string().required(),
@@ -175,14 +175,14 @@ export default {
 
           await clientesFinalRepository.save(clientefinalRepository);
 
-          return response.status(201).json(clientefinalRepository);
+          return response.status(201)
         } else {
-          return response.status(409).json({ "Erro" : "Cliente Já Cadastrado." });
+          return response.status(409)
         }
       }
 
     }catch(err){
-      return response.status(400).json({ "Erro": err });
+      return response.status(400)
     }
   },
 

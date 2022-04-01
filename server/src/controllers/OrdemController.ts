@@ -7,6 +7,7 @@ import ordemView from "../view/ordem_view";
 
 import Clientefinal from "../models/ClienteFinal";
 import ClienteController from "./ClienteController";
+import OrdemReservaController from "./OrdemReservaController";
 
 export default { 
 
@@ -342,7 +343,17 @@ export default {
       } else {
         existOrdem.cd_habil_tipo = setCondition;
         await ordensRepository.save(existOrdem);
-        return response.status(200).json(existOrdem);
+        const editOrdemReserva = await OrdemReservaController.editCondition(request, response);
+
+        if(editOrdemReserva != undefined){
+          if(editOrdemReserva.statusCode === 200){
+            return response.status(200).json(existOrdem);
+          }else{
+            return response.status(400).json({ "Erro" : "Backup não premitiu alteração"});
+          }
+        }else{
+          return response.status(400).json({ "Erro" : "Não existe esta Ordem no Backup."});
+        }
       }
 
     }catch(err){
@@ -485,10 +496,19 @@ export default {
         const ordemRepository = ordensRepository.create(data);
 
         await ordensRepository.save(ordemRepository);
+        const createOrdemReserva = await OrdemReservaController.create(request, response);
+        
+        if(createOrdemReserva != undefined){
+          if(createOrdemReserva.statusCode === 201) {
+            return response.status(201).json(ordemRepository);
+          }else{
+            return response.status(createOrdemReserva.statusCode).json(createOrdemReserva.json);
+          }
+        }else{
+          return response.status(400).json({ "Erro" : "Entre em contato com o Suporte" });
+        }
 
-        return response.status(201).json(ordemRepository);
       } else {
-
         // CRIAR NOVO CLIENTE E SALVAR ORDEM
         const clienteData : any = {
           nm_nome: client.clientName,
@@ -701,8 +721,4 @@ export default {
       return response.status(400).json({ "Erro": err });
     }
   },
-
-  async historyByDate(request: Request, response: Response){
-
-  }
 }
