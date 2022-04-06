@@ -242,6 +242,8 @@ export default {
               await clientesRepository.save(existCliente);
               await ordensRepository.save(existOrdem);
 
+              
+
               return response.status(200).json(existOrdem);
             } else {
               return response.status(406).json({ "Erro" : "Não é permitido alterar o Cliente após Criar Venda." });
@@ -495,8 +497,11 @@ export default {
 
         const ordemRepository = ordensRepository.create(data);
 
-        await ordensRepository.save(ordemRepository);
-        const createOrdemReserva = await OrdemReservaController.create(request, response);
+        const Ordercreated = await ordensRepository.save(ordemRepository);
+
+        const codigo = Ordercreated.cd_id;
+
+        const createOrdemReserva = await OrdemReservaController.create(request, response, codigo);
         
         if(createOrdemReserva != undefined){
           if(createOrdemReserva.statusCode === 201) {
@@ -577,6 +582,7 @@ export default {
       
 
     }catch(err){
+      console.log(err);
       return response.status(400).json({ "Erro" : err });
     }
   },

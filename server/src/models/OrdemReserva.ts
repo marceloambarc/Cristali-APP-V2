@@ -1,10 +1,10 @@
-import { Column, Entity, Index, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, Index, JoinColumn, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 import Ordemreservaitem from './OrdemReservaItem';
 
 @Entity()
 export default class Ordemreserva {
 
-  @PrimaryGeneratedColumn()
+  @PrimaryColumn()
   cd_id: number;
 
   @Index("ix_ordemreserva1", { synchronize: false })

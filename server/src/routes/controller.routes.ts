@@ -5,6 +5,7 @@ import { clientAuth } from '../middleware/auth';
 import ClienteController from '../controllers/ClienteController';
 import EventoController from '../controllers/EventoController';
 import OrdemController from '../controllers/OrdemController';
+import OrdemReservaController from '../controllers/OrdemReservaController';
 import SenhaController from '../controllers/SenhaController';
 import TokenController from '../controllers/TokenController';
 
@@ -58,5 +59,8 @@ controllerRouter.get('/order/:id', clientAuth, OrdemController.show);
 controllerRouter.post('/opensales', clientAuth, OrdemController.showOpenSales);
 controllerRouter.post('/insertedsales', clientAuth, OrdemController.showInsertedSales);
 controllerRouter.post('/selectedpaymentsales', clientAuth, OrdemController.showSelectedPaymentSales);
+
+// -- ORDENS RESERVA
+controllerRouter.get('/bkporder', clientAuth, OrdemReservaController.index);
 
 export default controllerRouter;

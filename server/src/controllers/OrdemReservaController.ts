@@ -7,6 +7,7 @@ import OrdemReservaView from "../view/ordemreserva_view";
 
 import Clientefinal from "../models/ClienteFinal";
 import ClienteController from "./ClienteController";
+import Ordem from "../models/Ordem";
 
 export default {
 
@@ -141,9 +142,9 @@ export default {
     }
   },
 
-  async create(request: Request, response: Response) {
+  async create(request: Request, response: Response, codigo: number) {
     try {
-      
+
       var { 
         userCode,
         totalPrice,
@@ -169,6 +170,7 @@ export default {
 
         const codPessoa = existCliente.cd_pessoa;
         const data : any = {
+          cd_id: codigo,
           cd_id_ccli: userCode,
           dt_criado: new Date(),
           vl_total: totalPrice,
@@ -202,7 +204,6 @@ export default {
         const ordemRepository = ordensRepository.create(data);
 
         await ordensRepository.save(ordemRepository);
-
         return response.status(201);
       }else{
         return response.status(400);
