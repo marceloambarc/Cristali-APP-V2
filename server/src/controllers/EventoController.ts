@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
+import { startOfDay, endOfDay, parseISO } from 'date-fns';
 import { Between, getRepository } from "typeorm";
-import { convertCompilerOptionsFromJson } from "typescript";
 import * as Yup from 'yup';
 
 import Evento from "../models/Evento";
@@ -39,32 +39,25 @@ export default {
   async showWithDt(request: Request, response: Response) {
     try{
 
-      const { dtInicio, dtFim, dt } = request.body;
+      var { dtInicio, dtFim } = request.body;
 
-      var dtInt = parseInt(dt);
-      var events = {} as Evento[];
+      const parsedInicio = parseISO(dtInicio);
+      const parsedFim = parseISO(dtFim);
 
       if(dtInicio == undefined && dtFim == undefined ||
         dtInicio == "" && dtFim == ""){
         return response.status(400).json({ "Erro": "JSON incorreto" });
       }
 
+      let findArgs = { 
+        where:{
+          dt_evento: Between(startOfDay(parsedInicio).toISOString(), endOfDay(parsedFim).toISOString()),
+        }
+      };
+
       const eventsRepository = getRepository(Evento);
 
-      if(dtInt > 0){
-        events = await eventsRepository.find({
-          where: {
-            dt_evento: Between(dtInicio, dtFim)
-          },
-          take: parseInt(dt)
-        });
-      }else{
-        events = await eventsRepository.find({
-          where: {
-            dt_evento: Between(dtInicio, dtFim)
-          }
-        });
-      }
+      const events = await eventsRepository.find(findArgs);
 
       if(events.length === 0){
         return response.status(404).json({ "Vazio": "Nenhum Evento Cadastrado" });
@@ -72,8 +65,9 @@ export default {
         return response.json(eventView.renderMany(events));
       }
 
-    }catch{
-      return response.status(510);
+    }catch(err){
+      console.log(err);
+      return response.status(400).json({ "Erro": err });
     }
   },
 

@@ -3006,6 +3006,7 @@ __metadata:
     cors: ^2.8.5
     cross-fetch: ^3.1.4
     crypto-js: 3.1.9-1
+    date-fns: ^2.28.0
     eslint: ^7.31.0
     eslint-config-standard: ^16.0.3
     eslint-plugin-import: ^2.23.4
@@ -3102,6 +3103,13 @@ __metadata:
   version: 3.0.1
   resolution: "data-uri-to-buffer@npm:3.0.1"
   checksum: c59c3009686a78c071806b72f4810856ec28222f0f4e252aa495ec027ed9732298ceea99c50328cf59b151dd34cbc3ad6150bbb43e41fc56fa19f48c99e9fc30
+  languageName: node
+  linkType: hard
+
+"date-fns@npm:^2.28.0":
+  version: 2.28.0
+  resolution: "date-fns@npm:2.28.0"
+  checksum: a0516b2e4f99b8bffc6cc5193349f185f195398385bdcaf07f17c2c4a24473c99d933eb0018be4142a86a6d46cb0b06be6440ad874f15e795acbedd6fd727a1f
   languageName: node
   linkType: hard
 

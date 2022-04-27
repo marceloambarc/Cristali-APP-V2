@@ -25,7 +25,7 @@ controllerRouter.post('/hashpasswords', clientAuth, SenhaController.hashPassword
 // -- LOGS
 
 controllerRouter.get('/evento', clientAuth, EventoController.index);
-controllerRouter.get('/evento/dateTime', clientAuth, EventoController.showWithDt);
+controllerRouter.get('/eventodt', clientAuth, EventoController.showWithDt);
 controllerRouter.get('/evento/:id', clientAuth, EventoController.show);
 controllerRouter.post('/evento', clientAuth, EventoController.create);
 
