@@ -40,7 +40,7 @@ export default {
     try{
 
       var { dtInicio, dtFim } = request.body;
-
+      console.log(`Data Inicio ${dtInicio}, Data Fim: ${dtFim}`);
       const parsedInicio = parseISO(dtInicio);
       const parsedFim = parseISO(dtFim);
 
