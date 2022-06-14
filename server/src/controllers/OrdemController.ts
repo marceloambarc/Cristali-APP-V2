@@ -366,7 +366,7 @@ export default {
   async delete(request: Request, response: Response) {
     try {
 
-      const ordensRepository = getRepository(Ordem);
+      /*const ordensRepository = getRepository(Ordem);
 
       var d = new Date();
       d.setDate(d.getDate()-30);
@@ -385,8 +385,8 @@ export default {
         });
 
         return response.status(200).json({});
-      }
-
+      }*/
+      return response.status(200).json({});
     }catch(err) {
       return response.status(400).json({ "Erro" : err });
     }

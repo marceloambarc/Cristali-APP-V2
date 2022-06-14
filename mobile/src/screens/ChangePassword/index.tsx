@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, Alert, KeyboardAvoidingView, Platform } from 'react-native';
 import validator from 'validator';
 import { useAuth } from '../../hooks/auth';
+import { versionCode } from '../../config/options';
 
 import { api } from '../../services/api';
 
@@ -43,7 +44,8 @@ export function ChangePassword() {
             }).then(() => {
               enterApp();
             }).catch(err => {
-              Alert.alert('Ops!', 'Tivemos um Erro, tente novamente');
+              console.log(err);
+              Alert.alert('Ops, tivemos um erro.');
               signOut();
             });
           }
@@ -78,7 +80,7 @@ export function ChangePassword() {
       behavior={(Platform.OS === 'ios')? "padding" : undefined}
     >
     <View style={styles.container}>
-      <Logo />
+      <Logo subtext versionCode='' />
       <Text style={styles.title}>
         SEJA BEM VINDA!
       </Text>
