@@ -123,9 +123,7 @@ export function History() {
     setOrder(orderSelect);
     setOpenHistoryModal(true);
   }
-
   
-
   if(loading){
     return(
       <Loading />

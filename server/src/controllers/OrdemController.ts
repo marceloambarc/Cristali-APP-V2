@@ -219,14 +219,13 @@ export default {
         }
       });
 
-
       if(existOrdem === undefined){
         return response.status(404).json({ "Erro" : "Ordem não Existe." });
       }else{
         if(totalClienteOrdens.length === 1){
 
           if(existCliente != undefined) {
-
+            
             if(existOrdem.cd_clientefinal === clientId) {
               
               existOrdem.vl_total = totalPrice;
@@ -240,11 +239,20 @@ export default {
               existCliente.tx_obs = client.clientNotes;
 
               await clientesRepository.save(existCliente);
-              await ordensRepository.save(existOrdem);
+              const Ordercreated = await ordensRepository.save(existOrdem);
 
-              
+              const codigo = Ordercreated.cd_id;
+              const createOrdemReserva = await OrdemReservaController.edit(request, response, codigo);
 
-              return response.status(200).json(existOrdem);
+              if(createOrdemReserva != undefined){
+                if(createOrdemReserva.statusCode === 201){
+                  return response.status(200).json(existOrdem);
+                }else{
+                  return response.status(createOrdemReserva.statusCode).json(createOrdemReserva.json);
+                }
+              }else{
+                return response.status(400).json({ "Erro" : "Entre em contato com o Suporte código[bkp]" });
+              }
             } else {
               return response.status(406).json({ "Erro" : "Não é permitido alterar o Cliente após Criar Venda." });
             }
