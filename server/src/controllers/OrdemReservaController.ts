@@ -266,6 +266,6 @@ export default {
       console.log(err);
       return response.status(400);
     }
-  }
+  },
 
 }

@@ -248,7 +248,7 @@ export default {
                 if(createOrdemReserva.statusCode === 201){
                   return response.status(200).json(existOrdem);
                 }else{
-                  return response.status(createOrdemReserva.statusCode).json(createOrdemReserva.json);
+                  return response.status(createOrdemReserva.statusCode).json({ "Erro" : "Código 3 - Inicie uma nova venda." });
                 }
               }else{
                 return response.status(400).json({ "Erro" : "Entre em contato com o Suporte código[bkp]" });
