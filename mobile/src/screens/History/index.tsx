@@ -179,7 +179,6 @@ export function History() {
                 handleOrderSelect={handleOrderSelect}
               />
             </View>
-  
           </View>
 
           <HistoryModal
