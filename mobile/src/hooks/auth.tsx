@@ -70,7 +70,7 @@ function AuthProvider({ children } : AuthProps) {
         }
         setLoading(false);
       }).catch(err => {
-  
+        console.log(err);
         const errorString = String(err);
         const res = errorString.replace(/\D/g,'');
   
@@ -91,7 +91,7 @@ function AuthProvider({ children } : AuthProps) {
           signOut();
           setLoading(false);
         }else{
-          Alert.alert('Problema na Conexão.', err);
+          Alert.alert('Problema de Conexão');
           signOut();
           setLoading(false);
         }

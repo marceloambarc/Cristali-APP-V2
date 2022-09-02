@@ -123,9 +123,7 @@ export function History() {
     setOrder(orderSelect);
     setOpenHistoryModal(true);
   }
-
   
-
   if(loading){
     return(
       <Loading />
@@ -181,7 +179,6 @@ export function History() {
                 handleOrderSelect={handleOrderSelect}
               />
             </View>
-  
           </View>
 
           <HistoryModal

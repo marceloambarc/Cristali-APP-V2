@@ -259,7 +259,6 @@ export function NewSale() {
 
       if(res === '404'){
         Alert.alert('Ops!','Esta venda não existe.');
-        
       }else if(res === '401'){
         Alert.alert('Sessão Terminada, Faça login novamente.');
         setLoading(false);

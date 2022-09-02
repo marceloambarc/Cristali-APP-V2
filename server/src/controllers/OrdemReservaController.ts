@@ -213,4 +213,59 @@ export default {
     }
   },
 
+  async edit(request: Request, response: Response, codigo: number){
+    try {
+
+      var {
+        totalPrice,
+        orderNotes,
+        itens,
+        clientId,
+        client,
+        userCode
+      } = request.body;
+
+      if(orderNotes == '')
+        orderNotes = 'Observação não inserida';
+
+        itens.forEach((item, index, object) => {
+          if(item.vl_preco === 0)
+            object.splice(index, 1);
+          if(item.vl_preco === '')
+            object.splice(index, 1);
+          if(item.cd_codigogerado === '')
+            item.cd_codigogerado = 'Código Vazio';
+          if(item.nm_produto === '')
+            item.nm_produto = 'Nome Não Inserido';
+          if(item.vl_preco)
+            item.vl_preco = parseInt(String(item.vl_preco).replace(/\D/g, ""));
+        });
+
+      const ordensRepository = getRepository(OrdemReserva);
+
+      const existOrdem = await ordensRepository.findOne({
+        where: {
+          cd_id: codigo
+        }
+      });
+
+      if(existOrdem === undefined){
+        return response.status(400);
+      }else{
+        existOrdem.vl_total = totalPrice;
+        existOrdem.tx_obs = orderNotes;
+        existOrdem.cd_habil_tipo = 217;
+        existOrdem.itens = itens;
+        existOrdem.cd_clientefinal = clientId;
+
+        await ordensRepository.save(existOrdem);
+        return response.status(201);
+      }
+
+    } catch(err) {
+      console.log(err);
+      return response.status(400);
+    }
+  },
+
 }
