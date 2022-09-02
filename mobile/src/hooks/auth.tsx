@@ -41,11 +41,6 @@ interface AuthContextData {
   handleSetNewCondition({id, condition} : ConditionProps) : Promise<void>;
 }
 
-interface AuthorizationResponse {
-  token?: string;
-  type?: string;
-}
-
 export const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 function AuthProvider({ children } : AuthProps) {
