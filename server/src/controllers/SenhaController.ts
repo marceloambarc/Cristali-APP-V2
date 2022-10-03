@@ -57,7 +57,12 @@ export default {
   },
 
   async login(request: Request, response: Response) {
-    const { cgc, password } = request.body;
+    const { cgc, password, versionCode } = request.body;
+
+    //transformar versionCode body e tx_versao para number e comparar:
+    // Se for maior salvar no banco de dados.
+    var txVersao : any;
+    const versionMobile = versionCode.replaceAll('.', '');
 
     const senhasRepository = getRepository(Senha);
 
@@ -74,13 +79,32 @@ export default {
         if(senha.in_ativo === 0){
           return response.status(406).json({ "Erro": "Usuário não ativo." });
         } else {
-          jwt.sign({ cgc, id: senha.id, isActive: senha.in_ativo, userName: senha.nm_nomecli }, JWTSecretUser, { expiresIn: '1h' }, (err, token) => {
-            if(err){
-              return response.status(401).json({ "Ops": "A sua Sessão Terminou, Faça Login Novamente" });
-            }else{
-              return response.status(200).json({ "token": token, "user": senhaView.render(senha) });
-            }
-          })
+          txVersao = senha.tx_versao;
+          const txVersaoAny = txVersao;
+          let versionDatabase;
+
+          if(txVersaoAny != " "){
+            versionDatabase = txVersaoAny.replaceAll('.', '');
+          }
+
+          console.log(txVersaoAny);
+          
+          if(versionDatabase > versionMobile && txVersaoAny != " "){
+            return response.status(426).json({ "Erro": "Necessário Update." });
+          }else{
+            jwt.sign({ cgc, id: senha.id, isActive: senha.in_ativo, userName: senha.nm_nomecli }, JWTSecretUser, { expiresIn: '1h' }, async (err, token) => {
+              if(err){
+                return response.status(401).json({ "Ops": "A sua Sessão Terminou, Faça Login Novamente" });
+              }else{
+                //ATUALIZAR VERSÃO NO BANCO
+
+                senha.tx_versao = versionCode;
+                await senhasRepository.save(senha);
+
+                return response.status(200).json({ "token": token, "user": senhaView.render(senha) });
+              }
+            })
+          }
         }
       }
     }
@@ -108,6 +132,30 @@ export default {
       }
     }catch(err){
       return response.status(401).json({ "Senha Incorreta" : "Entre em contato com o Suporte" });
+    }
+  },
+
+  async updateVersion(request: Request, response: Response) {
+    try {
+
+      const { secret, versionCode } = request.body;
+
+      if(secret === SegundaSenha) {
+        const senhasRepository = getRepository(Senha);
+  
+        const senha = await senhasRepository.find();
+
+        senha.forEach(async user => {
+          user.tx_versao = versionCode;
+          await senhasRepository.save(user);
+        });
+        return response.status(200).json({ "OK!" : "Versão Atualizada." });
+
+      } else {
+        return response.status(400).json({ "Erro" : "Código Errado." });
+      }
+    }catch(err){
+      return response.status(400).json({ "Erro" : err });
     }
   },
 

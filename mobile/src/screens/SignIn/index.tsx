@@ -24,7 +24,7 @@ export function SignIn() {
   async function handleSignIn() {
     try{
       const cgcProto = cgc.replace(/\D/g, "");
-      await signIn({cgc: cgcProto, password});
+      await signIn({cgc: cgcProto, password, versionCode});
     }catch(err){
       return;
     }

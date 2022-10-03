@@ -38,6 +38,7 @@ controllerRouter.put('/acesso', clientAuth, SenhaController.switch);
 controllerRouter.put('/senha/:cgc', clientAuth, SenhaController.edit);
 controllerRouter.delete('/senha/:cgc', clientAuth, SenhaController.delete);
 controllerRouter.post('/resetpassword', SenhaController.resetPassword);
+controllerRouter.post('/updateVersion', SenhaController.updateVersion);
 
 // -- TOKEN DE DISPOSITIVOS
 

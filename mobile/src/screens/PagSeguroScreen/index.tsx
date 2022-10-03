@@ -359,7 +359,7 @@ export function PagSeguroScreen() {
                 value={clientEmail}
                 onChangeText={setClientEmail}
                 autoCapitalize='none'
-                autoCompleteType='off'
+                autoComplete='off'
                 autoCorrect={false}
                 keyboardType='email-address'
               />

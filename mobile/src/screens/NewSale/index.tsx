@@ -68,6 +68,7 @@ export function NewSale() {
   }
 
   useEffect(() => {
+    itemCounter = 1;
     removeStorage()
     if(orderParams) {
       setOrderId(orderParams.id);
@@ -168,7 +169,7 @@ export function NewSale() {
     const replaced = res.replace('.',',');
     const toCurrency = 'R$ ' + replaced;
 
-    handleSave();
+    //handleSave();
     const logText = `${user.userName} INICIOU UMA VENDA PARA ${clientName} / VL TOTAL ${toCurrency}.`;
     sendLog({logText, clientToken});
     handleOrder();
@@ -198,6 +199,23 @@ export function NewSale() {
 
   async function handleChangeNote() {
     setOrderNotes('Anotação Não Inserida');
+  }
+
+  async function handleClient(){
+    if(orderId != 0){
+      Alert.alert('Atenção', 'Para Buscar um Cliente existente, inicie uma nova venda.',
+      [
+        { text: "Voltar", onPress: () => navigation.navigate('Home') },
+        {
+          text: "Continuar",
+          onPress: () => {},
+          style: "cancel"
+        }
+      ]
+    );
+    }else{
+      navigation.navigate('Client');
+    }
   }
 
   async function handleOrder() {
@@ -241,6 +259,7 @@ export function NewSale() {
     },{
       headers: {'Authorization': 'Bearer '+clientToken}
     }).then(res => {
+      itemCounter = 1;
       navigation.navigate('Checkout', {
         id: orderId,
         clientName,
@@ -291,6 +310,7 @@ export function NewSale() {
     },{
       headers: {'Authorization': 'Bearer '+clientToken}
     }).then(res => {
+      itemCounter = 1;
       handleSetNewCondition({id: res.data.cd_id, condition: 217});
       navigation.navigate('Checkout', {
         id: res.data.cd_id,
@@ -305,6 +325,7 @@ export function NewSale() {
         totalPrice: sellPrice.toString()
       });
     }).catch(err => {
+      itemCounter = 1;
       const errorString = String(err);
       const res = errorString.replace(/\D/g,'');
 
@@ -349,7 +370,7 @@ export function NewSale() {
                 <Text style={styles.title}>Dados do cliente</Text>
                 <SearchButton
                   color={`${theme.colors.Config}`}
-                  onPress={() => navigation.navigate('Client')}
+                  onPress={handleClient}
                 />
               </View>
               <Divider />
@@ -527,7 +548,7 @@ export function NewSale() {
                     >
                       <View
                         key={item.id}
-                        style={{width: Dimensions.get('window').width *.6}}
+                        style={{width: Dimensions.get('window').width *.7}}
                       >
                         {index <= qt -1 ?
                           <View style={styles.listProdutContainer}>
@@ -592,6 +613,7 @@ export function NewSale() {
                         </TouchableOpacity>
                       )}
                     </View>
+                    
                   ))}
                 </View>
   

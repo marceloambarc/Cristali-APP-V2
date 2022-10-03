@@ -24,5 +24,9 @@ export default class Senha {
   @Column("nvarchar", { length: 14 })
   @Index("ix_senha4", { synchronize: false })
   tx_cgc: string;
+
+  @Column("nvarchar", { length: 20 })
+  @Index("ix_senha5", { synchronize: false })
+  tx_versao: string;
   
 }

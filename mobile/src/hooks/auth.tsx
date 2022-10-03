@@ -1,6 +1,12 @@
 import React, { createContext, useState, useContext, ReactNode } from "react";
-import { Alert } from 'react-native';
+import { Alert, Linking, Platform } from 'react-native';
 import { api } from '../services/api';
+
+import * as packageJson from '../../app.json';
+import { itunesID } from "../../credentials";
+
+const androidPackageName = packageJson.expo.android.package;
+const itunesItemId = itunesID;
 
 export interface UserProps {
   id?: number;
@@ -9,6 +15,10 @@ export interface UserProps {
   userCode?: string;
   userName?: string;
   cgc: string;
+}
+
+interface versionCodeProps extends UserProps {
+  versionCode: string;
 }
 
 interface AuthProps {
@@ -33,7 +43,7 @@ interface AuthContextData {
   clientToken: string;
   loading: boolean;
   isSignInLogSended: boolean;
-  signIn({cgc, password} : UserProps): Promise<void>;
+  signIn({cgc, password, versionCode} : versionCodeProps): Promise<void>;
   enterApp: () => Promise<void>;
   signOut: () => Promise<void>;
   sendLog({logText, clientToken} : LogProps): Promise<void>;
@@ -51,11 +61,11 @@ function AuthProvider({ children } : AuthProps) {
   const [loading, setLoading] = useState(false);
   const [isSignInLogSended, setIsSignInLogSended] = useState(false);
   
-  async function signIn({ cgc, password } : UserProps) {
+  async function signIn({ cgc, password, versionCode } : versionCodeProps) {
       setLoading(true);
       setOldPassword(password);
       api.post('/login',{
-        cgc, password
+        cgc, password, versionCode
       }).then(res => {
         
         setClientToken(res.data.token);
@@ -83,6 +93,40 @@ function AuthProvider({ children } : AuthProps) {
           setLoading(false);
         }else if(res === '419'){
           Alert.alert('Senha Incorreta.');
+          signOut();
+          setLoading(false);
+        }else if(res === '426' && Platform.OS === 'android'){
+          Alert.alert(
+            'Atenção', 
+            'Sua versão está desatualizada, Por favor atualize o seu aplicativo.',
+            [
+              { text: "Atualizar", onPress: () => Linking.openURL(`market://details?id=${androidPackageName}`) },
+              {
+                text: "Não",
+                onPress: () => {},
+                style: "cancel"
+              }
+            ]
+          );
+          signOut();
+          setLoading(false);
+        }
+        else if(res === '426' && Platform.OS === 'ios'){
+          Alert.alert(
+            'Atenção', 
+            'Sua versão está desatualizada, Por favor atualize o seu aplicativo.',
+            [
+              { text: "Atualizar", onPress: () => Linking.openURL(
+                `https://beta.itunes.apple.com/v1/app/${itunesItemId}`
+                ) 
+              },
+              {
+                text: "Não",
+                onPress: () => {},
+                style: "cancel"
+              }
+            ]
+          );
           signOut();
           setLoading(false);
         }else{
