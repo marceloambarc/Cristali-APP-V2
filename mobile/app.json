@@ -7,7 +7,7 @@
       "ios",
       "android"
     ],
-    "version": "1.5.2",
+    "version": "1.5.5",
     "orientation": "portrait",
     "icon": "./assets/iconCWB.png",
     "splash": {
@@ -27,7 +27,7 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "habilinfo.cristalicwb.app",
-      "buildNumber": "1.0.4",
+      "buildNumber": "1.0.6",
       "infoPlist": {
         "NSCameraUsageDescription": "This app do not uses the camera to let user put a photo in his profile page."
       }
@@ -39,7 +39,7 @@
       },
       "useNextNotificationsApi": true,
       "package": "com.cristaliCWB.app",
-      "versionCode": 15
+      "versionCode": 17
     },
     "web": {
       "favicon": "./assets/faviconCWB.png"

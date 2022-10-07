@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Text, View, StatusBar, ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { useAuth } from '../../hooks/auth';
-import { versionCode } from '../../config/options';
 
 import { Background } from '../../components/Background';
 import { Logo } from '../../components/Logo';
@@ -9,7 +8,7 @@ import { CristaliInput } from '../../components/CristaliInput';
 import { CristaliButton } from '../../components/CristaliButton'; 
 import { InputMask } from '../../components/InputMask';
 
-import { UserProps } from '../../hooks/auth';
+import * as packageJson from '../../../app.json';
 
 import { styles } from './styles';
 import { theme } from '../../global';
@@ -24,7 +23,16 @@ export function SignIn() {
   async function handleSignIn() {
     try{
       const cgcProto = cgc.replace(/\D/g, "");
-      await signIn({cgc: cgcProto, password, versionCode});
+      let versionMobile = '';
+      let mobileUsed = 0;
+      if(Platform.OS === 'android'){
+        versionMobile = (packageJson.expo.android.versionCode).toString();
+        await signIn({cgc: cgcProto, password, versionMobile, mobileUsed});
+      }else{
+        mobileUsed++;
+        versionMobile = (packageJson.expo.ios.buildNumber).toString();
+        await signIn({cgc: cgcProto, password, versionMobile, mobileUsed});
+      }
     }catch(err){
       return;
     }
@@ -52,7 +60,7 @@ export function SignIn() {
           
               <Logo 
                 subtext
-                versionCode={versionCode}
+                versionCode={packageJson.expo.version}
               />
           
               {
@@ -111,7 +119,7 @@ export function SignIn() {
       
           <Logo 
             subtext
-            versionCode={versionCode}
+            versionCode={packageJson.expo.version}
           />
       
           {

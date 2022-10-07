@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { View, Text, Alert, KeyboardAvoidingView, Platform } from 'react-native';
 import validator from 'validator';
 import { useAuth } from '../../hooks/auth';
-import { versionCode } from '../../config/options';
 
 import { api } from '../../services/api';
 
@@ -61,9 +60,9 @@ export function ChangePassword() {
 
   const validate = (value: string) => {
     setNewPassword(value);
-    if (validator.isStrongPassword(value, {
-      minLength: 5, minLowercase: 1,
-      minUppercase: 1, minNumbers: 1, minSymbols: 0
+    if (validator.isStrongPassword(value,{returnScore: false,
+      minLength: 5, minLowercase: 1, minUppercase: 1, minNumbers: 1,
+      minSymbols: 0
     })) {
       setErrorMessage('Senha Autorizada');
       setIsStrong(true);

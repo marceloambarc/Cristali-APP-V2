@@ -5,7 +5,7 @@ import { styles } from './styles';
 
 interface Props {
   subtext?: boolean;
-  versionCode: string;
+  versionCode?: string;
 }
 
 export function Logo({subtext, versionCode}:Props){

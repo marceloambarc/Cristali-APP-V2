@@ -17,8 +17,9 @@ export interface UserProps {
   cgc: string;
 }
 
-interface versionCodeProps extends UserProps {
-  versionCode: string;
+interface versionMobileProps extends UserProps {
+  versionMobile: string;
+  mobileUsed: number;
 }
 
 interface AuthProps {
@@ -43,7 +44,7 @@ interface AuthContextData {
   clientToken: string;
   loading: boolean;
   isSignInLogSended: boolean;
-  signIn({cgc, password, versionCode} : versionCodeProps): Promise<void>;
+  signIn({cgc, password, versionMobile,mobileUsed} : versionMobileProps): Promise<void>;
   enterApp: () => Promise<void>;
   signOut: () => Promise<void>;
   sendLog({logText, clientToken} : LogProps): Promise<void>;
@@ -61,11 +62,11 @@ function AuthProvider({ children } : AuthProps) {
   const [loading, setLoading] = useState(false);
   const [isSignInLogSended, setIsSignInLogSended] = useState(false);
   
-  async function signIn({ cgc, password, versionCode } : versionCodeProps) {
+  async function signIn({ cgc, password, versionMobile, mobileUsed } : versionMobileProps) {
       setLoading(true);
       setOldPassword(password);
       api.post('/login',{
-        cgc, password, versionCode
+        cgc, password, versionMobile, mobileUsed
       }).then(res => {
         
         setClientToken(res.data.token);

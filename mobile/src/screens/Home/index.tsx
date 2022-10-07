@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Text, View, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../../hooks/auth';
-import { versionCode } from '../../config/options';
 
 import { api } from '../../services/api';
+import * as packageJson from '../../../app.json';
 
 import { Background } from '../../components/Background';
 import { Logo } from '../../components/Logo';
@@ -64,7 +64,7 @@ export function Home(){
           <View style={styles.logoContainer}>
             <Logo
               subtext
-              versionCode={versionCode}
+              versionCode={packageJson.expo.version}
             />
           </View>
   

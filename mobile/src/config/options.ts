@@ -1,7 +1,5 @@
 export const isCreditCardObfuscated = false;
 
-export const versionCode = '1.5.5';
-
 export const twoInstallment = 0.5;
 export const threeInstallment = 0.3333333333333333;
 export const fourInstallment = 0.25;
