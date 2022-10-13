@@ -27,6 +27,10 @@ export default class Senha {
 
   @Column("nvarchar", { length: 20 })
   @Index("ix_senha5", { synchronize: false })
-  tx_versao: string;
+  tx_versao_android: string;
+
+  @Column("nvarchar", { length: 20 })
+  @Index("ix_senha6", { synchronize: false })
+  tx_versao_ios: string;
   
 }

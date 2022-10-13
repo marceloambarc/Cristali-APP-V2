@@ -57,15 +57,14 @@ export default {
   },
 
   async login(request: Request, response: Response) {
-    const { cgc, password, versionCode } = request.body;
+    let { cgc, password, versionMobile, mobileUsed } = request.body;
 
-    //transformar versionCode body e tx_versao para number e comparar:
-    // Se for maior salvar no banco de dados.
-    var txVersao : any;
-    const versionMobile = versionCode.replaceAll('.', '');
+    if(versionMobile == undefined){
+      versionMobile = "1.0.0";
+      mobileUsed = "1";
+    }
 
     const senhasRepository = getRepository(Senha);
-
     const senha = await senhasRepository.findOne({ "tx_cgc": cgc });
 
     if(senha === undefined){
@@ -79,17 +78,34 @@ export default {
         if(senha.in_ativo === 0){
           return response.status(406).json({ "Erro": "Usuário não ativo." });
         } else {
-          txVersao = senha.tx_versao;
-          const txVersaoAny = txVersao;
-          let versionDatabase;
 
-          if(txVersaoAny != " "){
-            versionDatabase = txVersaoAny.replaceAll('.', '');
+          //VERIFICAR SISTEMA USADO
+          //COMPRAR SISTEMA COM O BANCO.
+
+          let versionDatabase;
+          let versionMobileInt;
+          let txVersaoAny : any;
+
+          if(mobileUsed > 0){
+            //IOS - Padrão de versão 0.0.0
+            txVersaoAny = senha.tx_versao_ios;
+			      let re = /\./gi;
+			
+            versionMobileInt = parseInt(versionMobile.replace(re, ''));
+
+            if(txVersaoAny != " ")
+              versionDatabase = parseInt(txVersaoAny.replace(re, ''));
+          }else{
+            // Android - Padrão de versão 000
+            txVersaoAny = senha.tx_versao_android;
+            versionMobileInt = parseInt(versionMobile);
+
+            if(txVersaoAny != " ")
+              versionDatabase = parseInt(txVersaoAny);
           }
 
-          console.log(txVersaoAny);
           
-          if(versionDatabase > versionMobile && txVersaoAny != " "){
+          if(versionDatabase > versionMobileInt && txVersaoAny != " "){
             return response.status(426).json({ "Erro": "Necessário Update." });
           }else{
             jwt.sign({ cgc, id: senha.id, isActive: senha.in_ativo, userName: senha.nm_nomecli }, JWTSecretUser, { expiresIn: '1h' }, async (err, token) => {
@@ -97,8 +113,12 @@ export default {
                 return response.status(401).json({ "Ops": "A sua Sessão Terminou, Faça Login Novamente" });
               }else{
                 //ATUALIZAR VERSÃO NO BANCO
+                
+                if(mobileUsed > 0)
+                  senha.tx_versao_ios = versionMobile;
+                else
+                  senha.tx_versao_android = versionMobile;
 
-                senha.tx_versao = versionCode;
                 await senhasRepository.save(senha);
 
                 return response.status(200).json({ "token": token, "user": senhaView.render(senha) });
@@ -138,7 +158,7 @@ export default {
   async updateVersion(request: Request, response: Response) {
     try {
 
-      const { secret, versionCode } = request.body;
+      const { secret, versionMobile, mobileUsed } = request.body;
 
       if(secret === SegundaSenha) {
         const senhasRepository = getRepository(Senha);
@@ -146,7 +166,12 @@ export default {
         const senha = await senhasRepository.find();
 
         senha.forEach(async user => {
-          user.tx_versao = versionCode;
+
+          if(mobileUsed > 0)
+            user.tx_versao_ios = versionMobile;
+          else
+            user.tx_versao_android = versionMobile;
+
           await senhasRepository.save(user);
         });
         return response.status(200).json({ "OK!" : "Versão Atualizada." });
@@ -357,7 +382,9 @@ export default {
         cgc
       } = request.body;
 
-      console.log(secret);
+      const versionCodeAndroid = "17";
+      const versionCodeiOS = "1.0.6";
+
       if(secret === SegundaSenha) {
         if(userCode === '' || userName === '' || cgc === '') {
           return response.status(400).json({ "Erro" : "O parâmetro não pode ser vazio." });
@@ -381,7 +408,9 @@ export default {
               tx_senha: hash,
               cd_ccli: userCode,
               nm_nomecli: userName,
-              tx_cgc: cgc
+              tx_cgc: cgc,
+              tx_versao_android: versionCodeAndroid,
+              tx_versao_ios: versionCodeiOS
             };
   
             const schema = Yup.object().shape({
@@ -389,7 +418,9 @@ export default {
               tx_senha: Yup.string().required(),
               cd_ccli: Yup.string().required(),
               nm_nomecli: Yup.string().required(),
-              tx_cgc: Yup.string().required()
+              tx_cgc: Yup.string().required(),
+              tx_versao_android: Yup.string().required(),
+              tx_versao_ios: Yup.string().required()
             });
       
             await schema.validate(data, {
