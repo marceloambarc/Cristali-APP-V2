@@ -51,7 +51,7 @@ export function Money() {
   function handleFinal() {
     const notes = paymentMethod + ' ' + orderParams.orderNotes;
     if(isMoney) {
-      const logText = `${user.userName} FINALIZOU UMA VENDA PARA ${paymentMethod}.`;
+      const logText = `${user.userName} FINALIZOU UMA VENDA PARA ${clientName}.`;
       sendLog({logText, clientToken});
       handleSetNewCondition({id: orderId,condition: 223});
       handleNavigation();

@@ -88,14 +88,18 @@ export default {
         deviceToken
       } = request.body;
 
+      const half = Math.ceil(userToken.length / 2);
+      const firstHalf = userToken.substr(0, half);
+      const secondHalf = userToken.substr(-half);
+
       const eventsRepository = getRepository(Evento);
 
       const data : any = {
         dt_evento: new Date(),
         cd_ccli: userCode,
         tx_evento: eventDescription,
-        token_cliente: userToken,
-        token_celular: deviceToken,
+        token_cliente: firstHalf,
+        token_celular: secondHalf,
       };
 
       const schema = Yup.object().shape({
@@ -113,10 +117,11 @@ export default {
       const eventRepository = eventsRepository.create(data);
 
       await eventsRepository.save(eventRepository);
-
       return response.status(201).json(eventRepository);
 
+
     }catch(err){
+      console.log(err);
       return response.status(400).json({ "Erro": err });
     }
   }

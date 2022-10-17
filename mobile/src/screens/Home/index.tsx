@@ -14,8 +14,7 @@ import { styles } from './styles';
 import { theme } from '../../global';
 
 export function Home(){
-  const { user, clientToken, isSignInLogSended, sendLoginLog, signOut } = useAuth();
-  const [loading, setLoading] = useState(true);
+  const { user, clientToken, loading, isSignInLogSended, sendLoginLog, signOut } = useAuth();
 
   const navigation = useNavigation();
 
@@ -35,26 +34,9 @@ export function Home(){
     signOut();
   }
 
-  async function deleteHistory() {
-    await api.delete(`/order`,{
-      headers: { 'Authorization' : 'Bearer '+clientToken }
-    }).catch(() => {
-      return;
-    });
-  }
-
   useEffect(() => {
-    if(!loading)
-      return;
-    if(isSignInLogSended) {
-      deleteHistory()
-      setLoading(false);
-      return;
-    } else {
-      sendLoginLog(clientToken).then(() => {
-        deleteHistory()
-        setLoading(false);
-      });
+    if(!isSignInLogSended){
+      sendLoginLog(clientToken);
     }
   },[]);
 
