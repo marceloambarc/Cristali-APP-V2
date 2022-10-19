@@ -62,7 +62,7 @@ export function PagSeguroScreen() {
   const [installment, setInstallment] = useState(1);
 
   const value = parseInt(totalPrice);
-  const codeDoc = String(uuid.v4(orderId.toString()));
+  const codeDoc = String(uuid.v4(orderId.toString()) + '--' + orderId.toString());
 
   useEffect(() => {
     if(clientParams){
