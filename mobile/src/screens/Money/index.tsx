@@ -42,6 +42,7 @@ export function Money() {
   const [clientNotes, setClientNotes] = useState('');
 
   const [orderNotes, setOrderNotes] = useState('');
+  const [orderReference, setOrderReference] = useState('');
   const [orderId, setOrderId] = useState(0);
   const [totalPrice, setTotalPrice] = useState('');
   const [qt, setQt] = useState<string | undefined>('');
@@ -49,16 +50,15 @@ export function Money() {
   const isMoney = moneyParams.isMoney;
 
   function handleFinal() {
-    const notes = paymentMethod + ' ' + orderParams.orderNotes;
-    if(isMoney) {
-      const logText = `${user.userName} FINALIZOU UMA VENDA PARA ${clientName}.`;
+    if(!isMoney) {
+      const logText = `${user.userName} FINALIZOU A VENDA ${orderReference} PARA ${clientName}: MÉTODO ${paymentMethod}`;
       sendLog({logText, clientToken});
-      handleSetNewCondition({id: orderId,condition: 223});
+      handleSetNewCondition({id: orderId, condition: 223, orderReference: orderReference});
       handleNavigation();
     } else {
-      const logText = `${user.userName} FINALIZOU UMA VENDA EM DINHEIRO.`;
+      const logText = `${user.userName} FINALIZOU A VENDA ${orderReference} PARA ${clientName} EM DINHEIRO.`;
       sendLog({logText, clientToken});
-      handleSetNewCondition({id: orderId,condition: 224});
+      handleSetNewCondition({id: orderId, condition: 224, orderReference: orderReference});
       handleNavigation();
     }
   }
@@ -79,6 +79,7 @@ export function Money() {
     if(orderParams){
       setOrderId(orderParams.id);
       setOrderNotes(orderParams.orderNotes);
+      setOrderReference(orderParams.orderReference);
       setTotalPrice(orderParams.totalPrice);
       setQt(orderParams.qt);
     }
@@ -151,6 +152,7 @@ export function Money() {
               :
   
                 <View style={styles.footer}>
+                  <Text>{orderReference}</Text>
                   <CristaliButton 
                     color={`${theme.colors.Success}`}
                     title="Finalizar"

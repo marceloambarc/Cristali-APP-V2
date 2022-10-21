@@ -16,6 +16,7 @@ export function Final(){
       userCode: '',
       totalPrice: '',
       orderNotes: '',
+      orderReference: '',
       client: {
         clientName: '',
         clientPhone: '',

@@ -44,6 +44,7 @@ export function PagSeguroScreen() {
   const [clientEmail, setClientEmail] = useState('');
 
   const [orderNotes, setOrderNotes] = useState('');
+  const [orderReference, setOrderReference] = useState('');
   const [orderId, setOrderId] = useState(0);
   const [totalPrice, setTotalPrice] = useState('');
   const [qt, setQt] = useState<string | undefined>('');
@@ -62,7 +63,6 @@ export function PagSeguroScreen() {
   const [installment, setInstallment] = useState(1);
 
   const value = parseInt(totalPrice);
-  const codeDoc = String(uuid.v4(orderId.toString()) + '--' + orderId.toString());
 
   useEffect(() => {
     if(clientParams){
@@ -76,6 +76,7 @@ export function PagSeguroScreen() {
     if(orderParams){
       setOrderId(orderParams.id);
       setOrderNotes(orderParams.orderNotes);
+      setOrderReference(orderParams.orderReference);
       setTotalPrice(orderParams.totalPrice);
       setQt(orderParams.qt);
       if(orderParams.itens != undefined) {
@@ -193,9 +194,10 @@ export function PagSeguroScreen() {
   }
 
   async function handleSendPagSeguro(encryptedCard: string) {
+    sendLog({logText:`${user.userName} ENVIOU VENDA ${orderId} PARA PAGSEGURO`, clientToken});
     const response = await pgapi.post('/charges',
       {
-        "reference_id": `${codeDoc}`,
+        "reference_id": `${orderReference}`,
         "description": `${orderNotes}`,
         "amount": {
           "value": `${value}`,
@@ -259,11 +261,11 @@ export function PagSeguroScreen() {
     if(response) {
       setCreatedPagSeguro(true);
       if(response.data.status === 'PAID'){
-        sendLog({logText:`${user.userName} OBTEVE VENDA Nº ${response.data.payment_response.reference} PAGA`, clientToken});
+        sendLog({logText:`${user.userName} OBTEVE REFERÊNCIA ${response.data.payment_response.reference_id} PAGA`, clientToken});
         handleSetNewCondition({id: orderId, condition: 220});
         navigation.navigate('SendConfirmation',{
           pagSeguroId: response.data.id,
-          reference: response.data.payment_response.reference,
+          reference: response.data.payment_response.reference_id,
           cardNumber: response.data.payment_method.card.last_digits,
           declined: response.data.status,
           message: response.data.payment_response.message,
@@ -276,9 +278,9 @@ export function PagSeguroScreen() {
           clientNotes: clientNotes,
         });
       } else {
-        sendLog({logText:`${user.userName} OBTEVE VENDA Nº ${response.data.payment_response.reference} REJEITADA`, clientToken});
+        sendLog({logText:`${user.userName} OBTEVE REFERÊNCIA ${response.data.payment_response.reference_id} REJEITADA`, clientToken});
         handleSetNewCondition({id: orderId, condition: 221});
-        handleNavigateRejected(response.data.id, 
+        handleNavigateRejected(response.data.id,
           response.data.payment_response.reference, 
           response.data.payment_method.card.last_digits,
           response.data.status,
@@ -293,6 +295,7 @@ export function PagSeguroScreen() {
       userCode: '',
       totalPrice: '',
       orderNotes: '',
+      orderReference: '',
       client: {
         clientName: '',
         clientCgc: '',
@@ -443,6 +446,7 @@ export function PagSeguroScreen() {
                 onPress={validate}
               />
             </View>
+            <Text>{orderReference}</Text>
           </View>
         </ScrollView>
 

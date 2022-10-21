@@ -53,28 +53,22 @@ export function NewSale() {
   const [orderNotes, setOrderNotes] = useState('');
   const [totalPrice, setTotalPrice] = useState('');
   const [condition, setCondition] = useState(0);
+  const [orderReference, setOrderReference] = useState(String(uuid.v4(user.cgc)) + `${user.id}`);
 
   const [sellPrice, setSellPrice] = useState(0);
   const [qt, setQt] = useState(0);
 
   const [list, setList] = useState<ItemProps[]>([{id: 0, cd_codigogerado: String(uuid.v4()), vl_preco: '', nm_produto: ''}]);
 
-  async function removeStorage(){
-    try {
-      await AsyncStorage.removeItem(COLLECTION_ITEMS);
-    }catch(err){
-      alert(err);
-    }
-  }
 
   useEffect(() => {
     itemCounter = 1;
-    removeStorage()
     if(orderParams) {
       setOrderId(orderParams.id);
       setOrderNotes(orderParams.orderNotes);
       setTotalPrice(orderParams.totalPrice);
       setCondition(orderParams.condition);
+      setOrderReference(orderParams.orderReference);
       if(orderParams.itens != undefined) {
         const itens = orderParams.itens
         itens.map((item, index) => {
@@ -92,6 +86,7 @@ export function NewSale() {
       setClientEmail(clientParams.clientEmail);
       setClientNotes(clientParams.clientNotes);
       setClientId(clientParams.clientId);
+      setOrderReference(String(uuid.v4(user.cgc)) + `${user.id}`);
     }
     
   },[orderParams, clientParams]);
@@ -175,28 +170,6 @@ export function NewSale() {
     handleOrder();
   }
 
-  async function handleSave() {
-    for (let index = 0; index <= list.length; index++) {
-      if(list[index].vl_preco != undefined && list[index].vl_preco != '') {
-        const newItem = {
-          cd_codigogerado: uuid.v4(),
-          nm_produto: list[index].nm_produto,
-          vl_preco: list[index].vl_preco
-        };
-
-        const storage = await AsyncStorage.getItem(COLLECTION_ITEMS);
-        const itens = storage ? JSON.parse(storage) : [];
-
-        await AsyncStorage.setItem(
-          COLLECTION_ITEMS,
-          JSON.stringify([...itens, newItem])
-        );
-      } else {
-        return;
-      }
-    }
-  }
-
   async function handleChangeNote() {
     setOrderNotes('Anotação Não Inserida');
   }
@@ -220,7 +193,7 @@ export function NewSale() {
 
   async function handleOrder() {
     if(orderId !== 0 && orderId !== undefined) {
-      handleSetNewCondition({id: orderId, condition: 217});
+      handleSetNewCondition({id: orderId, condition: 217, orderReference: orderReference});
       if(orderNotes === ''){
         await handleChangeNote().then(() => {
           handleOldOrder();
@@ -246,6 +219,7 @@ export function NewSale() {
       userCode: user.userCode,
       totalPrice: sellPrice,
       orderNotes,
+      orderReference,
       clientId,
       client: {
         clientName,
@@ -268,6 +242,7 @@ export function NewSale() {
         clientEmail,
         clientNotes,
         orderNotes,
+        orderReference,
         qt,
         itens: list,
         totalPrice: sellPrice.toString()
@@ -298,6 +273,7 @@ export function NewSale() {
       userCode: user.userCode,
       totalPrice: sellPrice,
       orderNotes,
+      orderReference,
       client: {
         clientName,
         clientCgc: clientCgcProto,
@@ -311,7 +287,7 @@ export function NewSale() {
       headers: {'Authorization': 'Bearer '+clientToken}
     }).then(res => {
       itemCounter = 1;
-      handleSetNewCondition({id: res.data.cd_id, condition: 217});
+      handleSetNewCondition({id: res.data.cd_id, condition: 217, orderReference: orderReference});
       navigation.navigate('Checkout', {
         id: res.data.cd_id,
         clientName,
@@ -320,6 +296,7 @@ export function NewSale() {
         clientEmail,
         clientNotes,
         orderNotes,
+        orderReference,
         qt,
         list: list,
         totalPrice: sellPrice.toString()
@@ -648,6 +625,7 @@ export function NewSale() {
                 <Divider />
   
                 <View style={styles.footer}>
+                <Text>{orderReference}</Text>
                   <View> 
                     <CristaliButton
                       title="Continuar"

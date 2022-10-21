@@ -29,6 +29,7 @@ export function Checkout() {
   const [clientNotes, setClientNotes] = useState('');
 
   const [orderNotes, setOrderNotes] = useState('');
+  const [orderReference, setOrderReference] = useState('');
   const [orderId, setOrderId] = useState(0);
   const [totalPrice, setTotalPrice] = useState('');
   const [qt, setQt] = useState<string | undefined>('');
@@ -45,6 +46,7 @@ export function Checkout() {
     if(orderParams){
       setOrderId(orderParams.id);
       setOrderNotes(orderParams.orderNotes);
+      setOrderReference(orderParams.orderReference);
       setTotalPrice(orderParams.totalPrice);
       setQt(orderParams.qt);
       handleSetNewCondition({id: orderParams.id, condition: 218});
@@ -80,6 +82,7 @@ export function Checkout() {
       clientEmail,
       clientNotes,
       orderNotes,
+      orderReference,
       qt,
       itens: list,
       totalPrice
@@ -105,6 +108,7 @@ export function Checkout() {
       clientEmail,
       clientNotes,
       orderNotes,
+      orderReference,
       qt,
       itens: list,
       totalPrice
@@ -130,6 +134,7 @@ export function Checkout() {
       clientEmail,
       clientNotes,
       orderNotes,
+      orderReference,
       qt,
       itens: list,
       totalPrice
@@ -216,7 +221,7 @@ export function Checkout() {
               </View>
             </View>
           </View>
-  
+          <Text>{orderReference}</Text>
         </View>
       </ScrollView>  
     );

@@ -28,6 +28,9 @@ export default class Ordemreserva {
   @Column()
   cd_clientefinal: number;
 
+  @Column("nvarchar", { length: 250 })
+  tx_referencia: string;
+
   @OneToMany(() => Ordemreservaitem, item => item.ordem,{
     cascade: ['insert', 'update']
   })

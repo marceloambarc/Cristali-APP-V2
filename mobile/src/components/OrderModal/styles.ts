@@ -29,6 +29,12 @@ export const styles = StyleSheet.create({
     color: theme.colors.primary,
     textAlign: 'center'
   },
+  reference: {
+    fontFamily: theme.fonts.text,
+    fontSize: theme.fonts.sizeD,
+    color: theme.colors.primary,
+    textAlign: 'center'
+  },
   condition: {
     fontFamily: theme.fonts.heading,
     fontSize: theme.fonts.sizeB,

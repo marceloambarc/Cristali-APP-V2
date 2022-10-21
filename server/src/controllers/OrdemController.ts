@@ -8,6 +8,7 @@ import ordemView from "../view/ordem_view";
 import Clientefinal from "../models/ClienteFinal";
 import ClienteController from "./ClienteController";
 import OrdemReservaController from "./OrdemReservaController";
+import { Console } from "console";
 
 export default { 
 
@@ -179,6 +180,7 @@ export default {
         itens,
         clientId,
         client,
+        orderReference,
         userCode
       } = request.body;
 
@@ -337,7 +339,8 @@ export default {
     try {
 
       const { id } = request.params;
-      const { condition } = request.body;
+      console.log(id);
+      const { condition, orderReference } = request.body;
       const setCondition = parseInt(condition);
 
       const ordensRepository = getRepository(Ordem);
@@ -352,6 +355,7 @@ export default {
         return response.status(404).json({ "Erro" : "Ordem não Econtrada" });
       } else {
         existOrdem.cd_habil_tipo = setCondition;
+        existOrdem.tx_referencia = orderReference;
         await ordensRepository.save(existOrdem);
         const editOrdemReserva = await OrdemReservaController.editCondition(request, response);
 
@@ -362,6 +366,7 @@ export default {
             return response.status(400).json({ "Erro" : "Backup não premitiu alteração"});
           }
         }else{
+          console.log("here");
           return response.status(400).json({ "Erro" : "Não existe esta Ordem no Backup."});
         }
       }
@@ -434,14 +439,17 @@ export default {
         VEM DO APP { userCode, createdAt, totalPrice, orderNotes, condition }
         VAI PARA O BANCO { cd_id_ccli, dt_criado, vl_total, tx_obs, cd_habil_tipo }
       */
-      
+
       var { 
         userCode,
         totalPrice,
         orderNotes,
+        orderReference,
         client,
         itens
       } = request.body;
+
+      console.log(request.body);
 
       if(orderNotes === undefined)
         orderNotes = 'Observação Não Inserida';
@@ -470,7 +478,6 @@ export default {
       });
 
       if(existCliente != undefined) {
-
         const codPessoa = existCliente.cd_pessoa;
         const data : any = {
           cd_id_ccli: userCode,
@@ -479,6 +486,7 @@ export default {
           tx_obs: orderNotes,
           cd_habil_tipo: 217,
           cd_clientefinal: codPessoa,
+          tx_referencia: orderReference,
           itens
         };
 
@@ -489,6 +497,7 @@ export default {
           tx_obs: Yup.string().required(),
           cd_habil_tipo: Yup.number().required(),
           cd_clientefinal: Yup.number().required(),
+          tx_referencia: Yup.string().required(),
           itens: Yup.array(
             Yup.object().shape({
               id: Yup.number().strip(),
@@ -505,7 +514,7 @@ export default {
 
         const ordemRepository = ordensRepository.create(data);
 
-        const Ordercreated = await ordensRepository.save(ordemRepository);
+        const Ordercreated : any = await ordensRepository.save(ordemRepository);
 
         const codigo = Ordercreated.cd_id;
 
@@ -552,6 +561,7 @@ export default {
               tx_obs: orderNotes,
               cd_habil_tipo: 0,
               cd_clientefinal: responseClienteId,
+              tx_referencia: orderReference,
               itens
             };
 
@@ -562,6 +572,7 @@ export default {
               tx_obs: Yup.string().required(),
               cd_habil_tipo: Yup.number().required(),
               cd_clientefinal: Yup.number().required(),
+              tx_referencia: Yup.string().required(),
               itens: Yup.array(
                 Yup.object().shape({
                   nm_produto: Yup.string().nullable(),
@@ -590,7 +601,6 @@ export default {
       
 
     }catch(err){
-      console.log(err);
       return response.status(400).json({ "Erro" : err });
     }
   },

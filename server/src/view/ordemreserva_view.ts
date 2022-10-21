@@ -10,7 +10,8 @@ export default {
       totalPrice: ordemreserva.vl_total,
       orderNotes: ordemreserva.tx_obs,
       condition: ordemreserva.cd_habil_tipo,
-      clientCode: ordemreserva.cd_clientefinal
+      clientCode: ordemreserva.cd_clientefinal,
+      reference: ordemreserva.tx_referencia,
     }
   },
 
@@ -23,6 +24,7 @@ export default {
       orderNotes: ordemreserva.tx_obs,
       condition: ordemreserva.cd_habil_tipo,
       clientCode: ordemreserva.cd_clientefinal,
+      reference: ordemreserva.tx_referencia,
       itens: itemReservaView.renderMany(ordemreserva.itens)
     };
   },

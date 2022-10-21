@@ -33,6 +33,7 @@ export function UnfinishedSale() {
   const [searchTotalPrice, setTotalPrice] = useState('');
   const [searchCondition, setCondition] = useState(0);
   const [searchOrderNotes, setSearchOrderNotes] = useState('');
+  const [searchOrderReference, setSearchOrderReference] = useState('');
   const [itens, setItens] =  useState<ItemProps[]>([{id: 0, cd_codigogerado: '', vl_preco: '', nm_produto: ''}]);
 
   const navigation = useNavigation();
@@ -57,6 +58,7 @@ export function UnfinishedSale() {
     setSearchOrderId(orderSelect.id);
     setTotalPrice(orderSelect.totalPrice);
     setSearchOrderNotes(orderSelect.orderNotes);
+    setSearchOrderReference(orderSelect.orderReference);
     setCondition(orderSelect.condition);
     setClientCode(orderSelect.clientCode);
     if(orderSelect.itens != undefined) {
@@ -76,6 +78,7 @@ export function UnfinishedSale() {
         navigation.navigate('NewSale',{
           id: searchOrderId,
           orderNotes: searchOrderNotes,
+          orderReference: searchOrderReference,
           totalPrice: searchTotalPrice,
           condition: searchCondition,
           itens,

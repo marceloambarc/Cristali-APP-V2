@@ -11,7 +11,7 @@ import { theme } from '../../global';
 
 interface PagSeguroConfirmationProps {
   pagSeguroId: string;
-  reference: string;
+  reference_id: string;
   cardNumber: string;
   response: string;
 }
@@ -33,7 +33,7 @@ export function Rejected(){
     if(pagSeguroParams){
       setPagSeguroId(pagSeguroParams.pagSeguroId);
       setPagSeguroResponse(pagSeguroParams.response);
-      setPagSeguroReference(pagSeguroParams.reference);
+      setPagSeguroReference(pagSeguroParams.reference_id);
       setPagSeguroCardNumber(`XXXX-XXXX-XXXX-${pagSeguroParams.cardNumber}`);
     }
     if(clientParams) {
@@ -46,6 +46,7 @@ export function Rejected(){
       userCode: '',
       totalPrice: '',
       orderNotes: '',
+      orderReference: '',
       client: {
         clientName: '',
         clientCgc: '',

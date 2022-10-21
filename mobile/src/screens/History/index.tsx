@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, StatusBar, Dimensions, Platform, Alert } from "react-native";
+import { View, Text, StatusBar, Alert } from "react-native";
 import { useNavigation } from '@react-navigation/native';
-import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { FontAwesome5 } from '@expo/vector-icons'; 
 import { useAuth } from '../../hooks/auth';
 import { Placeholder, PlaceholderLine, ShineOverlay } from 'rn-placeholder';
 
@@ -14,7 +12,6 @@ import { CristaliInput } from "../../components/CristaliInput";
 import { OrderList } from "../../components/OrderList";
 import { Header } from "../../components/Header";
 import { Loading } from "../../components/Loading";
-import { CristaliButton } from "../../components/CristaliButton";
 import { HistoryModal } from "../../components/HistoryModal";
 import { OrderModal } from "../../components/OrderModal";
 
@@ -23,7 +20,7 @@ import { OrderProps } from "../../components/Order";
 import { api } from "../../services/api";
 
 export function History() {
-  const { user, clientToken, sendLog } = useAuth();
+  const { user, clientToken } = useAuth();
   const [loading, setLoading] = useState(true);
   const [loadingPrice, setLoadingPrice] = useState(true);
   const [orderHistory, setOrderHistory] = useState<OrderProps[]>([]);
@@ -35,26 +32,14 @@ export function History() {
     totalPrice: '0',
     createdAt: new Date(),
     orderNotes: '0',
+    orderReference: '0',
     condition: 0,
     clientCode: 0} as OrderProps);
 
   const [historyCount, setHistoryCount] = useState(0);
   const [total, setTotal] = useState('0');
 
-  const [momentum, setMomentum] =  useState<Date>(new Date());
-
-  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  const [isSecondDatePickerVisible, setSecondDatePickerVisibility] = useState(false);
-
-  const [firstDate, setFirstDate] = useState<Date>(momentum);
-  const [secondDate, setSecondDate] = useState<Date>(new Date());
-
-  const [activePressed, setActivePressed] = useState(false);
-  const [inactivePressed, setInactivePressed] = useState(false);
-
   const [openHistoryModal, setOpenHistoryModal] = useState(false);
-
-  const logText = `${user.userName} Consultou Histórico de ${firstDate} até ${secondDate}`;
 
   const navigation = useNavigation();
 
@@ -68,13 +53,6 @@ export function History() {
       Alert.alert('Ops!',`Erro ao Carregar o seu Histórico.`);
       navigation.navigate('Home');
     });
-  }
-
-  async function handleSetMomentum() {
-    var event = new Date();
-    event.setDate(-30);
-    setMomentum(event);
-    setFirstDate(event);
   }
 
   async function handleReduce() {
@@ -97,7 +75,6 @@ export function History() {
 
   async function handleHistory() {
     await handleGetHistory('all');
-    await handleSetMomentum();
   }
 
   useEffect(() => {

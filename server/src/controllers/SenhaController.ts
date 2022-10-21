@@ -67,6 +67,11 @@ export default {
     const senhasRepository = getRepository(Senha);
     const senha = await senhasRepository.findOne({ "tx_cgc": cgc });
 
+    if(versionMobile == "admin"){
+      versionMobile = senha?.tx_versao_android;
+      mobileUsed = "0";
+    }
+
     if(senha === undefined){
       return response.status(403).send({ "Erro" : "Usuário não Cadastrado" });
     }else{
@@ -232,8 +237,6 @@ export default {
         oldPassword,
         newPassword
       } = request.body;
-
-      console.log(request.body);
 
       const searchUserCode = String(userCode);
 

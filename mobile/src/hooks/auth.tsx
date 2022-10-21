@@ -34,6 +34,7 @@ interface LogProps {
 interface ConditionProps {
   id: number;
   condition: number;
+  orderReference?: string;
 }
 
 interface AuthContextData {
@@ -49,7 +50,7 @@ interface AuthContextData {
   signOut: () => Promise<void>;
   sendLog({logText, clientToken} : LogProps): Promise<void>;
   sendLoginLog(clientToken : string): Promise<void>;
-  handleSetNewCondition({id, condition} : ConditionProps) : Promise<void>;
+  handleSetNewCondition({id, condition, orderReference} : ConditionProps) : Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextData>({} as AuthContextData);
@@ -76,7 +77,6 @@ function AuthProvider({ children } : AuthProps) {
         }
         setLoading(false);
       }).catch(err => {
-        console.log(err);
         const errorString = String(err);
         const res = errorString.replace(/\D/g,'');
   
@@ -188,14 +188,25 @@ function AuthProvider({ children } : AuthProps) {
     }
   }
 
-  async function handleSetNewCondition({id, condition}: ConditionProps) {
-    await api.put(`/order/condition/${id}`,{
-      condition: condition
-    },{
-      headers: { 'Authorization' : 'Bearer ' +clientToken }
-    }).catch(err => {
-      Alert.alert(`ERRO NO ENVIO DA CONDIÇÃO ${condition}, id: ${id}`, `${err}`)
-    });
+  async function handleSetNewCondition({id, condition, orderReference}: ConditionProps) {
+    if(orderReference != undefined){
+      await api.put(`/order/condition/${id}`,{
+        condition: condition,
+        orderReference: orderReference,
+      },{
+        headers: { 'Authorization' : 'Bearer ' +clientToken }
+      }).catch(err => {
+        Alert.alert(`ERRO NO ENVIO DA CONDIÇÃO ${condition}, id: ${id}`, `${err}`)
+      });
+    }else{
+      await api.put(`/order/condition/${id}`,{
+        condition: condition,
+      },{
+        headers: { 'Authorization' : 'Bearer ' +clientToken }
+      }).catch(err => {
+        Alert.alert(`ERRO NO ENVIO DA CONDIÇÃO ${condition}, id: ${id}`, `${err}`)
+      });
+    }
   }
 
   return (

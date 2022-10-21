@@ -43,7 +43,6 @@ export function ChangePassword() {
             }).then(() => {
               enterApp();
             }).catch(err => {
-              console.log(err);
               Alert.alert('Ops, tivemos um erro.');
               signOut();
             });

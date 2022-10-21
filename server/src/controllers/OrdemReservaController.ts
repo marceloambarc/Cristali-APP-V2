@@ -93,7 +93,7 @@ export default {
     try {
 
       const { id } = request.params;
-      const { condition } = request.body;
+      const { condition, orderReference } = request.body;
       const setCondition = parseInt(condition);
 
       const ordensReservaRepository = getRepository(OrdemReserva);
@@ -108,6 +108,7 @@ export default {
         return;
       } else {
         existOrdemReserva.cd_habil_tipo = setCondition;
+        existOrdemReserva.tx_referencia = orderReference;
         await ordensReservaRepository.save(existOrdemReserva);
         return response.status(200);
       }
@@ -149,6 +150,7 @@ export default {
         userCode,
         totalPrice,
         orderNotes,
+        orderReference,
         client,
         itens
       } = request.body;
@@ -177,6 +179,7 @@ export default {
           tx_obs: orderNotes,
           cd_habil_tipo: 217,
           cd_clientefinal: codPessoa,
+          tx_referencia: orderReference,
           itens
         };
 
@@ -187,6 +190,7 @@ export default {
           tx_obs: Yup.string().required(),
           cd_habil_tipo: Yup.number().required(),
           cd_clientefinal: Yup.number().required(),
+          tx_referencia: Yup.string().required(),
           itens: Yup.array(
             Yup.object().shape({
               id: Yup.number().strip(),

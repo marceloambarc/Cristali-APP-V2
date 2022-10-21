@@ -28,6 +28,9 @@ export default class Ordem {
   @Column()
   cd_clientefinal: number;
 
+  @Column("nvarchar", { length: 250 })
+  tx_referencia: string;
+
   @OneToMany(() => Ordemitem, item => item.ordem,{
     cascade: ['insert', 'update']
   })

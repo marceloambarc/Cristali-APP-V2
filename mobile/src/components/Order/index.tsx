@@ -19,6 +19,7 @@ export interface OrderProps {
   createdAt: Date;
   totalPrice: string;
   orderNotes: string;
+  orderReference: string;
   condition: number;
   clientCode: number;
   itens?:[{id: number, cd_codigogerado: string, vl_preco: string, nm_produto: string}];

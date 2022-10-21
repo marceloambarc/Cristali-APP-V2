@@ -1,15 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Text, View, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../../hooks/auth';
-
-import { api } from '../../services/api';
-import * as packageJson from '../../../app.json';
 
 import { Background } from '../../components/Background';
 import { Logo } from '../../components/Logo';
 import { CristaliButton } from '../../components/CristaliButton';
 
+import * as packageJson from '../../../app.json';
 import { styles } from './styles';
 import { theme } from '../../global';
 

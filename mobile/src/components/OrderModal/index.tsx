@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, TouchableOpacityProps } from "react-native";
+import { View, Text, ScrollView, TouchableOpacityProps } from "react-native";
 import { TextInputMask } from "react-native-masked-text";
 import { useAuth } from "../../hooks/auth";
 
@@ -52,9 +52,7 @@ export function OrderModal({ data } : OrderComponentProps ) {
   },[]);
 
   return (
-    <View
-    >
-
+    <ScrollView>
     <View style={styles.content}>
     <View style={{paddingHorizontal: 70, marginTop: 10}}>
       <Text style={styles.number}>Venda #{ data.id }</Text>
@@ -119,7 +117,17 @@ export function OrderModal({ data } : OrderComponentProps ) {
         <Text>Nenhum item cadastrado</Text>
       }
     </View>
+    {data.orderReference !== '' 
+      ? 
+      <View style={{marginTop: 10}}>
+        <Text style={styles.number}>Referência</Text>
+        <Text style={styles.reference}>{ data.orderReference }</Text>
+      </View>
+      : 
+      <></>
+    }
 
-  </View>
+
+  </ScrollView>
   );
 }

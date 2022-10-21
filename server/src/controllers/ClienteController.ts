@@ -134,9 +134,8 @@ export default {
           });
 
           const clientefinalRepository = clientesFinalRepository.create(clienteData);
-
           await clientesFinalRepository.save(clientefinalRepository);
-
+          
           return response.status(201);
         }
       } else {
@@ -182,7 +181,8 @@ export default {
       }
 
     }catch(err){
-      return response.status(400)
+      console.log(err);
+      return response.status(400);
     }
   },
 

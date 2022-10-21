@@ -10,7 +10,8 @@ export default {
       totalPrice: ordem.vl_total,
       orderNotes: ordem.tx_obs,
       condition: ordem.cd_habil_tipo,
-      clientCode: ordem.cd_clientefinal
+      clientCode: ordem.cd_clientefinal,
+      orderReference: ordem.tx_referencia,
     }
   },
 
@@ -23,6 +24,7 @@ export default {
       orderNotes: ordem.tx_obs,
       condition: ordem.cd_habil_tipo,
       clientCode: ordem.cd_clientefinal,
+      orderReference: ordem.tx_referencia,
       itens: itemView.renderMany(ordem.itens)
     };
   },
