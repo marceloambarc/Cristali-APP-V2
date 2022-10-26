@@ -221,7 +221,6 @@ export function Checkout() {
               </View>
             </View>
           </View>
-          <Text>{orderReference}</Text>
         </View>
       </ScrollView>  
     );

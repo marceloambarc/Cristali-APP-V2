@@ -52,7 +52,7 @@ controllerRouter.get('/client', clientAuth, ClienteController.index);
 controllerRouter.get('/client/orders', clientAuth, ClienteController.showWithOrders);
 controllerRouter.get('/client/:id', clientAuth, ClienteController.show);
 controllerRouter.post('/client', clientAuth, ClienteController.create);
-controllerRouter.put('/cliente/:id', clientAuth, ClienteController.edit);
+//controllerRouter.put('/cliente/:id', clientAuth, ClienteController.edit);
 
 // -- TODAS AS ORDENS
 

@@ -109,7 +109,7 @@ export function NewSale() {
   const handleAdd = (index: number, vl_preco: string) => {
     const newItem = {id: itemCounter ++, cd_codigogerado: String(uuid.v4()), vl_preco: '', nm_produto: ''}
     if(vl_preco === '') {
-      alert('Insira o Preço do Produto.');
+      alert('Insira o Valor do Produto.');
     } else {
       var value = parseInt(vl_preco.replace(/\D/g, ""));
       setList(prev => [...prev.slice(0, index + 1), newItem, ...prev.slice(index + 1)]);
@@ -307,10 +307,12 @@ export function NewSale() {
       const res = errorString.replace(/\D/g,'');
 
       if(res === '401'){
-        Alert.alert('Ops!','Cliente já Existe.');
-        
+        Alert.alert('Ops!','Problemas no cadastro de sua Cliente. Contacte sua supervisora.');
       }else if(res === '400'){
-        Alert.alert('Ops!', 'Erro de Anotação, possívelmente está Vazia.');
+        Alert.alert('Ops!', 'Erro Interno, Contacte sua supervisora.');
+        setLoading(false);
+      }else if(res === '405'){
+        Alert.alert('Ops!', 'Erro na criação de sua Ordem. Contacte sua supervisora.');
         setLoading(false);
       }
     });
@@ -503,7 +505,7 @@ export function NewSale() {
                     />
                   </View>
                   <View style={styles.orderCol}>
-                    <Text style={styles.orderText}>Preço</Text>
+                    <Text style={styles.orderText}>Total</Text>
                     <InputMask
                       type={'money'}
                       textAlign='center'
@@ -625,7 +627,6 @@ export function NewSale() {
                 <Divider />
   
                 <View style={styles.footer}>
-                <Text>{orderReference}</Text>
                   <View> 
                     <CristaliButton
                       title="Continuar"

@@ -8,7 +8,6 @@ import ordemView from "../view/ordem_view";
 import Clientefinal from "../models/ClienteFinal";
 import ClienteController from "./ClienteController";
 import OrdemReservaController from "./OrdemReservaController";
-import { Console } from "console";
 
 export default { 
 
@@ -233,6 +232,7 @@ export default {
               existOrdem.vl_total = totalPrice;
               existOrdem.tx_obs = orderNotes;
               existOrdem.cd_habil_tipo = 217;
+              existOrdem.tx_referencia = orderReference;
               existOrdem.itens = itens;
 
               existCliente.tx_cgc = client.clientCgc;
@@ -299,8 +299,9 @@ export default {
                     existOrdem.vl_total = totalPrice;
                     existOrdem.tx_obs = orderNotes;
                     existOrdem.cd_habil_tipo = 217;
-                    existOrdem.itens = itens;
                     existOrdem.cd_clientefinal = existClienteCreated.cd_pessoa;
+                    existOrdem.tx_referencia = orderReference;
+                    existOrdem.itens = itens;
                     
                     await ordensRepository.save(existOrdem);
 
@@ -319,6 +320,7 @@ export default {
               existOrdem.vl_total = totalPrice;
               existOrdem.tx_obs = orderNotes;
               existOrdem.cd_habil_tipo = 217;
+              existOrdem.tx_referencia = orderReference;
               existOrdem.itens = itens;
     
               await ordensRepository.save(existOrdem);
@@ -339,7 +341,6 @@ export default {
     try {
 
       const { id } = request.params;
-      console.log(id);
       const { condition, orderReference } = request.body;
       const setCondition = parseInt(condition);
 
@@ -363,10 +364,9 @@ export default {
           if(editOrdemReserva.statusCode === 200){
             return response.status(200).json(existOrdem);
           }else{
-            return response.status(400).json({ "Erro" : "Backup não premitiu alteração"});
+            return response.status(400).json({ "Erro" : "Backup não permitiu alteração"});
           }
         }else{
-          console.log("here");
           return response.status(400).json({ "Erro" : "Não existe esta Ordem no Backup."});
         }
       }
@@ -440,6 +440,12 @@ export default {
         VAI PARA O BANCO { cd_id_ccli, dt_criado, vl_total, tx_obs, cd_habil_tipo }
       */
 
+      //VARIÁVEIS DE CONTROLE DE CLIENTE.
+      var blnExistClient = false;
+      var blnEditClient = false;
+      var blnClient = true;
+      var codCliente = 0;
+
       var { 
         userCode,
         totalPrice,
@@ -448,8 +454,6 @@ export default {
         client,
         itens
       } = request.body;
-
-      console.log(request.body);
 
       if(orderNotes === undefined)
         orderNotes = 'Observação Não Inserida';
@@ -468,28 +472,102 @@ export default {
       });
 
       const ordensRepository = getRepository(Ordem);
-
       const clientesRepository = getRepository(Clientefinal);
 
       const existCliente = await clientesRepository.findOne({
         where: {
-          nm_nome: client.clientName
+          nm_nome: client.clientName,
+          cd_id_ccli: userCode,
         }
       });
 
-      if(existCliente != undefined) {
-        const codPessoa = existCliente.cd_pessoa;
-        const data : any = {
+      if(existCliente != undefined){
+        blnExistClient = true;
+        codCliente = existCliente.cd_pessoa;
+
+        if(client.clientCgc != existCliente.tx_cgc 
+          || client.clientPhone != existCliente.tx_fone
+          || client.clientEmail != existCliente.tx_email
+          || client.clientNotes != existCliente.tx_obs){
+            blnEditClient = true;
+            console.log("Parâmetros desiguais");
+        }
+      }
+
+      const clienteData : any = {
+        cd_pessoa: codCliente,
+        nm_nome: client.clientName,
+        tx_cgc: client.clientCgc,
+        tx_fone: client.clientPhone,
+        tx_email: client.clientEmail,
+        tx_obs: client.clientNotes,
+        cd_id_ccli: userCode,
+      }
+
+      if(blnExistClient){
+        console.log("Cliente Existe");
+
+        if(blnEditClient){
+          //CLIENTE FINAL EXISTE E EXIGE ALTERAÇÃO DE PARÂMETRO.
+          console.log("Editando Cliente");
+          const editClient = await ClienteController.edit(request, response, clienteData, codCliente);
+          if(editClient != undefined){
+            if(editClient.statusCode === 201) {
+              console.log("Cliente Editado");
+              blnClient = true;
+            }else{
+              blnClient = false;
+            }
+          }else{
+            blnClient = false;
+          }
+        }
+
+      }else{
+        //CRIAR CLIENTE
+        console.log("Criando Cliente");
+        const createCliente = await ClienteController.create(request, response, clienteData);
+
+        if(createCliente != undefined){
+          if(createCliente.statusCode === 201) {
+            const existClienteCreated = await clientesRepository.findOne({
+              where: {
+                nm_nome: client.clientName,
+                cd_id_ccli: userCode,
+              }
+            });
+            if(existClienteCreated != undefined){
+
+              codCliente = existClienteCreated.cd_pessoa;
+              blnClient = true;
+
+            }else{
+              blnClient = false;
+            }
+          }else{
+            blnClient = false;
+          }
+        }else{
+          blnClient = false;
+        }
+      }
+      console.log(blnClient);
+      if(blnClient === false){
+        console.log("Cliente não existente");
+        return response.status(401).json({ "Erro" : "Entre em contato com o Suporte" });
+      }else{
+        console.log("Iniciando a criação da ordem");
+        const ordemData : any = {
           cd_id_ccli: userCode,
           dt_criado: new Date(),
           vl_total: totalPrice,
           tx_obs: orderNotes,
           cd_habil_tipo: 217,
-          cd_clientefinal: codPessoa,
+          cd_clientefinal: codCliente,
           tx_referencia: orderReference,
           itens
         };
-
+  
         const schema = Yup.object().shape({
           cd_id_ccli: Yup.string().required(),
           dt_criado: Yup.date().default(() => new Date()),
@@ -507,98 +585,29 @@ export default {
             })
           )
         });
-
-        await schema.validate(data, {
+  
+        await schema.validate(ordemData, {
           abortEarly: false,
         });
-
-        const ordemRepository = ordensRepository.create(data);
-
+  
+        const ordemRepository = ordensRepository.create(ordemData);
         const Ordercreated : any = await ordensRepository.save(ordemRepository);
-
+  
         const codigo = Ordercreated.cd_id;
-
         const createOrdemReserva = await OrdemReservaController.create(request, response, codigo);
-        
-        if(createOrdemReserva != undefined){
+  
+        if(createOrdemReserva !== undefined){
           if(createOrdemReserva.statusCode === 201) {
             return response.status(201).json(ordemRepository);
           }else{
-            return response.status(createOrdemReserva.statusCode).json(createOrdemReserva.json);
+            return response.status(405).json({ "Erro" : "Entre em contato com o Suporte" });
           }
         }else{
           return response.status(400).json({ "Erro" : "Entre em contato com o Suporte" });
         }
 
-      } else {
-        // CRIAR NOVO CLIENTE E SALVAR ORDEM
-        const clienteData : any = {
-          nm_nome: client.clientName,
-          tx_cgc: client.clientCgc,
-          tx_fone: client.clientPhone,
-          tx_email: client.clientEmail,
-          tx_obs: client.clientNotes,
-          cd_id_ccli: userCode,
-          cd_ordem_id: 1
-        }
-
-        const createCliente = await ClienteController.create(request, response, clienteData);
-
-        if(createCliente != undefined){
-          if(createCliente.statusCode === 201) {
-
-            const existClienteCreated = await clientesRepository.findOne({
-              where: {
-                nm_nome: client.clientName
-              }
-            });
-            const responseClienteId = existClienteCreated?.cd_pessoa;
-
-            const data : any = {
-              cd_id_ccli: userCode,
-              dt_criado: new Date(),
-              vl_total: totalPrice,
-              tx_obs: orderNotes,
-              cd_habil_tipo: 0,
-              cd_clientefinal: responseClienteId,
-              tx_referencia: orderReference,
-              itens
-            };
-
-            const schema = Yup.object().shape({
-              cd_id_ccli: Yup.string().required(),
-              dt_criado: Yup.date().default(() => new Date()),
-              vl_total: Yup.string().required(),
-              tx_obs: Yup.string().required(),
-              cd_habil_tipo: Yup.number().required(),
-              cd_clientefinal: Yup.number().required(),
-              tx_referencia: Yup.string().required(),
-              itens: Yup.array(
-                Yup.object().shape({
-                  nm_produto: Yup.string().nullable(),
-                  cd_codigogerado: Yup.string().required(),
-                  vl_preco: Yup.number().required()
-                })
-              )
-            });
-
-            await schema.validate(data, {
-              abortEarly: false,
-            });
-
-            const ordemRepository = ordensRepository.create(data);
-
-            await ordensRepository.save(ordemRepository);
-
-            return response.json(ordemRepository);
-          } else {
-            return response.status(createCliente.statusCode).json(createCliente.json);
-          }
-        } else {
-          return;
-        }
       }
-      
+
 
     }catch(err){
       return response.status(400).json({ "Erro" : err });

@@ -1,3 +1,4 @@
+import { Console } from "console";
 import { Request, Response } from "express";
 import { getRepository } from "typeorm";
 import * as Yup from 'yup';
@@ -57,41 +58,36 @@ export default {
     }
   },
 
-  async edit(request: Request, response: Response) {
+  async edit(request: Request, response: Response, clienteData: any, codigoId: number) {
     try{
 
-      const { id } = request.params;
-
-      const {
-        clientName,
-        clientCgc,
-        clientPhone,
-        clientEmail,
-        clientNotes
-      } = request.body;
+      //const { id } = request.params;
+      console.log(clienteData);
 
       const clientesFinalRepository = getRepository(Clientefinal);
 
       const existClienteFinal = await clientesFinalRepository.findOne({
         where: {
-          cd_pessoa: id
+          cd_pessoa: codigoId,
         }
       });
 
-      if(existClienteFinal === undefined){
-        return response.status(404).json({ "Erro" : "Cliente não Existe" });
-      }else{
-        existClienteFinal.nm_nome = clientName;
-        existClienteFinal.tx_cgc = clientCgc;
-        existClienteFinal.tx_fone = clientPhone;
-        existClienteFinal.tx_email = clientEmail;
-        existClienteFinal.tx_obs = clientNotes;
-        await clientesFinalRepository.save(existClienteFinal);
-        return response.status(200).json(existClienteFinal);
-      } 
+      if(existClienteFinal != undefined){
 
+        existClienteFinal.nm_nome = clienteData.clientName;
+        existClienteFinal.tx_cgc = clienteData.clientCgc;
+        existClienteFinal.tx_email = clienteData.clientEmail;
+        existClienteFinal.tx_fone = clienteData.clientPhone;
+        existClienteFinal.tx_obs = clienteData.clientNotes;
+        
+        const editedClient = await clientesFinalRepository.save(existClienteFinal);
+        return response.status(200).json(editedClient);
+      }else{
+        return response.status(401);
+      }
     }catch(err){
-      return response.status(400).json({ "Erro" : err });
+      console.log(err);
+      return response.status(401);
     }
   },
 
@@ -125,8 +121,7 @@ export default {
             tx_fone: Yup.string().nullable(),
             tx_email: Yup.string().nullable(),
             tx_obs: Yup.string().nullable(),
-            cd_id_ccli: Yup.string().required(),
-            cd_ordem_id: Yup.number().required()
+            cd_id_ccli: Yup.string().required()
           });
 
           await schema.validate(clienteData, {
