@@ -58,7 +58,7 @@ export default {
     }
   },
 
-  async edit(request: Request, response: Response, clienteData: any, codigoId: number) {
+  async edit(request: Request, response: Response, clienteData: Clientefinal, codigoId: number) {
     try{
 
       //const { id } = request.params;
@@ -74,15 +74,17 @@ export default {
 
       if(existClienteFinal != undefined){
 
-        existClienteFinal.nm_nome = clienteData.clientName;
-        existClienteFinal.tx_cgc = clienteData.clientCgc;
-        existClienteFinal.tx_email = clienteData.clientEmail;
-        existClienteFinal.tx_fone = clienteData.clientPhone;
-        existClienteFinal.tx_obs = clienteData.clientNotes;
+        existClienteFinal.nm_nome = clienteData.nm_nome;
+        existClienteFinal.tx_cgc = clienteData.tx_cgc;
+        existClienteFinal.tx_email = clienteData.tx_email;
+        existClienteFinal.tx_fone = clienteData.tx_fone;
+        existClienteFinal.tx_obs = clienteData.tx_obs;
         
-        const editedClient = await clientesFinalRepository.save(existClienteFinal);
-        return response.status(200).json(editedClient);
+        await clientesFinalRepository.save(existClienteFinal);
+        console.log("Sucesso ao Editar")
+        return response.status(200);
       }else{
+        console.log("Erro ao Editar")
         return response.status(401);
       }
     }catch(err){

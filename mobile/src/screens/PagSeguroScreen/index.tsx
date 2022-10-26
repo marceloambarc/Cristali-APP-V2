@@ -446,7 +446,6 @@ export function PagSeguroScreen() {
                 onPress={validate}
               />
             </View>
-            <Text>{orderReference}</Text>
           </View>
         </ScrollView>
 

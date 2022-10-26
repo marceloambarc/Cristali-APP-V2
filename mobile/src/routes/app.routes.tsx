@@ -30,17 +30,17 @@ export function AppRoutes() {
         <AppStack.Screen name="ChangePassword" component={ChangePassword} />
         :
         <>
-        <AppStack.Screen name="Home" component={Home} />
-        <AppStack.Screen name="History" component={History} />
-        <AppStack.Screen name="UnfinishedSale" component={UnfinishedSale} />
-        <AppStack.Screen name="NewSale" component={NewSale} />
-        <AppStack.Screen name="Client" component={Client} />
-        <AppStack.Screen name="Checkout" component={Checkout} />
-        <AppStack.Screen name="Money" component={Money} />
-        <AppStack.Screen name="PagSeguro" component={PagSeguroScreen} />
-        <AppStack.Screen name="Rejected" component={Rejected} />
-        <AppStack.Screen name="SendConfirmation" component={SendConfirmation} />
-        <AppStack.Screen name="Final" component={Final} />
+          <AppStack.Screen name="Home" component={Home} />
+          <AppStack.Screen name="History" component={History} />
+          <AppStack.Screen name="UnfinishedSale" component={UnfinishedSale} />
+          <AppStack.Screen name="NewSale" component={NewSale} />
+          <AppStack.Screen name="Client" component={Client} />
+          <AppStack.Screen name="Checkout" component={Checkout} />
+          <AppStack.Screen name="Money" component={Money} />
+          <AppStack.Screen name="PagSeguro" component={PagSeguroScreen} />
+          <AppStack.Screen name="Rejected" component={Rejected} />
+          <AppStack.Screen name="SendConfirmation" component={SendConfirmation} />
+          <AppStack.Screen name="Final" component={Final} />
         </>
       }
       

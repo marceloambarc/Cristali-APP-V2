@@ -152,7 +152,6 @@ export function Money() {
               :
   
                 <View style={styles.footer}>
-                  <Text>{orderReference}</Text>
                   <CristaliButton 
                     color={`${theme.colors.Success}`}
                     title="Finalizar"

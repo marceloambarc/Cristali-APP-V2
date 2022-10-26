@@ -512,14 +512,16 @@ export default {
           console.log("Editando Cliente");
           const editClient = await ClienteController.edit(request, response, clienteData, codCliente);
           if(editClient != undefined){
-            if(editClient.statusCode === 201) {
+            if(editClient.statusCode === 200) {
               console.log("Cliente Editado");
               blnClient = true;
             }else{
               blnClient = false;
+              console.log("Cliente com status code: " + editClient.statusCode)
             }
           }else{
             blnClient = false;
+            console.log("Cliente retornou indefinido")
           }
         }
 
