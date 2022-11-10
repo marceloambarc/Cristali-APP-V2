@@ -5,12 +5,10 @@ import jwt from 'jsonwebtoken';
 import * as Yup from 'yup';
 
 import { salt } from '../../credentials';
-import { JWTSecretUser } from '../../credentials';
-import { SegundaSenha } from '../../credentials';
+import { JWTSecretUser, SegundaSenha, versionCodeAndroid, versionCodeiOS } from '../../credentials';
 
 import Senha from '../models/Senha';
 import senhaView from '../view/senha_view';
-import { JWTSecretAdmin } from '../../credentials';
 
 export default {
   
@@ -384,9 +382,6 @@ export default {
         userName,
         cgc
       } = request.body;
-
-      const versionCodeAndroid = "17";
-      const versionCodeiOS = "1.0.6";
 
       if(secret === SegundaSenha) {
         if(userCode === '' || userName === '' || cgc === '') {

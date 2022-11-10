@@ -20,6 +20,7 @@ export const styles = StyleSheet.create({
     fontFamily: theme.fonts.heading,
     fontSize: theme.fonts.sizeC,
     textAlign: 'left',
+    width: Dimensions.get('screen').width * .4,
   },
   text: {
     fontFamily: theme.fonts.text,

@@ -13,7 +13,7 @@ import { ClientProps } from '../../components/ClientComponent';
 
 interface PagSeguroConfirmationProps {
   pagSeguroId: string;
-  reference_id: string;
+  reference: string;
   cardNumber: string;
 }
 
@@ -43,7 +43,7 @@ export function SendConfirmation() {
   useEffect(() => {
     if(pagSeguroParams){
       setPagSeguroId(pagSeguroParams.pagSeguroId);
-      setPagSeguroReference(pagSeguroParams.reference_id);
+      setPagSeguroReference(pagSeguroParams.reference);
       setPagSeguroCardNumber(`XXXX-XXXX-XXXX-${pagSeguroParams.cardNumber}`);
     }
 

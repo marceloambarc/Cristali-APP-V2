@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Text, View, KeyboardAvoidingView, Platform, ActivityIndicator, Alert, Keyboard } from 'react-native';
+import { Text, View, KeyboardAvoidingView, Platform, ActivityIndicator, Keyboard } from 'react-native';
 import { useNavigation, useRoute, useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAuth } from '../../hooks/auth';

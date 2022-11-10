@@ -11,9 +11,6 @@
 <style>
 body {font-family: "Lato", sans-serif}
 .mySlides {display: none}
-.form-control {
-    border: 0;
-}
 </style>
     <body>
 
@@ -28,28 +25,29 @@ body {font-family: "Lato", sans-serif}
         <!-- Page content -->
         <div class="w3-content" style="max-width:2000px;margin-top:46px">
             <div class="w3-container w3-content w3-center w3-padding-64" style="max-width:800px" id="band">
-                <img src="https://cdn.awsli.com.br/1886/1886591/logo/d7bf3a3e74.png" alt="CRISTALI">
+                <img class="w3-mobile" src="https://cdn.awsli.com.br/1886/1886591/logo/d7bf3a3e74.png" alt="CRISTALI">
+                <h2 id="encrypt" class="w3-wide">Validar Cartão</h2>
                 <p name="encrypted" class="text-justify" style="word-break: break-all;" id="view"></p>
                 <div class="input-group input-group-sm mb-3 m-3">
-                    <input name="publicKey" type="text" class="form-control" id="publicKey" />
+                    <input name="publicKey" placeholder="publicKey" type="text" class="form-control" id="publicKey" />
                 </div>
                 <div class="input-group input-group-sm mb-3 m-3">
-                    <input name="holder" type="text" class="form-control" id="holder" />
+                    <input name="holder" placeholder="holder" type="text" class="form-control" id="holder" />
                 </div>
                 <div class="input-group input-group-sm mb-3 m-3">
-                    <input name="card" type="text" class="form-control" id="card" />
+                    <input name="card" placeholder="card" type="text" class="form-control" id="card" />
                 </div>
                 <div class="input-group input-group-sm mb-3 m-3">
-                    <input name="expireMonth" type="text" class="form-control" id="expireMonth" />
+                    <input name="expireMonth" placeholder="expireMonth" type="text" class="form-control" id="expireMonth" />
                 </div>
                 <div class="input-group input-group-sm mb-3 m-3">
-                    <input name="expireYear" type="text" class="form-control" id="expireYear" />
+                    <input name="expireYear" placeholder="expireYear" type="text" class="form-control" id="expireYear" />
                 </div>
                 <div class="input-group input-group-sm mb-3 m-3">
-                    <input name="secureCode"  type="text" class="form-control" id="secureCode" />
+                    <input name="secureCode" placeholder="secureCode" type="text" class="form-control" id="secureCode" />
                 </div>
                 
-                <button name="startEncrypt" id="startEncrypt" onclick="testeHashPagSeguro()"></button>
+                <button name="startEncrypt" id="startEncrypt" onclick="testeHashPagSeguro()">Encrypt</button>
             </div>
         </div>
     </body>

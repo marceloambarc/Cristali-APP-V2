@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, StatusBar, Image, Alert, KeyboardAvoidingView, Platform } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import uuid from 'react-native-uuid';
 import { useAuth } from '../../hooks/auth';
 
 import { isCreditCardObfuscated } from '../../config/options';
@@ -244,6 +243,7 @@ export function PagSeguroScreen() {
       } else {
         handleSetNewCondition({id: orderId, condition: 221});
         const message = err.response.data.error_messages[0].description;
+        console.log(err);
         
         if(message === 'invalid_parameter') {
           Alert.alert('Ops!', 'Dados do Cartão são inválidos. Tente novamente.');
@@ -261,11 +261,11 @@ export function PagSeguroScreen() {
     if(response) {
       setCreatedPagSeguro(true);
       if(response.data.status === 'PAID'){
-        sendLog({logText:`${user.userName} OBTEVE REFERÊNCIA ${response.data.payment_response.reference_id} PAGA`, clientToken});
+        sendLog({logText:`${user.userName} OBTEVE REFERÊNCIA ${orderReference} PAGA`, clientToken});
         handleSetNewCondition({id: orderId, condition: 220});
         navigation.navigate('SendConfirmation',{
           pagSeguroId: response.data.id,
-          reference: response.data.payment_response.reference_id,
+          reference: response.data.payment_response.reference,
           cardNumber: response.data.payment_method.card.last_digits,
           declined: response.data.status,
           message: response.data.payment_response.message,
@@ -278,10 +278,10 @@ export function PagSeguroScreen() {
           clientNotes: clientNotes,
         });
       } else {
-        sendLog({logText:`${user.userName} OBTEVE REFERÊNCIA ${response.data.payment_response.reference_id} REJEITADA`, clientToken});
+        sendLog({logText:`${user.userName} OBTEVE REFERÊNCIA ${orderReference} REJEITADA`, clientToken});
         handleSetNewCondition({id: orderId, condition: 221});
         handleNavigateRejected(response.data.id,
-          response.data.payment_response.reference, 
+          response.data.payment_response.reference,
           response.data.payment_method.card.last_digits,
           response.data.status,
           response.data.payment_response.message,

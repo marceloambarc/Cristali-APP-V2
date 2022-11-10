@@ -40,7 +40,6 @@ export default {
     try{
 
       var { dtInicio, dtFim } = request.body;
-      console.log(`Data Inicio ${dtInicio}, Data Fim: ${dtFim}`);
       const parsedInicio = parseISO(dtInicio);
       const parsedFim = parseISO(dtFim);
 
@@ -66,7 +65,6 @@ export default {
       }
 
     }catch(err){
-      console.log(err);
       return response.status(400).json({ "Erro": err });
     }
   },
@@ -121,7 +119,6 @@ export default {
 
 
     }catch(err){
-      console.log(err);
       return response.status(400).json({ "Erro": err });
     }
   }

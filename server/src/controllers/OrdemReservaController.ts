@@ -6,8 +6,6 @@ import OrdemReserva from "../models/OrdemReserva";
 import OrdemReservaView from "../view/ordemreserva_view";
 
 import Clientefinal from "../models/ClienteFinal";
-import ClienteController from "./ClienteController";
-import Ordem from "../models/Ordem";
 
 export default {
 
@@ -155,8 +153,13 @@ export default {
         itens
       } = request.body;
 
-      if(orderNotes === undefined)
-        orderNotes = 'Observação Não Inserida';
+      let oderNotesChecked = "";
+
+      if(orderNotes === undefined || orderNotes === ''){
+        oderNotesChecked = 'Observação Não Inserida';
+      }else{
+        oderNotesChecked = orderNotes;
+      }
 
       const ordensRepository = getRepository(OrdemReserva);
 
@@ -176,7 +179,7 @@ export default {
           cd_id_ccli: userCode,
           dt_criado: new Date(),
           vl_total: totalPrice,
-          tx_obs: orderNotes,
+          tx_obs: oderNotesChecked,
           cd_habil_tipo: 217,
           cd_clientefinal: codPessoa,
           tx_referencia: orderReference,
@@ -267,7 +270,6 @@ export default {
       }
 
     } catch(err) {
-      console.log(err);
       return response.status(400);
     }
   },

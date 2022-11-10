@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, ScrollView, StatusBar, KeyboardAvoidingView, Platform, Dimensions, TouchableOpacity, Alert } from "react-native";
 import {  useNavigation, useRoute } from "@react-navigation/native";
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AntDesign } from '@expo/vector-icons';
 import uuid from 'react-native-uuid';
 import { useAuth } from "../../hooks/auth";
 
 import { styles } from "./styles";
 import { theme } from "../../global";
-import { COLLECTION_ITEMS } from "../../config/storage";
 
 import { OrderProps } from "../../components/Order";
 import { ClientProps } from "../../components/ClientComponent";

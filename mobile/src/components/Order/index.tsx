@@ -94,7 +94,7 @@ export function Order({ data, ...rest } : OrderComponentProps ) {
           loading?
             <Loading />
           : 
-            <Text style={[styles.title,
+            <Text numberOfLines={1} style={[styles.title,
               data.condition === 217 &&
                 {color: theme.colors.activatedList},
               data.condition === 218 &&
@@ -162,8 +162,8 @@ export function Order({ data, ...rest } : OrderComponentProps ) {
       {data.condition === 220 && <Text style={[styles.condition,{color: theme.colors.title}]}>Pago CC</Text>}
       {data.condition === 221 && <Text style={[styles.condition,{color: theme.colors.overlay}]}>Recusada</Text>}
       {data.condition === 222 && <Text style={[styles.condition,{color: theme.colors.input}]}>Cancelada</Text>}
-      {data.condition === 223 && <Text style={[styles.condition,{color: theme.colors.title}]}>Dinheiro</Text>}
-      {data.condition === 224 && <Text style={[styles.condition,{color: theme.colors.title}]}>Outro Método</Text>}
+      {data.condition === 223 && <Text style={[styles.condition,{color: theme.colors.title}]}>Outro Método</Text>}
+      {data.condition === 224 && <Text style={[styles.condition,{color: theme.colors.title}]}>Dinheiro</Text>}
       <Text 
         style={[styles.number,
             data.condition >= 221 &&

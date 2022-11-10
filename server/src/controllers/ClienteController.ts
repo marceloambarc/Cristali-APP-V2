@@ -1,4 +1,3 @@
-import { Console } from "console";
 import { Request, Response } from "express";
 import { getRepository } from "typeorm";
 import * as Yup from 'yup';
@@ -62,7 +61,6 @@ export default {
     try{
 
       //const { id } = request.params;
-      console.log(clienteData);
 
       const clientesFinalRepository = getRepository(Clientefinal);
 
@@ -81,14 +79,11 @@ export default {
         existClienteFinal.tx_obs = clienteData.tx_obs;
         
         await clientesFinalRepository.save(existClienteFinal);
-        console.log("Sucesso ao Editar")
         return response.status(200);
       }else{
-        console.log("Erro ao Editar")
         return response.status(401);
       }
     }catch(err){
-      console.log(err);
       return response.status(401);
     }
   },
@@ -178,7 +173,6 @@ export default {
       }
 
     }catch(err){
-      console.log(err);
       return response.status(400);
     }
   },

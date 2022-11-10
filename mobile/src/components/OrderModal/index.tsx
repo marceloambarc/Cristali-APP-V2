@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, ScrollView, TouchableOpacityProps } from "react-native";
 import { TextInputMask } from "react-native-masked-text";
+
 import { useAuth } from "../../hooks/auth";
 
 import { styles } from "./styles";

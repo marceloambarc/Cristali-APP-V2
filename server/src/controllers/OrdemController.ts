@@ -455,8 +455,13 @@ export default {
         itens
       } = request.body;
 
-      if(orderNotes === undefined)
-        orderNotes = 'Observação Não Inserida';
+      let oderNotesChecked = "";
+
+      if(orderNotes === undefined || orderNotes == ''){
+        oderNotesChecked = 'Observação Não Inserida';
+      }else{
+        oderNotesChecked = orderNotes;
+      }
 
       itens.forEach((item, index, object) => {
         if(item.vl_preco === 0)
@@ -485,49 +490,59 @@ export default {
         blnExistClient = true;
         codCliente = existCliente.cd_pessoa;
 
-        if(client.clientCgc != existCliente.tx_cgc 
+        if(client.clientCgc != existCliente.tx_cgc
           || client.clientPhone != existCliente.tx_fone
           || client.clientEmail != existCliente.tx_email
           || client.clientNotes != existCliente.tx_obs){
             blnEditClient = true;
-            console.log("Parâmetros desiguais");
+        }else{
+          blnEditClient = false;
         }
       }
 
-      const clienteData : any = {
-        cd_pessoa: codCliente,
-        nm_nome: client.clientName,
-        tx_cgc: client.clientCgc,
-        tx_fone: client.clientPhone,
-        tx_email: client.clientEmail,
-        tx_obs: client.clientNotes,
-        cd_id_ccli: userCode,
+      var clienteData : any = "";
+
+      if(codCliente == 0){
+        clienteData = {
+          nm_nome: client.clientName,
+          tx_cgc: client.clientCgc,
+          tx_fone: client.clientPhone,
+          tx_email: client.clientEmail,
+          tx_obs: client.clientNotes,
+          cd_id_ccli: userCode,
+        }
+      }else{
+        clienteData = {
+          cd_pessoa: codCliente,
+          nm_nome: client.clientName,
+          tx_cgc: client.clientCgc,
+          tx_fone: client.clientPhone,
+          tx_email: client.clientEmail,
+          tx_obs: client.clientNotes,
+          cd_id_ccli: userCode,
+        }
       }
 
+
       if(blnExistClient){
-        console.log("Cliente Existe");
 
         if(blnEditClient){
           //CLIENTE FINAL EXISTE E EXIGE ALTERAÇÃO DE PARÂMETRO.
-          console.log("Editando Cliente");
           const editClient = await ClienteController.edit(request, response, clienteData, codCliente);
           if(editClient != undefined){
             if(editClient.statusCode === 200) {
-              console.log("Cliente Editado");
               blnClient = true;
             }else{
               blnClient = false;
-              console.log("Cliente com status code: " + editClient.statusCode)
             }
           }else{
             blnClient = false;
-            console.log("Cliente retornou indefinido")
           }
+        }else{
         }
 
       }else{
         //CRIAR CLIENTE
-        console.log("Criando Cliente");
         const createCliente = await ClienteController.create(request, response, clienteData);
 
         if(createCliente != undefined){
@@ -553,17 +568,14 @@ export default {
           blnClient = false;
         }
       }
-      console.log(blnClient);
       if(blnClient === false){
-        console.log("Cliente não existente");
         return response.status(401).json({ "Erro" : "Entre em contato com o Suporte" });
       }else{
-        console.log("Iniciando a criação da ordem");
         const ordemData : any = {
           cd_id_ccli: userCode,
           dt_criado: new Date(),
           vl_total: totalPrice,
-          tx_obs: orderNotes,
+          tx_obs: oderNotesChecked,
           cd_habil_tipo: 217,
           cd_clientefinal: codCliente,
           tx_referencia: orderReference,
