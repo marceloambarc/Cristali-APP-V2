@@ -74,7 +74,7 @@ export function Rejected(){
           <View style={styles.textContainer}>
             <Text style={styles.text}>Venda Rejeitada</Text>
             <Text style={styles.subtext}>{pagSeguroResponse}</Text>
-            |<Text style={styles.subtext}>{pagSeguroReference}</Text>
+            <Text style={styles.subtext}>{pagSeguroReference}</Text>
           </View>
         </View>
 
