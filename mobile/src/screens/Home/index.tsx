@@ -7,7 +7,7 @@ import { Background } from '../../components/Background';
 import { Logo } from '../../components/Logo';
 import { CristaliButton } from '../../components/CristaliButton';
 
-import * as packageJson from '../../../app.json';
+import * as appJson from '../../../app.json';
 import { styles } from './styles';
 import { theme } from '../../global';
 
@@ -44,7 +44,7 @@ export function Home(){
           <View style={styles.logoContainer}>
             <Logo
               subtext
-              versionCode={packageJson.expo.version}
+              versionCode={appJson.expo.version}
             />
           </View>
   

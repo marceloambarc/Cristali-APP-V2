@@ -28,6 +28,7 @@ controllerRouter.get('/evento', clientAuth, EventoController.index);
 controllerRouter.post('/eventodt', EventoController.showWithDt);
 controllerRouter.get('/evento/:id', clientAuth, EventoController.show);
 controllerRouter.post('/evento', clientAuth, EventoController.create);
+controllerRouter.get('/evento/update/:id', clientAuth, EventoController.update);
 
 // -- TODOS USUÁRIOS
 

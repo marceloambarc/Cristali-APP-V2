@@ -8,7 +8,8 @@ export default {
       userCode: event.cd_ccli,
       eventDescription: event.tx_evento,
       userToken: event.token_cliente,
-      deviceToken: event.token_celular
+      deviceToken: event.token_celular,
+      updated: event.in_acerto
     };
   },
 
