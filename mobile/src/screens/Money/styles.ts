@@ -3,11 +3,11 @@ import { theme } from "../../global";
 
 export const styles = StyleSheet.create({
   container: {
+    height: '90%',
+    paddingHorizontal: 24,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: theme.colors.input,
-    paddingHorizontal: 24,
-    height: '100%'
+    flexDirection: 'column'
   },
   banner: {
     justifyContent: 'center',
