@@ -156,7 +156,7 @@ function AuthProvider({ children } : AuthProps) {
       },{
         headers: {'Authorization': 'Bearer '+clientToken}
       }).catch(err => {
-
+        console.log(err);
         const errorString = String(err);
         const error = errorString.replace(/\D/g,'');
 

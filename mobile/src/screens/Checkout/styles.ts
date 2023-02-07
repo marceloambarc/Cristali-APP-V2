@@ -37,7 +37,7 @@ export const styles = StyleSheet.create({
   },
   checkoutButtonRow: {
     flexDirection: 'row',
-    marginBottom: 15
+    marginBottom: 20
   },
   checkoutButtonCol: {
     justifyContent: 'space-between',

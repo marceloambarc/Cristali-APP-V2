@@ -20,11 +20,12 @@ export const styles = StyleSheet.create({
   },
   icon: {
     width: '90%',
+    height: '100%'
   },
   title: {
     fontFamily: theme.fonts.heading,
     color: theme.colors.title,
     fontSize: theme.fonts.sizeC,
-    paddingBottom: 40
+    marginBottom: 40
   },
 })

@@ -97,7 +97,7 @@ export default {
         cd_ccli: userCode,
         tx_evento: eventDescription,
         token_cliente: firstHalf,
-        token_celular: secondHalf,
+        token_celular: secondHalf
       };
 
       const schema = Yup.object().shape({
@@ -119,45 +119,8 @@ export default {
 
 
     }catch(err){
+      console.log(err);
       return response.status(400).json({ "Erro": err });
     }
   },
-
-  async update(request: Request, response: Response){
-    try {
-
-      const { id } = request.params;
-      const { indicator } = request.body;
-
-      if(id === undefined || id === " "){
-        return response.status(400).json({ "Erro" : "Necessário enviar parâmetro" });
-      }
-
-      if(indicator === undefined || indicator === " "){
-        return response.status(400).json({ "Erro" : "Necessário enviar o Indicador" });
-      }
-
-      const eventsRepository = getRepository(Evento);
-
-      const event = await eventsRepository.findOne({
-        where: {
-          id_evento: id
-        }
-      });
-
-      if(event != undefined){
-        event.in_acerto = parseInt(indicator);
-
-        await eventsRepository.save(event);
-        return response.status(201).json({"Sucesso!": "Indicador de Acerto Alterado!"});
-
-      }else{
-        return response.status(400).json({ "Erro" : "Evento não existe" });
-      }
-
-    } catch(err){
-      return response.status(400).json({ "Erro": err });
-    }
-  }
-
 }

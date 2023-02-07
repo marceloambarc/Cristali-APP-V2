@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Text, View, KeyboardAvoidingView, Platform, ActivityIndicator, Keyboard } from 'react-native';
+import { Text, View, KeyboardAvoidingView, Platform, ActivityIndicator, Keyboard, StatusBar } from 'react-native';
 import { useNavigation, useRoute, useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAuth } from '../../hooks/auth';
 
 import { CristaliButton } from '../../components/CristaliButton';
 import { CristaliInput } from '../../components/CristaliInput';
+import { Header } from '../../components/Header';
 
 import { COLLECTION_ITEMS } from '../../config/storage';
 
@@ -110,6 +111,14 @@ export function Money() {
         contentContainerStyle={{backgroundColor: 'transparent'}}
         behavior={ Platform.OS === 'ios'? 'padding' : undefined }
       >
+        <StatusBar
+          barStyle='dark-content'
+          backgroundColor={theme.colors.input}
+        />
+        <Header
+          title='Finalizar'
+          haveBack
+        />
         <TouchableWithoutFeedback
           onPress={() => Keyboard.dismiss()}
         >

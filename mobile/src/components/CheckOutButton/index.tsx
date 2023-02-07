@@ -40,7 +40,7 @@ export function CheckOutButton({
          <Image
            style={styles.icon}
            source={path}
-           resizeMode='contain'
+           resizeMode='center'
          />
        </View>
        <Text 

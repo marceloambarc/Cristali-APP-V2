@@ -23,7 +23,4 @@ export default class Evento {
 
   @Column("nvarchar", { length: 250 })
   token_celular: string;
-
-  @Column()
-  in_acerto: number;
 }
