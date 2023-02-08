@@ -83,7 +83,7 @@ export default {
         } else {
 
           //VERIFICAR SISTEMA USADO
-          //COMPRAR SISTEMA COM O BANCO.
+          //COMPARAR SISTEMA COM O BANCO.
 
           let versionDatabase;
           let versionMobileInt;
@@ -162,6 +162,8 @@ export default {
     try {
 
       const { secret, versionMobile, mobileUsed } = request.body;
+
+      console.log(request.body);
 
       if(secret === SegundaSenha) {
         const senhasRepository = getRepository(Senha);
