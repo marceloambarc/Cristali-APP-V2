@@ -10,6 +10,7 @@ export const styles = StyleSheet.create({
     paddingBottom: Dimensions.get('window').height * 0.1
   },
   title: {
+    marginTop: 12,
     fontFamily: theme.fonts.heading,
     color: theme.colors.title,
     fontSize: theme.fonts.sizeB

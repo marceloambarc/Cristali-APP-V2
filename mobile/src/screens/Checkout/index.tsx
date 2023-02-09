@@ -71,7 +71,6 @@ export function Checkout() {
     if(pagSeguroPressed){
       setPagSeguroPressed(false);
     }
-    console.log("APERTOU NO PAGSEGURO");
     const logText = `${user.userName} INICIOU CHECKOUT PARA PAGSEGURO`;
     sendLog({logText, clientToken});
     handleSetNewCondition({id: orderParams.id, condition: 219});

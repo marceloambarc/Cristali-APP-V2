@@ -64,7 +64,6 @@ export function Rejected(){
 
         <View style={styles.body}>
           <View style={styles.titleContainer}>
-            <Text>{clientPhone}</Text>
             <Image
               source={require('../../assets/pagseguro.png')}
               style={styles.pagseguroImage}

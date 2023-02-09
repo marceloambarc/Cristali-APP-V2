@@ -43,7 +43,9 @@ export function ChangePassword() {
             }).then(() => {
               enterApp();
             }).catch(err => {
-              Alert.alert('Ops, tivemos um erro.');
+              const strErr = String(err);
+              const displayErro = strErr.substring(0, 20)
+              Alert.alert(displayErro);
               signOut();
             });
           }
