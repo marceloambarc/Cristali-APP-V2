@@ -13,14 +13,23 @@ import senhaView from '../view/senha_view';
 export default {
   
   async index(request: Request, response: Response) {
-    const senhasRepository = getRepository(Senha);
+    try{
 
-    const senhas = await senhasRepository.find()
+      const senhasRepository = getRepository(Senha);
 
-    if(senhas.length === 0){
-      return response.status(204).json({ "Vazio" : "Nenhum Usuário Cadastrado." });
-    }else{
-      return response.json(senhaView.renderMany(senhas));
+      const senhas = await senhasRepository.find()
+  
+      if(senhas.length === 0){
+        return response.status(204).json({ "Vazio" : "Nenhum Usuário Cadastrado." });
+      }else{
+        return response.json(senhaView.renderMany(senhas));
+      }
+
+    }catch(err){
+
+      console.log("SENHA INDEX ERR :" + err);
+      return response.status(400).json({ "Erro" : "Erro de Index" });
+
     }
   },
 
@@ -50,86 +59,92 @@ export default {
       
 
     }catch(err) {
-      return response.status(400).json({ "Erro" : err });
+      console.log("SENHA RENDER ERR :" + err);
+      return response.status(400).json({ "Erro" : "Erro de Visualização de Usuário" });
     }
   },
 
   async login(request: Request, response: Response) {
-    let { cgc, password, versionMobile, mobileUsed } = request.body;
+    try {
+      let { cgc, password, versionMobile, mobileUsed } = request.body;
 
-    if(versionMobile == undefined){
-      versionMobile = "1.0.0";
-      mobileUsed = "1";
-    }
+      if(versionMobile == undefined){
+        versionMobile = "1.0.0";
+        mobileUsed = "1";
+      }
 
-    const senhasRepository = getRepository(Senha);
-    const senha = await senhasRepository.findOne({ "tx_cgc": cgc });
+      const senhasRepository = getRepository(Senha);
+      const senha = await senhasRepository.findOne({ "tx_cgc": cgc });
 
-    if(versionMobile == "admin"){
-      versionMobile = senha?.tx_versao_android;
-      mobileUsed = "0";
-    }
+      if(versionMobile == "admin"){
+        versionMobile = senha?.tx_versao_android;
+        mobileUsed = "0";
+      }
 
-    if(senha === undefined){
-      return response.status(403).send({ "Erro" : "Usuário não Cadastrado" });
-    }else{
-      const isPasswordRight = await bcrypt.compare(password, senha.tx_senha);
-
-      if(!isPasswordRight){
-        return response.status(419).json({ "Erro": "Senha Incorreta" });
+      if(senha === undefined){
+        return response.status(403).send({ "Erro" : "Usuário não Cadastrado" });
       }else{
-        if(senha.in_ativo === 0){
-          return response.status(406).json({ "Erro": "Usuário não ativo." });
-        } else {
+        const isPasswordRight = await bcrypt.compare(password, senha.tx_senha);
 
-          //VERIFICAR SISTEMA USADO
-          //COMPARAR SISTEMA COM O BANCO.
+        if(!isPasswordRight){
+          return response.status(419).json({ "Erro": "Senha Incorreta" });
+        }else{
+          if(senha.in_ativo === 0){
+            return response.status(406).json({ "Erro": "Usuário não ativo." });
+          } else {
 
-          let versionDatabase;
-          let versionMobileInt;
-          let txVersaoAny : any;
+            //VERIFICAR SISTEMA USADO
+            //COMPARAR SISTEMA COM O BANCO.
 
-          if(mobileUsed > 0){
-            //IOS - Padrão de versão 0.0.0
-            txVersaoAny = senha.tx_versao_ios;
-			      let re = /\./gi;
-			
-            versionMobileInt = parseInt(versionMobile.replace(re, ''));
+            let versionDatabase;
+            let versionMobileInt;
+            let txVersaoAny : any;
 
-            if(txVersaoAny != " ")
-              versionDatabase = parseInt(txVersaoAny.replace(re, ''));
-          }else{
-            // Android - Padrão de versão 000
-            txVersaoAny = senha.tx_versao_android;
-            versionMobileInt = parseInt(versionMobile);
+            if(mobileUsed > 0){
+              //IOS - Padrão de versão 0.0.0
+              txVersaoAny = senha.tx_versao_ios;
+              let re = /\./gi;
+        
+              versionMobileInt = parseInt(versionMobile.replace(re, ''));
 
-            if(txVersaoAny != " ")
-              versionDatabase = parseInt(txVersaoAny);
-          }
+              if(txVersaoAny != " ")
+                versionDatabase = parseInt(txVersaoAny.replace(re, ''));
+            }else{
+              // Android - Padrão de versão 000
+              txVersaoAny = senha.tx_versao_android;
+              versionMobileInt = parseInt(versionMobile);
 
-          
-          if(versionDatabase > versionMobileInt && txVersaoAny != " "){
-            return response.status(426).json({ "Erro": "Necessário Update." });
-          }else{
-            jwt.sign({ cgc, id: senha.id, isActive: senha.in_ativo, userName: senha.nm_nomecli }, JWTSecretUser, { expiresIn: '1h' }, async (err, token) => {
-              if(err){
-                return response.status(401).json({ "Ops": "A sua Sessão Terminou, Faça Login Novamente" });
-              }else{
-                //ATUALIZAR VERSÃO NO BANCO
-                
-                if(mobileUsed > 0)
-                  senha.tx_versao_ios = versionMobile;
-                else
-                  senha.tx_versao_android = versionMobile;
+              if(txVersaoAny != " ")
+                versionDatabase = parseInt(txVersaoAny);
+            }
 
-                await senhasRepository.save(senha);
+            
+            if(versionDatabase > versionMobileInt && txVersaoAny != " "){
+              return response.status(426).json({ "Erro": "Necessário Update." });
+            }else{
+              jwt.sign({ cgc, id: senha.id, isActive: senha.in_ativo, userName: senha.nm_nomecli }, JWTSecretUser, { expiresIn: '1h' }, async (err, token) => {
+                if(err){
+                  return response.status(401).json({ "Ops": "A sua Sessão Terminou, Faça Login Novamente" });
+                }else{
+                  //ATUALIZAR VERSÃO NO BANCO
+                  
+                  if(mobileUsed > 0)
+                    senha.tx_versao_ios = versionMobile;
+                  else
+                    senha.tx_versao_android = versionMobile;
 
-                return response.status(200).json({ "token": token, "user": senhaView.render(senha) });
-              }
-            })
+                  await senhasRepository.save(senha);
+
+                  return response.status(200).json({ "token": token, "user": senhaView.render(senha) });
+                }
+              })
+            }
           }
         }
       }
+    }catch(err){
+      console.log("SENHA LOGIN ERR :" + err);
+      return response.status(400).send({ "Erro": "Erro de Login" });
     }
   },
 
@@ -154,6 +169,7 @@ export default {
         return response.status(200).json({ "OK!" : "Senhas criptografadas." });
       }
     }catch(err){
+      console.log("HASHPASS ERR :" + err);
       return response.status(401).json({ "Senha Incorreta" : "Entre em contato com o Suporte" });
     }
   },
@@ -185,7 +201,8 @@ export default {
         return response.status(400).json({ "Erro" : "Código Errado." });
       }
     }catch(err){
-      return response.status(400).json({ "Erro" : err });
+      console.log("UPDATE VERSION ERR :" + err);
+      return response.status(400).json({ "Erro" : "Erro de Update da Versão" });
     }
   },
 
@@ -225,7 +242,8 @@ export default {
         return response.status(400).json({ "Erro" : "Código Errado." });
       }
     }catch(err) {
-      return response.status(400).json({ "Erro" : err });
+      console.log("RESET PASS ERR :" + err);
+      return response.status(400).json({ "Erro" : "Erro de Reinicialização de Senha" });
     }
   },
 
@@ -268,7 +286,8 @@ export default {
       }
 
     }catch(err) {
-      return response.status(400).json({ "Erro" : err });
+      console.log("ALTER PASS ERR :" + err);
+      return response.status(400).json({ "Erro" : "Erro Ao Alterar Senha" });
     }
   },
 
@@ -300,7 +319,8 @@ export default {
         return response.status(404).json({ "Erro": "Usuário não Encontrado." });
       }
     }catch(err){
-      return response.status(400).json({ err });
+      console.log("SWITCH USER ERR :" + err);
+      return response.status(400).json({ "Erro" : "Erro Ao Ativar/Desativar Usuário" });
     }
   },
 
@@ -337,7 +357,8 @@ export default {
       }
 
     }catch(err) {
-      return response.status(400).json({ "Erro" : err });
+      console.log("EDIT USER ERR :" + err);
+      return response.status(400).json({ "Erro" : "Erro ao Editar o Usuário" });
     }
   },
 
@@ -365,7 +386,8 @@ export default {
       }
 
     }catch(err) {
-      return response.status(400).json({ "Erro" : err });
+      console.log("DELETE USER ERR :" + err);
+      return response.status(400).json({ "Erro" : "Erro ao Deletar Usuário" });
     }
   },
 
@@ -439,7 +461,8 @@ export default {
         return response.status(400).json({ "Erro" : "Código Errado." });
       }
     }catch(err){
-      return response.status(400).json({ "Erro" : err });
+      console.log("CREATE USER ERR :" + err);
+      return response.status(400).json({ "Erro" : "Erro ao Criar Usuário" });
     }
   }
 }

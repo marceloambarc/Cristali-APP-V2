@@ -542,6 +542,7 @@ export function NewSale() {
                               />
                               <View style={styles.productTitleContainer}>
                                 <CristaliInput
+                                  maxLength={30}
                                   keyboardType={'numbers-and-punctuation'}
                                   value={item.nm_produto}
                                   onChangeText={e => handleTitleChange(e, item.id)}

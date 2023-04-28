@@ -8,14 +8,19 @@ import clienteView from "../view/cliente_view";
 export default {
 
   async index(request: Request, response: Response) {
-    const clientesFinalRepository = getRepository(Clientefinal);
+    try {
+      const clientesFinalRepository = getRepository(Clientefinal);
 
-    const clientesFinal = await clientesFinalRepository.find();
+      const clientesFinal = await clientesFinalRepository.find();
 
-    if(clientesFinal.length === 0){
-      return response.status(204).json({ "Vazio": "Nenhum Cliente Final Cadastrado" });
-    }else{
-      return response.json(clienteView.renderMany(clientesFinal));
+      if(clientesFinal.length === 0){
+        return response.status(204).json({ "Vazio": "Nenhum Cliente Final Cadastrado" });
+      }else{
+        return response.json(clienteView.renderMany(clientesFinal));
+      }
+    }catch(err){
+      console.log("CLIENT INDEX ERR :" + err);
+      return response.status(400).json({ "Erro" : "Erro de index" });
     }
   },
 
@@ -32,6 +37,7 @@ export default {
       return response.json(clienteView.render(cliente));
 
     }catch(err){
+      console.log("CLIENT RENDER ERR :" + err);
       return response.status(404).json({ "Erro" : "Nenhum Cliente encontrado com este Parâmetro." });
     }
   },
@@ -53,7 +59,8 @@ export default {
         return response.json(clienteView.render(existCliente));
       }
     }catch(err){
-      return response.status(400).json({ "Erro" : err });
+      console.log("CLIENT & ORDER ERR :" + err);
+      return response.status(400).json({ "Erro" : "erro" });
     }
   },
 
@@ -84,6 +91,7 @@ export default {
         return response.status(401);
       }
     }catch(err){
+      console.log("CLIENT EDIT ERR :" + err);
       return response.status(401);
     }
   },
@@ -173,6 +181,7 @@ export default {
       }
 
     }catch(err){
+      console.log("CLIENT CREATE ERR :" + err);
       return response.status(400);
     }
   },
@@ -200,6 +209,7 @@ export default {
       }
 
     }catch(err){
+      console.log("USER CLIENT ERR :" + err);
       return response.status(404).json({ "Erro" : "Nenhum Cliente encontrado com este Parâmetro." });
     }
   }

@@ -10,17 +10,21 @@ import Clientefinal from "../models/ClienteFinal";
 export default {
 
   async index(request: Request, response: Response) {
-    const ordensReservaRepository = getRepository(OrdemReserva)
-    const ordensReserva = await ordensReservaRepository.find({
-      order: {
-        cd_id_ccli: "DESC"
-      }
-    });
+    try {
+      const ordensReservaRepository = getRepository(OrdemReserva)
+      const ordensReserva = await ordensReservaRepository.find({
+        order: {
+          cd_id_ccli: "DESC"
+        }
+      });
 
-    if(ordensReserva.length === 0){
-      return response.status(204).json({ "Vazio" : "Nenhuma Ordem Cadastrada." });
-    }else{
-      return response.json(OrdemReservaView.renderMany(ordensReserva));
+      if(ordensReserva.length === 0){
+        return response.status(204).json({ "Vazio" : "Nenhuma Ordem Cadastrada." });
+      }else{
+        return response.json(OrdemReservaView.renderMany(ordensReserva));
+      }
+    }catch(err){
+      console.log("RES INDEX ERR :" + err);
     }
   },
 
@@ -44,7 +48,8 @@ export default {
       }
 
     }catch(err){
-      return response.status(400).json({ "Erro" : err });
+      console.log("RES RENDER ERR :" + err);
+      return response.status(400).json({ "Erro" : "Erro render reserva" });
     }
   },
 
@@ -83,7 +88,8 @@ export default {
       }
 
     }catch(err){
-      return response.status(400).json({ "Erro" : err });
+      console.log("RESOPEN ERR :" + err);
+      return response.status(400).json({ "Erro" : "abertas reserva" });
     }
   },
 
@@ -112,6 +118,7 @@ export default {
       }
 
     }catch(err){
+      console.log("RES CONDITION ERR :" + err);
       return response.status(400);
     }
   },
@@ -137,7 +144,8 @@ export default {
       }
 
     }catch(err) {
-      return response.status(400).json({ "Erro" : err });
+      console.log("RES-USER ORDER ERR :" + err);
+      return response.status(400).json({ "Erro" : "Ordem-Reserva do Usuário" });
     }
   },
 
@@ -216,6 +224,7 @@ export default {
         return response.status(400);
       }
     } catch(err) {
+      console.log("RES CREATE ERR :" + err);
       return response.status(400);
     }
   },
@@ -270,6 +279,7 @@ export default {
       }
 
     } catch(err) {
+      console.log("RES EDIT ERR :" + err);
       return response.status(400);
     }
   },

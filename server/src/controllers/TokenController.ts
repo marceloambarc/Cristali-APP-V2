@@ -8,29 +8,39 @@ import tokenView from '../view/token_view';
 export default {
   
   async index(request: Request, response: Response) {
-    const tokensRepository = getRepository(Token);
+    try {
+      const tokensRepository = getRepository(Token);
 
-    const tokens = await tokensRepository.find();
+      const tokens = await tokensRepository.find();
 
-    if(tokens.length === 0){
-      return response.status(204).json({ "Vazio": "Nenhum Token Inserido." });
-    }else{
-      return response.status(200).json([tokenView.renderMany(tokens), request.userId]);
+      if(tokens.length === 0){
+        return response.status(204).json({ "Vazio": "Nenhum Token Inserido." });
+      }else{
+        return response.status(200).json([tokenView.renderMany(tokens), request.userId]);
+      }
+    }catch(err){
+      console.log("TOKEN INDEX ERR :" + err);
+      return response.status(400).json({ "Erro": "Erro de INDEX de Token" });
     }
   },
 
   async show(request: Request, response: Response) {
-    const { id } = request.params;
-    const searchId = parseInt(id);
+    try {
+      const { id } = request.params;
+      const searchId = parseInt(id);
 
-    const tokensRepository = getRepository(Token);
+      const tokensRepository = getRepository(Token);
 
-    const token = await tokensRepository.findOneOrFail(searchId);
+      const token = await tokensRepository.findOneOrFail(searchId);
 
-    if(token){
-      return response.json(tokenView.render(token));
-    }else{
-      return response.status(404);
+      if(token){
+        return response.json(tokenView.render(token));
+      }else{
+        return response.status(404);
+      }
+    }catch(err){
+      console.log("TOKEN RENDER ERR :" + err);
+      return response.status(400).json({ "Erro": "render Token" });
     }
   },
 
@@ -38,7 +48,7 @@ export default {
     try {
 
       /* CRIAR NOVO TOKEN DE DISPOSITIVO FÍSICO PARA 
-      GERENCIAMENTO DE EVETOS E NOTIFICAÇÕES
+      GERENCIAMENTO DE EVENTOS E NOTIFICAÇÕES
       VEM DO APP COMO { id, deviceToken, createdAt, updatedAt }
       SAI PARA O BANCO { id, token_celular, dt_criado, dt_modificado }
 
@@ -86,7 +96,8 @@ export default {
       }
 
     }catch(err){
-      return response.status(400).json({ "Erro": err });
+      console.log("TOKEN CREATE ERR :" + err);
+      return response.status(400).json({ "Erro": "não foi possível Criar Token" });
     }
   }
 

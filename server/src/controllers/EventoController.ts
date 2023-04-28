@@ -9,14 +9,19 @@ import eventView from "../view/evento_view";
 export default {
 
   async index(request: Request, response: Response) {
-    const eventsRepository = getRepository(Evento);
+    try {
+      const eventsRepository = getRepository(Evento);
 
-    const events = await eventsRepository.find();
+      const events = await eventsRepository.find();
 
-    if(events.length === 0){
-      return response.status(404).json({ "Vazio": "Nenhum Evento Cadastrado" });
-    }else{
-      return response.json(eventView.renderMany(events));
+      if(events.length === 0){
+        return response.status(404).json({ "Vazio": "Nenhum Evento Cadastrado" });
+      }else{
+        return response.json(eventView.renderMany(events));
+      }
+    }catch(err){
+      console.log("EVENT INDEX ERR :" + err);
+      return response.status(400).json({ "Erro": "Erro de Index"});
     }
   },
 
@@ -32,7 +37,8 @@ export default {
       return response.json(eventView.render(event));
 
     }catch(err){
-      return response.status(400).json({ "Erro": err });
+      console.log("EVENT ERR :" + err);
+      return response.status(400).json({ "Erro": "Não foi possível renderizar" });
     }
   },
 
@@ -65,7 +71,8 @@ export default {
       }
 
     }catch(err){
-      return response.status(400).json({ "Erro": err });
+      console.log("EVENT-DT ERR :" + err);
+      return response.status(400).json({ "Erro": "Não foi possivel Carregar EventoDT" });
     }
   },
 
@@ -86,6 +93,8 @@ export default {
         deviceToken
       } = request.body;
 
+      console.log('Código do Usuário: ' + userCode + " Descrição: " + eventDescription + " userToken: " + userToken + " Token do Dispositivo: " + deviceToken);
+
       const half = Math.ceil(userToken.length / 2);
       const firstHalf = userToken.substr(0, half);
       const secondHalf = userToken.substr(-half);
@@ -97,7 +106,7 @@ export default {
         cd_ccli: userCode,
         tx_evento: eventDescription,
         token_cliente: firstHalf,
-        token_celular: secondHalf
+        token_celular: deviceToken
       };
 
       const schema = Yup.object().shape({
@@ -119,8 +128,8 @@ export default {
 
 
     }catch(err){
-      console.log(err);
-      return response.status(400).json({ "Erro": err });
+      console.log("EVENT CREATE ERR :" + err);
+      return response.status(400).json({ "Erro": "Erro ao criar evento" });
     }
   },
 }

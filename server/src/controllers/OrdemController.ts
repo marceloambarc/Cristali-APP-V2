@@ -12,18 +12,23 @@ import OrdemReservaController from "./OrdemReservaController";
 export default { 
 
   async index(request: Request, response: Response) {
-    const ordensRepository = getRepository(Ordem);
+    try {
+      const ordensRepository = getRepository(Ordem);
 
-    const ordens = await ordensRepository.find({
-      order: {
-        cd_id_ccli: "DESC"
+      const ordens = await ordensRepository.find({
+        order: {
+          cd_id_ccli: "DESC"
+        }
+      });
+  
+      if(ordens.length === 0){
+        return response.status(204).json({ "Vazio" : "Nenhuma Ordem Cadastrada." });
+      }else{
+        return response.json(ordemView.renderMany(ordens));
       }
-    });
-
-    if(ordens.length === 0){
-      return response.status(204).json({ "Vazio" : "Nenhuma Ordem Cadastrada." });
-    }else{
-      return response.json(ordemView.renderMany(ordens));
+    }catch(err){
+      console.log("ORDER INDEX ERR :" + err);
+      return response.status(400).json({ "Erro" : "Erro Index Ordens"});
     }
   },
 
@@ -47,7 +52,8 @@ export default {
       }
 
     }catch(err){
-      return response.status(400).json({ "Erro" : err });
+      console.log("ORDER RENDER ERR :" + err);
+      return response.status(400).json({ "Erro" : "Erro na renderização a Ordem" });
     }
   },
 
@@ -86,7 +92,8 @@ export default {
       }
 
     }catch(err){
-      return response.status(400).json({ "Erro" : err });
+      console.log("ORDER OPEN ERR :" + err);
+      return response.status(400).json({ "Erro" : "Erro nas Ordens 217" });
     }
   },
 
@@ -125,7 +132,8 @@ export default {
       }
 
     }catch(err){
-      return response.status(400).json({ "Erro" : err });
+      console.log("ORDER INS ERR :" + err);
+      return response.status(400).json({ "Erro" : "Erro nas Ordens Inseridas" });
     }
   },
   
@@ -164,7 +172,8 @@ export default {
       }
 
     }catch(err){
-      return response.status(400).json({ "Erro" : err });
+      console.log("ORDER SEL ERR :" + err);
+      return response.status(400).json({ "Erro" : "Erro nas Ordens Selecionadas" });
     }
   },
 
@@ -331,9 +340,9 @@ export default {
           }
         }
       }
-
     }catch(err){
-      return response.status(400).json({ "Erro" : err });
+      console.log("ORDER EDIT ERR :" + err);
+      return response.status(400).json({ "Erro" : "Erro ao editar ordem" });
     }
   },
 
@@ -372,7 +381,8 @@ export default {
       }
 
     }catch(err){
-      return response.status(400).json({ "Erro" : err });
+      console.log("ORDER CONDITION ERR :" + err);
+      return response.status(400).json({ "Erro" : "Erro ao Alterar Condição" });
     }
   },
 
@@ -399,9 +409,10 @@ export default {
 
         return response.status(200).json({});
       }*/
-      return response.status(200).json({});
+      return response.status(405).json({});
     }catch(err) {
-      return response.status(400).json({ "Erro" : err });
+      console.log("ORDER DELETE ERR :" + err);
+      return response.status(400).json({ "Erro" : "Erro ao Deletar Ordem" });
     }
   },
 
@@ -427,9 +438,9 @@ export default {
 
         return response.status(200).json({});
       }
-
     }catch(err) {
-      return response.status(400).json({ "Erro" : err });
+      console.log("ORDER DELNOTALLOWED ERR :" + err);
+      return response.status(400).json({ "Erro" : "Erro" });
     }
   },
 
@@ -619,11 +630,9 @@ export default {
         }else{
           return response.status(400).json({ "Erro" : "Entre em contato com o Suporte" });
         }
-
       }
-
-
     }catch(err){
+      console.log("ORDER CREATE ERR :" + err);
       return response.status(400).json({ "Erro" : err });
     }
   },
@@ -651,7 +660,8 @@ export default {
       }
 
     }catch(err) {
-      return response.status(400).json({ "Erro" : err });
+      console.log("USER ORDERS ERR :" + err);
+      return response.status(400).json({ "Erro" : "erro de Ordens do Usuário"});
     }
   },
 
@@ -680,7 +690,8 @@ export default {
       }
 
     }catch(err) {
-      return response.status(400).json({ "Erro" : err });
+      console.log("SAVED ORDERS ERR :" + err);
+      return response.status(400).json({ "Erro" : "Erro nas Ordens Salvas" });
     }
   },
 
@@ -709,7 +720,8 @@ export default {
       }
 
     }catch(err) {
-      return response.status(400).json({ "Erro" : err });
+      console.log("USER HISTORY ERR :" + err);
+      return response.status(400).json({ "Erro" : "Erro no histórico" });
     }
   },
 
@@ -737,7 +749,8 @@ export default {
       }
 
     }catch(err) {
-      return response.status(400).json({ "Erro": err });
+      console.log("PAID ORDERS :" + err);
+      return response.status(400).json({ "Erro": "Erro nas ordens pagas" });
     }
   },
 
@@ -765,7 +778,8 @@ export default {
       }
 
     }catch(err) {
-      return response.status(400).json({ "Erro": err });
+      console.log("NOT PAID ERR :" + err);
+      return response.status(400).json({ "Erro" : "Erro em Ordens não pagas" });
     }
   },
 }

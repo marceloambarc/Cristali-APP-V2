@@ -87,8 +87,8 @@ export function OrderModal({ data } : OrderComponentProps ) {
         {data.condition === 220 && <Text style={[styles.text,{color: theme.colors.Success}]}>Cartão de Crédito</Text>}
         {data.condition === 221 && <Text style={[styles.text,{color: theme.colors.Cancel}]}>Recusada</Text>}
         {data.condition === 222 && <Text style={[styles.text,{color: theme.colors.Cancel}]}>Cancelada</Text>}
-        {data.condition === 223 && <Text style={[styles.text,{color: theme.colors.Success}]}>Dinheiro</Text>}
-        {data.condition === 224 && <Text style={[styles.text,{color: theme.colors.Success}]}>Outra Forma</Text>}
+        {data.condition === 224 && <Text style={[styles.text,{color: theme.colors.Success}]}>Dinheiro</Text>}
+        {data.condition === 223 && <Text style={[styles.text,{color: theme.colors.Success}]}>Outra Forma</Text>}
         <Text style={[styles.text,{color: theme.colors.primary}]}>{ data.orderNotes }</Text>
       </View>
     </View>

@@ -147,6 +147,7 @@ export function Money() {
                 <Text style={styles.inputText}>Digite a forma de pagamento.</Text>
                 <CristaliInput 
                   clientInput
+                  maxLength={30}
                   value={paymentMethod}
                   onChangeText={setPaymentMethod}
                 />
