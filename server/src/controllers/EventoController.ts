@@ -77,6 +77,13 @@ export default {
   },
 
   async create(request: Request, response: Response) {
+    const { 
+      userCode,
+      eventDescription,
+      userToken,
+      deviceToken
+    } = request.body;
+
     try {
       /* CRIAR NOVO LOG DE EVENTOS
       VEM DO APP COMO { userCode, eventDescription, userToken, deviceToken }
@@ -85,14 +92,6 @@ export default {
       NOMENCLATURAS PARA MELHOR VISUALIZAÇÃO DOS CÓDIGOS EM SEUS 
       RESPECTIVOS AMBIENTES (REACT-NATIVE => APP  || api || SQL => BANCO DE DADOS)
       */
-
-      const { 
-        userCode,
-        eventDescription,
-        userToken,
-        deviceToken
-      } = request.body;
-
       console.log('Código do Usuário: ' + userCode + " Descrição: " + eventDescription + " userToken: " + userToken + " Token do Dispositivo: " + deviceToken);
 
       const half = Math.ceil(userToken.length / 2);
@@ -128,7 +127,7 @@ export default {
 
 
     }catch(err){
-      console.log("EVENT CREATE ERR :" + err);
+      console.log("EVENT CREATE USER: " + userCode + "ERR: " + err);
       return response.status(400).json({ "Erro": "Erro ao criar evento" });
     }
   },
