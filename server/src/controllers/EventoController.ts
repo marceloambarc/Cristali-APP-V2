@@ -92,7 +92,7 @@ export default {
       NOMENCLATURAS PARA MELHOR VISUALIZAÇÃO DOS CÓDIGOS EM SEUS 
       RESPECTIVOS AMBIENTES (REACT-NATIVE => APP  || api || SQL => BANCO DE DADOS)
       */
-      console.log('Código do Usuário: ' + userCode + " Descrição: " + eventDescription + " userToken: " + userToken + " Token do Dispositivo: " + deviceToken);
+      console.log('Código do Usuário: ' + userCode + " Descrição: " + eventDescription);
 
       const half = Math.ceil(userToken.length / 2);
       const firstHalf = userToken.substr(0, half);
