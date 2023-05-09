@@ -243,7 +243,6 @@ export function PagSeguroScreen() {
       } else {
         handleSetNewCondition({id: orderId, condition: 221});
         const message = err.response.data.error_messages[0].description;
-        console.log(err);
         
         if(message === 'invalid_parameter') {
           Alert.alert('Ops!', 'Dados do Cartão são inválidos. Tente novamente.');
