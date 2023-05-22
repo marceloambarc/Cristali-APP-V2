@@ -9,11 +9,13 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
     'standard'
   ],
+  // eslint-disable-next-line no-dupe-keys
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 12,
     sourceType: 'module'
   },
+  // eslint-disable-next-line no-dupe-keys
   plugins: [
     '@typescript-eslint'
   ],

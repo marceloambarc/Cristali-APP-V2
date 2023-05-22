@@ -1,27 +1,27 @@
-import { Request, Response } from "express";
-import { startOfDay, endOfDay, parseISO } from 'date-fns';
-import { Between, getRepository } from "typeorm";
-import * as Yup from 'yup';
+import { Request, Response } from 'express'
+import { startOfDay, endOfDay, parseISO } from 'date-fns'
+import { Between, getRepository } from 'typeorm'
+import * as Yup from 'yup'
 
-import Evento from "../models/Evento";
-import eventView from "../view/evento_view";
+import Evento from '../models/Evento'
+import eventView from '../view/evento_view'
 
 export default {
 
   async index(request: Request, response: Response) {
     try {
-      const eventsRepository = getRepository(Evento);
+      const eventsRepository = getRepository(Evento)
 
-      const events = await eventsRepository.find();
+      const events = await eventsRepository.find()
 
-      if(events.length === 0){
-        return response.status(404).json({ "Vazio": "Nenhum Evento Cadastrado" });
-      }else{
-        return response.json(eventView.renderMany(events));
+      if (events.length === 0) {
+        return response.status(404).json({ Vazio: 'Nenhum Evento Cadastrado' })
+      } else {
+        return response.json(eventView.renderMany(events))
       }
-    }catch(err){
-      console.log("EVENT INDEX ERR :" + err);
-      return response.status(400).json({ "Erro": "Erro de Index"});
+    } catch (err) {
+      console.log('EVENT INDEX ERR :' + err)
+      return response.status(400).json({ Erro: 'Erro de Index' })
     }
   },
 
@@ -73,6 +73,35 @@ export default {
     }catch(err){
       console.log("EVENT-DT ERR :" + err);
       return response.status(400).json({ "Erro": "Não foi possivel Carregar EventoDT" });
+    }
+  },
+
+  async userEvent(request: Request, response: Response) {
+    try {
+
+      const { id } = request.params;
+
+      const eventosRepository = getRepository(Evento);
+
+      const eventos = await eventosRepository.find({
+        where: {
+          cd_id_ccli: id
+        }
+      });
+
+      if(eventos === undefined){
+        return response.status(404).json({ "Erro" : "Nenhuma Ordem Cadastrada neste Usuário" });
+      }else{
+        if(eventos.length <= 0){
+          return response.status(204).json({ "Vazio" : "Nenhuma Ordem Aberta" });
+        } else {
+          return response.json(eventView.renderMany(eventos));
+        }
+      }
+
+    } catch (err) {
+      console.log("EVENT-USER ERR :" + err);
+      return response.status(400).json({ "Erro": "Não foi possivel Carregar Evento do Usuário" });
     }
   },
 

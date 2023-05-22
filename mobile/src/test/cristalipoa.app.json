@@ -27,7 +27,7 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "habilinfo.cristalipoa.app",
-      "buildNumber": "1.0.9",
+      "buildNumber": "1.1.0",
       "infoPlist": {
         "NSCameraUsageDescription": "This app do not uses the camera to let user put a photo in his profile page."
       }
@@ -39,7 +39,7 @@
       },
       "useNextNotificationsApi": true,
       "package": "com.cristaliPOA.app",
-      "versionCode": 20
+      "versionCode": 21
     },
     "web": {
       "favicon": "./assets/faviconPOA.png"
