@@ -35,7 +35,7 @@ export default {
   
       const ordensReservaRepository = getRepository(OrdemReserva)
   
-      const ordensReserva = await ordensReservaRepository.findOne({
+      const ordensReserva = await ordensReservaRepository.find({
         where: {
           cd_id_ccli: id
         }
@@ -44,7 +44,7 @@ export default {
       if(ordensReserva === undefined){
         return response.status(404).json({ "Erro" : "Nenhuma Ordem Cadastrada neste Usuário" });
       }else{
-        return response.json(OrdemReservaView.render(ordensReserva));
+        return response.json(OrdemReservaView.renderMany(ordensReserva));
       }
 
     }catch(err){

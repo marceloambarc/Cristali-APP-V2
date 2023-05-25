@@ -85,7 +85,7 @@ export default {
 
       const eventos = await eventosRepository.find({
         where: {
-          cd_id_ccli: id
+          cd_ccli: id
         }
       });
 

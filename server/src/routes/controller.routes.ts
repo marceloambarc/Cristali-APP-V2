@@ -27,6 +27,7 @@ controllerRouter.post('/hashpasswords', clientAuth, SenhaController.hashPassword
 controllerRouter.get('/evento', clientAuth, EventoController.index)
 controllerRouter.post('/eventodt', EventoController.showWithDt)
 controllerRouter.get('/evento/:id', clientAuth, EventoController.show)
+controllerRouter.get('/evento/user/:id', clientAuth, EventoController.userEvent)
 controllerRouter.post('/evento', clientAuth, EventoController.create)
 
 // -- TODOS USUÁRIOS
@@ -64,5 +65,6 @@ controllerRouter.post('/selectedpaymentsales', clientAuth, OrdemController.showS
 
 // -- ORDENS RESERVA
 controllerRouter.get('/bkporder', clientAuth, OrdemReservaController.index)
+controllerRouter.get('/bkporder/:id', clientAuth, OrdemReservaController.show)
 
 export default controllerRouter
