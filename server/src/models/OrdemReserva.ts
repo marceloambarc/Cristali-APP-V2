@@ -1,4 +1,5 @@
-import { Column, Entity, Index, JoinColumn, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, Index, JoinColumn, OneToMany, PrimaryColumn, PrimaryGeneratedColumn, CreateDateColumn, Timestamp } from 'typeorm';
+
 import Ordemreservaitem from './OrdemReservaItem';
 
 @Entity()
@@ -11,8 +12,8 @@ export default class Ordemreserva {
   @Column("nvarchar", { length: 6 })
   cd_id_ccli: string;
 
-  @Column("datetime")
-  @Index("ix_ordemreserva3", { synchronize: false })
+  @Column() 
+  @Index("ix_ordemreserva3")
   dt_criado: Date;
 
   @Column("nvarchar", { length: 255 })

@@ -6,7 +6,7 @@ export default {
     return {
       id: ordem.cd_id,
       userCode: ordem.cd_id_ccli,
-      createdAt: ordem.dt_criado,
+      createdAt: new Date(ordem.dt_criado),
       totalPrice: ordem.vl_total,
       orderNotes: ordem.tx_obs,
       condition: ordem.cd_habil_tipo,
@@ -19,7 +19,7 @@ export default {
     return {
       id: ordem.cd_id,
       userCode: ordem.cd_id_ccli,
-      createdAt: ordem.dt_criado,
+      createdAt: new Date(ordem.dt_criado),
       totalPrice: ordem.vl_total,
       orderNotes: ordem.tx_obs,
       condition: ordem.cd_habil_tipo,

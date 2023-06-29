@@ -1,4 +1,4 @@
-import { Column, Entity, Index, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, Index, JoinColumn, OneToMany, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm';
 import Ordemitem from './OrdemItem';
 
 @Entity()
@@ -11,8 +11,8 @@ export default class Ordem {
   @Column("nvarchar", { length: 6 })
   cd_id_ccli: string;
 
-  @Column("datetime")
-  @Index("ix_ordem3", { synchronize: false })
+  @CreateDateColumn() 
+  @Index("ix_ordemreserva3")
   dt_criado: Date;
 
   @Column("nvarchar", { length: 255 })

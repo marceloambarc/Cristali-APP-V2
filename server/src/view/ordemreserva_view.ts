@@ -6,7 +6,7 @@ export default {
     return {
       id: ordemreserva.cd_id,
       userCode: ordemreserva.cd_id_ccli,
-      createdAt: ordemreserva.dt_criado,
+      createdAt: new Date(ordemreserva.dt_criado.getTime() - ordemreserva.dt_criado.getTimezoneOffset() * 60 * 1000),
       totalPrice: ordemreserva.vl_total,
       orderNotes: ordemreserva.tx_obs,
       condition: ordemreserva.cd_habil_tipo,
@@ -19,7 +19,7 @@ export default {
     return {
       id: ordemreserva.cd_id,
       userCode: ordemreserva.cd_id_ccli,
-      createdAt: ordemreserva.dt_criado,
+      createdAt: new Date(ordemreserva.dt_criado.getTime() - ordemreserva.dt_criado.getTimezoneOffset() * 60 * 1000),
       totalPrice: ordemreserva.vl_total,
       orderNotes: ordemreserva.tx_obs,
       condition: ordemreserva.cd_habil_tipo,
