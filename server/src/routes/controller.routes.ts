@@ -66,5 +66,6 @@ controllerRouter.post('/selectedpaymentsales', clientAuth, OrdemController.showS
 // -- ORDENS RESERVA
 controllerRouter.get('/bkporder', clientAuth, OrdemReservaController.index)
 controllerRouter.get('/bkporder/:id', clientAuth, OrdemReservaController.show)
+controllerRouter.get('/openmonthly', OrdemReservaController.showOpenDt)
 
 export default controllerRouter

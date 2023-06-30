@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
-import { Between, getRepository, LessThan, LessThanOrEqual, MoreThan, In } from "typeorm";
+import { startOfDay, endOfDay, parseISO, subDays } from 'date-fns'
+import { Between, getRepository, LessThanOrEqual } from "typeorm";
 import * as Yup from 'yup'
 
 import OrdemReserva from "../models/OrdemReserva";
@@ -90,6 +91,34 @@ export default {
     }catch(err){
       console.log("RESOPEN ERR :" + err);
       return response.status(400).json({ "Erro" : "abertas reserva" });
+    }
+  },
+
+  async showOpenDt(request: Request, response: Response) {
+    try {
+      
+      const dt = new Date();
+      
+      let findArgs = { 
+        where:{
+          dt_criado: Between(subDays(dt, 30).toISOString(), endOfDay(dt).toISOString()),
+          cd_habil_tipo: LessThanOrEqual(219)
+        }
+      };
+
+      const ordensReservaRepository = getRepository(OrdemReserva);
+
+      const existOrdemReserva = await ordensReservaRepository.find(findArgs);
+
+      if(existOrdemReserva.length === 0){
+        return response.status(404).json({ "Vazio": "Nenhuma Ordem no Período" });
+      }else{
+        return response.json(OrdemReservaView.renderMany(existOrdemReserva));
+      }
+
+    } catch(err) {
+      console.log("RESOPENDT ERR :" + err);
+      return response.status(400).json({ "Erro" : "abertas reserva por data" });
     }
   },
 
